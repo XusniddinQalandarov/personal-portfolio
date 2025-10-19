@@ -1,0 +1,136 @@
+/* Theme color variables and reusable classes for neon/modern dark UI */
+:root {
+  --color-navy: #0A1128;
+  --color-charcoal: #1B1F3B;
+  --color-panel: rgba(22, 36, 71, 0.7);
+  --color-gym-bg: #0C0F1A;
+  --color-cyan: #00FFF7;
+  --color-violet: #BB00FF;
+  --color-white: #FFFFFF;
+  --color-light-gray: #B0BAC9;
+  --border-glow-cyan: 0 0 8px 2px rgba(0,255,247,0.2);
+  --border-glow-violet: 0 0 8px 2px rgba(187,0,255,0.2);
+}
+
+.bg-primary {
+  background: var(--color-navy);
+}
+.bg-charcoal {
+  background: var(--color-charcoal);
+}
+.bg-dark-charcoal {
+  background: #000000FF;
+}
+
+/* Glassy panel/card */
+.glass-panel {
+  /* background removed to allow parent bg to show */
+  backdrop-filter: blur(12px);
+  border-radius: 1rem;
+  border: 1px solid rgba(0,255,247,0.15);
+  box-shadow: var(--border-glow-cyan);
+}
+
+/* Gym & lifestyle page */
+.bg-gym {
+  background: var(--color-gym-bg);
+}
+
+/* Gradient background animation */
+.bg-gradient-animated {
+  background: linear-gradient(120deg, var(--color-cyan), var(--color-violet), var(--color-navy));
+  background-size: 200% 200%;
+  animation: gradientMove 8s ease-in-out infinite;
+}
+@keyframes gradientMove {
+  0%, 100% { background-position: 0% 50%; }
+  50% { background-position: 100% 50%; }
+}
+
+/* Buttons */
+.btn-primary {
+  background: black !important;
+  color: var(--color-white);
+  border: white 1px solid;
+  border-radius: 22px !important;
+}
+.btn-primary:hover {
+  box-shadow: 0 0 18px 4px var(--color-cyan);
+  background: #1ffcf7;
+}
+
+.btn-secondary {
+  background: transparent;
+  color: var(--color-violet);
+  border: 2px solid var(--color-violet);
+  border-radius: 0.5rem;
+  transition: border-color 0.2s, color 0.2s;
+}
+.btn-secondary:hover {
+  border-color: var(--color-cyan);
+  color: var(--color-cyan);
+}
+
+/* Typography */
+.text-main {
+  color: var(--color-white);
+}
+.text-sub {
+  color: var(--color-light-gray);
+}
+.text-quote-cyan {
+  color: var(--color-cyan);
+  text-shadow: 0 0 8px var(--color-cyan);
+}
+.text-quote-violet {
+  color: var(--color-violet);
+  text-shadow: 0 0 8px var(--color-violet);
+}
+
+/* Navbar links */
+.nav-link {
+  color: var(--color-white);
+  transition: color 0.2s;
+}
+.nav-link:hover {
+  color: var(--color-cyan);
+  text-shadow: 0 0 8px var(--color-cyan);
+}
+.nav-link.violet:hover {
+  color: var(--color-violet);
+  text-shadow: 0 0 8px var(--color-violet);
+}
+
+/* Borders & dividers */
+.glow-border {
+  border: 1px solid rgba(0,255,247,0.2);
+  box-shadow: var(--border-glow-cyan);
+}
+
+/* Icons */
+.icon {
+  color: var(--color-white);
+  transition: color 0.2s, text-shadow 0.2s;
+}
+.icon:hover {
+  color: var(--color-cyan);
+  text-shadow: 0 0 8px var(--color-cyan);
+}
+
+/* Form fields */
+.input-neon {
+  background: rgba(24, 41, 70, 0.8);
+  border: 2px solid var(--color-cyan);
+  color: var(--color-white);
+  border-radius: 0.5rem;
+  padding: 0.5rem 1rem;
+}
+.input-neon::placeholder {
+  color: var(--color-white);
+  opacity: 0.7;
+}
+.input-neon:focus {
+  outline: none;
+  border-color: var(--color-violet);
+  box-shadow: 0 0 8px var(--color-violet);
+}

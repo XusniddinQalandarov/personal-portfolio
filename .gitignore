@@ -1,0 +1,59 @@
+# Nuxt dev/build outputs
+.output
+.data
+.nuxt
+.nitro
+.cache
+dist
+
+# Node dependencies
+node_modules
+
+# Logs
+logs
+*.log
+
+# Misc
+.DS_Store
+.fleet
+.idea
+
+# Local env files
+.env
+.env.*
+!.env.example
+
+# Telegram bot env
+telegram-bot/.env
+telegram-bot/.env.*
+!telegram-bot/.env.example
+
+# Local database files
+*.db
+*.sqlite
+
+# OS files
+Thumbs.db
+
+# Editor files
+*.swp
+*.swo
+*~
+.vscode/
+.idea/
+
+# Temporary files
+*.tmp
+temp/
+tmp/
+
+# Build files
+build/
+dist/
+
+# Sensitive data (extra safety)
+secrets/
+credentials/
+*.pem
+*.key
+*.cert
