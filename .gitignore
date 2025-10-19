@@ -23,7 +23,7 @@ logs
 .env.*
 !.env.example
 
-# Telegram bot env
+# Telegram bot env files
 telegram-bot/.env
 telegram-bot/.env.*
 !telegram-bot/.env.example

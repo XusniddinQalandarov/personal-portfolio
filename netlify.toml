@@ -2,6 +2,7 @@
   command = "npm run build"
   publish = ".output/public"
   functions = ".output/server"
+  ignore = "telegram-bot/"
 
 [build.environment]
   NODE_VERSION = "18"
