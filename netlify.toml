@@ -1,17 +1,10 @@
 [build]
   command = "npm run build"
-  publish = ".output/public"
-  functions = ".output/server"
+  publish = "dist"
   ignore = "telegram-bot/"
 
 [build.environment]
   NODE_VERSION = "20"
-
-# Redirects and rewrites
-[[redirects]]
-  from = "/*"
-  to = "/.netlify/functions/index"
-  status = 200
 
 # Headers for security
 [[headers]]

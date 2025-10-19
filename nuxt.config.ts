@@ -2,6 +2,12 @@
 export default defineNuxtConfig({
   compatibilityDate: '2025-07-15',
   devtools: { enabled: true },
+  
+  // Netlify deployment preset
+  nitro: {
+    preset: 'netlify'
+  },
+  
   modules: [
     '@nuxtjs/supabase',
     '@nuxtjs/tailwindcss', 
