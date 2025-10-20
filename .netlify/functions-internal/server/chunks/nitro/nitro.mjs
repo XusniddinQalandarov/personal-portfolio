@@ -4355,7 +4355,7 @@ function _expandFromEnv(value) {
 const _inlineRuntimeConfig = {
   "app": {
     "baseURL": "/",
-    "buildId": "8787c978-06e3-4fd3-abb8-fad79da82a70",
+    "buildId": "8f7b14b9-c44c-4fd4-b06f-c59be8e0a1b1",
     "buildAssetsDir": "/_nuxt/",
     "cdnURL": ""
   },
@@ -4408,7 +4408,7 @@ const _inlineRuntimeConfig = {
     }
   },
   "supabaseServiceKey": "",
-  "adminPassword": "xusniddin2004",
+  "adminPassword": "Xusniddin2004$$$",
   "supabase": {
     "serviceKey": "",
     "secretKey": ""

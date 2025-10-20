@@ -46,6 +46,7 @@
     "entities": "4.5.0",
     "estree-walker": "2.0.2",
     "etag": "1.8.1",
+    "gsap": "3.13.0",
     "h3": "1.15.4",
     "hookable": "5.5.3",
     "image-meta": "0.2.2",
