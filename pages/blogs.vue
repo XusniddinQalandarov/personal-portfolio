@@ -1,36 +1,48 @@
 <template>
-  <div class="min-h-screen py-20">
+  <div class="min-h-screen py-12 md:py-20">
     <div class="max-w-6xl mx-auto px-4">
       <!-- Header -->
-      <div class="text-center mb-16">
-        <h1 class="text-4xl md:text-5xl text-white font-bold mb-6">Blog & Insights</h1>
-        <p class="text-xl text-[#BDC1CAFF] max-w-2xl mx-auto">
+      <div ref="headerEl" class="text-center mb-12 md:mb-16">
+        <h1 class="text-2xl sm:text-3xl md:text-4xl lg:text-5xl text-white font-bold mb-6">Blog & Insights</h1>
+        <p class="text-base md:text-lg lg:text-xl text-[#BDC1CAFF] max-w-2xl mx-auto">
           Thoughts, tutorials, and insights on web development
         </p>
       </div>
 
       <!-- Search & Filter -->
-      <div class="mb-12 flex flex-col md:flex-row gap-4">
-        <div class="flex-1">
+      <div ref="filtersEl" class="mb-12 flex flex-col md:flex-row gap-4">
+        <!-- Search Input -->
+        <div class="flex-1 relative">
+          <div class="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none">
+            <i class="pi pi-search text-gray-400"></i>
+          </div>
           <input
             v-model="searchQuery"
             @input="searchBlogs"
             type="text"
             placeholder="Search blogs..."
-            class="w-full px-4 py-3 bg-transparent text-white rounded-lg border border-white/20 focus:border-cyan-400 focus:outline-none transition-colors"
+            class="w-full pl-12 pr-4 py-3 bg-[#1E2128FF] text-white rounded-lg border border-white/10 focus:border-cyan-400 focus:outline-none focus:ring-2 focus:ring-cyan-400/20 transition-all placeholder-gray-400"
           />
         </div>
-        <div>
+        
+        <!-- Tag Selector -->
+        <div class="relative">
+          <div class="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none">
+            <i class="pi pi-tag text-gray-400"></i>
+          </div>
           <select
             v-model="selectedTag"
             @change="filterByTag"
-            class="w-full md:w-48 px-4 py-3 bg-transparent text-white rounded-lg border border-white/20 focus:border-cyan-400 focus:outline-none transition-colors"
+            class="w-full md:w-56 pl-12 pr-10 py-3 bg-[#1E2128FF] text-white rounded-lg border border-white/10 focus:border-cyan-400 focus:outline-none focus:ring-2 focus:ring-cyan-400/20 transition-all appearance-none cursor-pointer"
           >
-            <option value="" class="bg-[#0A1128]">All Tags</option>
-            <option v-for="tag in allTags" :key="tag" :value="tag" class="bg-[#0A1128]">
+            <option value="" class="bg-[#1E2128FF] text-white py-2">All Tags</option>
+            <option v-for="tag in allTags" :key="tag" :value="tag" class="bg-[#1E2128FF] text-white py-2">
               {{ tag }}
             </option>
           </select>
+          <div class="absolute inset-y-0 right-0 pr-4 flex items-center pointer-events-none">
+            <i class="pi pi-chevron-down text-gray-400 text-sm"></i>
+          </div>
         </div>
       </div>
 
@@ -48,7 +60,7 @@
       </div>
 
       <!-- Blog Grid -->
-      <div v-else class="grid md:grid-cols-2 gap-8">
+      <div ref="gridEl" v-else class="grid md:grid-cols-2 gap-8">
         <NuxtLink
           v-for="blog in filteredBlogs"
           :key="blog.id"
@@ -128,6 +140,11 @@
 </template>
 
 <script setup>
+import { gsap } from 'gsap';
+import { ScrollTrigger } from 'gsap/ScrollTrigger';
+
+gsap.registerPlugin(ScrollTrigger);
+
 const loading = ref(true)
 const blogs = ref([])
 const filteredBlogs = ref([])
@@ -135,9 +152,14 @@ const searchQuery = ref('')
 const selectedTag = ref('')
 const allTags = ref([])
 
+const headerEl = ref(null)
+const filtersEl = ref(null)
+const gridEl = ref(null)
+
 // Load blogs on mount
 onMounted(async () => {
   await loadBlogs()
+  await animateBlogs()
 })
 
 const loadBlogs = async () => {
@@ -161,6 +183,44 @@ const loadBlogs = async () => {
   }
 }
 
+const animateBlogs = () => {
+  // Animate header from top
+  gsap.from(headerEl.value, {
+    y: -30,
+    opacity: 0,
+    duration: 0.8,
+    ease: 'power3.out',
+  })
+  
+  // Animate filters slide in
+  gsap.from(filtersEl.value, {
+    y: 20,
+    opacity: 0,
+    duration: 0.8,
+    delay: 0.3,
+    ease: 'power3.out',
+  })
+  
+  // Animate blog cards with stagger
+  if (gridEl.value) {
+    const cards = gridEl.value.querySelectorAll('.blog-card')
+    if (cards.length > 0) {
+      gsap.from(cards, {
+        y: 30,
+        opacity: 0,
+        duration: 0.8,
+        stagger: 0.15,
+        ease: 'power3.out',
+        scrollTrigger: {
+          trigger: gridEl.value,
+          start: 'top 80%',
+          toggleActions: 'play none none none',
+        },
+      })
+    }
+  }
+}
+
 const searchBlogs = () => {
   let results = blogs.value
 
@@ -181,6 +241,22 @@ const searchBlogs = () => {
   }
 
   filteredBlogs.value = results
+  
+  // Re-animate grid after filter
+  nextTick(() => {
+    if (gridEl.value) {
+      const cards = gridEl.value.querySelectorAll('.blog-card')
+      if (cards.length > 0) {
+        gsap.from(cards, {
+          scale: 0.9,
+          opacity: 0,
+          duration: 0.4,
+          stagger: 0.1,
+          ease: 'back.out(1.2)',
+        })
+      }
+    }
+  })
 }
 
 const filterByTag = () => {
@@ -217,6 +293,7 @@ useSeoMeta({
 .line-clamp-2 {
   display: -webkit-box;
   -webkit-line-clamp: 2;
+  line-clamp: 2;
   -webkit-box-orient: vertical;
   overflow: hidden;
 }

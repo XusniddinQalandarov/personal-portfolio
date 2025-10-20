@@ -28,8 +28,8 @@
       </NuxtLink>
 
       <!-- Header -->
-      <header class="mb-12 glass-panel p-8">
-        <h1 class="text-4xl md:text-5xl text-white font-bold mb-6">
+      <header class="mb-12 glass-panel p-6 md:p-8">
+        <h1 class="text-2xl sm:text-3xl md:text-4xl lg:text-5xl text-white font-bold mb-6">
           {{ blog.title }}
         </h1>
         
@@ -71,26 +71,26 @@
       </div>
 
       <!-- Excerpt -->
-      <div v-if="blog.excerpt" class="glass-panel p-6 mb-12">
-        <p class="text-xl text-[#BDC1CAFF] leading-relaxed italic">
+      <div v-if="blog.excerpt" class="glass-panel p-4 md:p-6 mb-8 md:mb-12">
+        <p class="text-lg md:text-xl text-[#BDC1CAFF] leading-relaxed italic">
           {{ blog.excerpt }}
         </p>
       </div>
 
       <!-- Content -->
-      <div class="glass-panel p-8 mb-12">
+      <div class="glass-panel p-4 md:p-8 mb-8 md:mb-12">
         <div v-html="renderedContent" class="blog-content"></div>
       </div>
 
       <!-- Share Buttons -->
-      <div class="glass-panel p-8 mb-12">
-        <h3 class="text-xl text-white font-semibold mb-4">Share this post</h3>
-        <div class="flex flex-wrap gap-4">
+      <div class="glass-panel p-4 md:p-8 mb-8 md:mb-12">
+        <h3 class="text-lg md:text-xl text-white font-semibold mb-4">Share this post</h3>
+        <div class="flex flex-wrap gap-3 md:gap-4">
           <a
             :href="shareUrls.twitter"
             target="_blank"
             rel="noopener noreferrer"
-            class="px-6 py-3 bg-transparent border border-white text-white rounded-full hover:bg-cyan-400 hover:text-black hover:border-cyan-400 transition-all duration-300"
+            class="px-4 py-2 md:px-6 md:py-3 text-sm md:text-base bg-transparent border border-white text-white rounded-full hover:bg-cyan-400 hover:text-black hover:border-cyan-400 transition-all duration-300"
           >
             <i class="pi pi-twitter mr-2"></i>
             Twitter
@@ -99,14 +99,14 @@
             :href="shareUrls.linkedin"
             target="_blank"
             rel="noopener noreferrer"
-            class="px-6 py-3 bg-transparent border border-white text-white rounded-full hover:bg-cyan-400 hover:text-black hover:border-cyan-400 transition-all duration-300"
+            class="px-4 py-2 md:px-6 md:py-3 text-sm md:text-base bg-transparent border border-white text-white rounded-full hover:bg-cyan-400 hover:text-black hover:border-cyan-400 transition-all duration-300"
           >
             <i class="pi pi-linkedin mr-2"></i>
             LinkedIn
           </a>
           <button
             @click="copyLink"
-            class="px-6 py-3 bg-transparent border border-white text-white rounded-full hover:bg-cyan-400 hover:text-black hover:border-cyan-400 transition-all duration-300"
+            class="px-4 py-2 md:px-6 md:py-3 text-sm md:text-base bg-transparent border border-white text-white rounded-full hover:bg-cyan-400 hover:text-black hover:border-cyan-400 transition-all duration-300"
           >
             <i class="pi pi-link mr-2"></i>
             {{ linkCopied ? 'Copied!' : 'Copy Link' }}
@@ -115,14 +115,14 @@
       </div>
 
       <!-- Related Tags -->
-      <div v-if="blog.tags?.length" class="glass-panel p-8">
-        <h3 class="text-xl text-white font-semibold mb-4">Explore more topics</h3>
-        <div class="flex flex-wrap gap-3">
+      <div v-if="blog.tags?.length" class="glass-panel p-4 md:p-8">
+        <h3 class="text-lg md:text-xl text-white font-semibold mb-4">Explore more topics</h3>
+        <div class="flex flex-wrap gap-2 md:gap-3">
           <NuxtLink
             v-for="tag in blog.tags"
             :key="tag"
             :to="`/blogs?tag=${tag}`"
-            class="px-4 py-2 bg-transparent border border-white text-white rounded-full hover:bg-cyan-400 hover:text-black hover:border-cyan-400 transition-all duration-300"
+            class="px-3 py-1.5 md:px-4 md:py-2 text-sm md:text-base bg-transparent border border-white text-white rounded-full hover:bg-cyan-400 hover:text-black hover:border-cyan-400 transition-all duration-300"
           >
             {{ tag }}
           </NuxtLink>

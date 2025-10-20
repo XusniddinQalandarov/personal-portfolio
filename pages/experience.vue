@@ -1,10 +1,10 @@
 <template>
-  <div class="min-h-screen py-20 bg-dark-charcoal">
+  <div class="min-h-screen py-12 md:py-20 bg-dark-charcoal">
     <div class="max-w-4xl mx-auto px-4">
       <!-- Header -->
-      <div class="text-center mb-16">
-        <h1 class="text-4xl md:text-5xl font-bold mb-6 text-main">Professional Journey</h1>
-        <p class="text-xl text-sub max-w-2xl mx-auto">
+      <div ref="headerEl" class="text-center mb-12 md:mb-16">
+        <h1 class="text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-bold mb-6 text-main">Professional Journey</h1>
+        <p class="text-base md:text-lg lg:text-xl text-sub max-w-2xl mx-auto">
           Aspiring computer scientist passionate about frontend development and AI agent building. My journey from high school projects to professional development roles.
         </p>
       </div>
@@ -16,14 +16,63 @@
       </div>
 
       <!-- Experience Timeline -->
-      <div v-else class="relative">
-        <!-- Timeline Line -->
-        <div class="absolute left-1/2 transform -translate-x-1/2 w-1 glow-border h-full"></div>
+      <div v-else ref="timelineEl" class="relative">
+        <!-- Timeline Line - Hidden on mobile, shown on md+ -->
+        <div class="hidden md:block absolute left-1/2 transform -translate-x-1/2 w-1 glow-border h-full"></div>
         
         <!-- Timeline Items -->
-        <div v-for="(experience, index) in experiences" :key="experience.id" class="relative mb-12">
-          <div :class="[
-            'flex items-start',
+        <div v-for="(experience, index) in experiences" :key="experience.id" class="relative mb-8 md:mb-12">
+          <!-- Mobile Layout (stacked) -->
+          <div class="md:hidden">
+            <!-- Timeline Marker -->
+            <div class="flex items-start mb-4">
+              <button 
+                @click="selectedExperience = index"
+                class="w-10 h-10 rounded-full flex items-center justify-center transition-all duration-300 cursor-pointer flex-shrink-0"
+                :class="[
+                  selectedExperience === index 
+                    ? 'bg-gray-500 scale-110' 
+                    : 'bg-gray-600 hover:bg-gray-500'
+                ]">
+                <i :class="experience.icon || 'pi pi-briefcase'" class="text-white text-sm"></i>
+              </button>
+              <div class="ml-4 flex-1 bg-[#1E2128FF] p-4 rounded-lg">
+                <div class="mb-3">
+                  <h3 class="text-lg font-bold text-main mb-1">{{ experience.title }}</h3>
+                  <h4 class="text-base text-[#704343FF] font-semibold mb-1">{{ experience.company }}</h4>
+                  <p class="text-xs text-[#704343FF] font-medium">{{ experience.period }}</p>
+                </div>
+                
+                <p class="text-sub text-sm mb-3">{{ experience.description }}</p>
+                
+                <!-- Technologies/Skills -->
+                <div class="flex flex-wrap gap-1.5 mb-3" v-if="experience.technologies">
+                  <span 
+                    v-for="tech in experience.technologies" 
+                    :key="tech"
+                    class="px-2 py-0.5 bg-[#71444433] text-white rounded-2xl text-xs"
+                  >
+                    {{ tech }}
+                  </span>
+                </div>
+
+                <!-- Key Achievements -->
+                <div v-if="experience.achievements" class="mt-3">
+                  <h5 class="text-xs font-semibold text-main mb-1">Key Achievements:</h5>
+                  <ul class="text-xs text-sub space-y-0.5">
+                    <li v-for="achievement in experience.achievements" :key="achievement" class="flex items-start">
+                      <span class="text-gray-400 mr-1">•</span>
+                      {{ achievement }}
+                    </li>
+                  </ul>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Desktop Layout (alternating) -->
+          <div class="hidden md:flex" :class="[
+            'items-start',
             index % 2 === 0 ? 'flex-row-reverse' : 'flex-row'
           ]">
             <!-- Content Card -->
@@ -77,16 +126,16 @@
           </div>
         </div>
       </div>
-
+      
       <!-- Education Section -->
-      <div class="mt-20">
-        <h2 class="text-3xl font-bold text-center text-main mb-12">Education & Certifications</h2>
-        <div class="grid md:grid-cols-2 gap-8">
-          <div v-for="edu in education" :key="edu.id" class="bg-[#1E2128FF] p-6 rounded-lg transition-all">
-            <h3 class="text-lg font-bold text-main mb-2">{{ edu.degree }}</h3>
-            <h4 class="text-main font-semibold mb-1">{{ edu.school }}</h4>
-            <p class="text-[#704343FF] font-medium mb-3">{{ edu.year }}</p>
-            <p class="text-sub" v-if="edu.description">{{ edu.description }}</p>
+      <div v-if="!loading" class="mt-16 md:mt-20">
+        <h2 class="text-2xl md:text-3xl font-bold text-center text-main mb-8 md:mb-12">Education & Certifications</h2>
+        <div class="grid md:grid-cols-2 gap-6 md:gap-8">
+          <div v-for="edu in education" :key="edu.id" class="bg-[#1E2128FF] p-4 md:p-6 rounded-lg transition-all hover:scale-105 duration-300">
+            <h3 class="text-base md:text-lg font-bold text-main mb-2">{{ edu.degree }}</h3>
+            <h4 class="text-main font-semibold mb-1 text-sm md:text-base">{{ edu.school }}</h4>
+            <p class="text-[#704343FF] font-medium mb-3 text-sm">{{ edu.year }}</p>
+            <p class="text-sub text-sm" v-if="edu.description">{{ edu.description }}</p>
           </div>
         </div>
       </div>
@@ -95,6 +144,11 @@
 </template>
 
 <script setup>
+import { gsap } from 'gsap';
+import { ScrollTrigger } from 'gsap/ScrollTrigger';
+
+gsap.registerPlugin(ScrollTrigger);
+
 const selectedExperience = ref(null);
 const loading = ref(true);
 const error = ref(null);
@@ -235,6 +289,9 @@ const defaultEducation = [
 const experiences = ref([...defaultExperiences]);
 const education = ref([...defaultEducation]);
 
+const headerEl = ref(null);
+const timelineEl = ref(null);
+
 // Load data from database
 onMounted(async () => {
   try {
@@ -288,8 +345,109 @@ onMounted(async () => {
     error.value = 'Failed to load some data. Showing defaults.';
   } finally {
     loading.value = false;
+    
+    // Animate after content loads with delay to ensure DOM is ready
+    setTimeout(() => {
+      nextTick(() => {
+        animateExperience();
+      });
+    }, 100);
   }
 });
+
+const animateExperience = () => {
+  try {
+    console.log('Experience animations initialized');
+  
+  // Header fade in
+  gsap.from(headerEl.value, {
+    y: -30,
+    opacity: 0,
+    duration: 0.8,
+    ease: 'power3.out',
+  });
+  
+  // Animate timeline line
+  const timelineLine = timelineEl.value?.querySelector('.glow-border');
+  if (timelineLine) {
+    gsap.from(timelineLine, {
+      scaleY: 0,
+      transformOrigin: 'top center',
+      duration: 1.2,
+      ease: 'power2.out',
+      scrollTrigger: {
+        trigger: timelineEl.value,
+        start: 'top 80%',
+        toggleActions: 'play none none none',
+      },
+    });
+  }
+  
+  // Get all timeline items - use simpler selector
+  const timelineItems = timelineEl.value?.querySelectorAll(':scope > .relative');
+  if (timelineItems && timelineItems.length > 0) {
+    // Animate each timeline item individually with ScrollTrigger
+    timelineItems.forEach((item, index) => {
+      // Animate markers/buttons with bounce effect
+      const marker = item.querySelector('button');
+      if (marker) {
+        gsap.from(marker, {
+          scale: 0,
+          rotation: -180,
+          opacity: 0,
+          duration: 0.6,
+          ease: 'back.out(1.7)',
+          scrollTrigger: {
+            trigger: item,
+            start: 'top 85%',
+            toggleActions: 'play none none none',
+          },
+        });
+      }
+      
+      // Animate cards with alternating direction based on index
+      const cards = item.querySelectorAll('.bg-\\[\\#1E2128FF\\]');
+      cards.forEach((card) => {
+        const isEven = index % 2 === 0;
+        gsap.from(card, {
+          x: isEven ? 80 : -80,
+          opacity: 0,
+          duration: 0.8,
+          ease: 'power3.out',
+          scrollTrigger: {
+            trigger: item,
+            start: 'top 80%',
+            toggleActions: 'play none none none',
+          },
+        });
+      });
+      
+      // Animate technology tags with stagger
+      const techTags = item.querySelectorAll('.flex-wrap span');
+      if (techTags.length > 0) {
+        gsap.from(techTags, {
+          scale: 0,
+          opacity: 0,
+          duration: 0.4,
+          stagger: 0.05,
+          ease: 'back.out(1.7)',
+          scrollTrigger: {
+            trigger: item,
+            start: 'top 75%',
+            toggleActions: 'play none none none',
+          },
+        });
+      }
+    });
+  }
+  
+  // No animations for education section - keep it always visible
+  console.log('Education section loaded without animations');
+  
+  } catch (error) {
+    console.error('Animation error:', error);
+  }
+};
 
 // SEO Meta
 useSeoMeta({

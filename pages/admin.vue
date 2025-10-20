@@ -34,26 +34,26 @@
     <!-- Admin Dashboard -->
     <div v-else class="max-w-6xl mx-auto px-4">
       <!-- Header -->
-      <div class="text-center mb-16">
-        <div class="flex justify-between items-center mb-6">
-          <h1 class="text-4xl md:text-5xl text-white font-bold">Admin Dashboard</h1>
-          <button @click="handleLogout" class="px-4 py-2 bg-red-500 text-white rounded-lg hover:bg-red-600 transition-colors">
+      <div class="text-center mb-12 md:mb-16">
+        <div class="flex flex-col sm:flex-row justify-between items-center gap-4 mb-6">
+          <h1 class="text-2xl sm:text-3xl md:text-4xl lg:text-5xl text-white font-bold">Admin Dashboard</h1>
+          <button @click="handleLogout" class="px-4 py-2 bg-red-500 text-white rounded-lg hover:bg-red-600 transition-colors whitespace-nowrap">
             Logout
           </button>
         </div>
-        <p class="text-xl text-[#BDC1CAFF] max-w-2xl mx-auto">
+        <p class="text-base md:text-lg lg:text-xl text-[#BDC1CAFF] max-w-2xl mx-auto">
           Manage your portfolio content
         </p>
       </div>
 
       <!-- Tabs -->
-      <div class="flex flex-wrap gap-4 mb-8">
+      <div class="flex flex-wrap gap-2 md:gap-4 mb-6 md:mb-8">
         <button
           v-for="tab in tabs"
           :key="tab"
           @click="activeTab = tab"
           :class="[
-            'px-6 py-2 rounded-lg font-semibold transition-colors',
+            'px-4 md:px-6 py-2 rounded-lg font-semibold transition-colors text-sm md:text-base',
             activeTab === tab
               ? 'bg-cyan-400 text-black'
               : 'bg-[#1E2128FF] text-white hover:bg-[#323743FF]'
@@ -64,10 +64,10 @@
       </div>
 
       <!-- Projects Management -->
-      <div v-if="activeTab === 'Projects'" class="bg-[#1E2128FF] p-6 rounded-lg">
-        <div class="flex justify-between items-center mb-6">
-          <h2 class="text-2xl text-white font-semibold">Manage Projects</h2>
-          <button @click="showProjectForm = true" class="btn-primary px-4 py-2">
+      <div v-if="activeTab === 'Projects'" class="bg-[#1E2128FF] p-4 md:p-6 rounded-lg">
+        <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 mb-6">
+          <h2 class="text-xl md:text-2xl text-white font-semibold">Manage Projects</h2>
+          <button @click="showProjectForm = true" class="btn-primary px-4 py-2 whitespace-nowrap">
             Add New Project
           </button>
         </div>

@@ -1,15 +1,15 @@
 <template>
-  <div class="min-h-screen py-20">
+  <div class="min-h-screen py-12 md:py-20">
     <div class="max-w-6xl mx-auto px-4">
       <!-- Header -->
-      <div class="text-center mb-16">
-        <h1 class="text-4xl md:text-5xl text-white font-bold mb-6">Pioneering Projects &amp; Innovations</h1>
-        <p class="text-xl text-[#BDC1CAFF] max-w-2xl mx-auto">
+      <div ref="headerEl" class="text-center mb-12 md:mb-16">
+        <h1 class="text-2xl sm:text-3xl md:text-4xl lg:text-5xl text-white font-bold mb-6">Pioneering Projects &amp; Innovations</h1>
+        <p class="text-base md:text-lg lg:text-xl text-[#BDC1CAFF] max-w-2xl mx-auto">
 A curated selection of my work in Frontend Development, AI Automation, and inspired by a disciplined lifestyle. Each project reflects a commitment to precision and impactful solutions.        </p>
       </div>
 
       <!-- Filter Tags -->
-      <div class="flex flex-wrap justify-center gap-3 mb-12">
+      <div ref="tagsEl" class="flex flex-wrap justify-center gap-3 mb-12">
         <button
           v-for="tag in filterTags"
           :key="tag"
@@ -39,7 +39,7 @@ A curated selection of my work in Frontend Development, AI Automation, and inspi
       <!-- Projects Grid -->
       <div v-else>
         <!-- Show grid if there are projects -->
-        <div v-if="projects.length > 0" class="grid md:grid-cols-2 lg:grid-cols-3 gap-8 mb-16">
+        <div v-if="projects.length > 0" ref="gridEl" class="grid md:grid-cols-2 lg:grid-cols-3 gap-8 mb-16">
           <ProjectCard 
             v-for="project in filteredProjects" 
             :key="project.id"
@@ -86,10 +86,19 @@ A curated selection of my work in Frontend Development, AI Automation, and inspi
 </template>
 
 <script setup>
+import { gsap } from 'gsap';
+import { ScrollTrigger } from 'gsap/ScrollTrigger';
+
+gsap.registerPlugin(ScrollTrigger);
+
 const projects = ref([]);
 const loading = ref(true);
 const error = ref(null);
 const selectedFilter = ref('All');
+
+const headerEl = ref(null);
+const tagsEl = ref(null);
+const gridEl = ref(null);
 
 // Load projects from database
 onMounted(async () => {
@@ -111,7 +120,65 @@ onMounted(async () => {
     projects.value = []; // Ensure it's an array even on error
   } finally {
     loading.value = false;
+    
+    // Animate after projects load
+    nextTick(() => {
+      animateElements();
+    });
   }
+});
+
+const animateElements = () => {
+  // Header fade in from top
+  gsap.from(headerEl.value, {
+    y: -30,
+    opacity: 0,
+    duration: 0.8,
+    ease: 'power3.out',
+  });
+  
+  // Tags slide in and stagger
+  gsap.from(tagsEl.value?.children || [], {
+    y: 20,
+    opacity: 0,
+    duration: 0.6,
+    stagger: 0.1,
+    ease: 'power3.out',
+    delay: 0.3,
+  });
+  
+  // Projects grid items - stagger with scroll trigger
+  if (gridEl.value?.children) {
+    gsap.from(gridEl.value.children, {
+      y: 50,
+      opacity: 0,
+      duration: 0.8,
+      stagger: 0.15,
+      ease: 'power3.out',
+      scrollTrigger: {
+        trigger: gridEl.value,
+        start: 'top 80%',
+        toggleActions: 'play none none none',
+      },
+    });
+  }
+};
+
+// Re-animate when filter changes
+watch(selectedFilter, () => {
+  nextTick(() => {
+    if (gridEl.value?.children) {
+      // Set initial state then animate to prevent flash
+      gsap.set(gridEl.value.children, { scale: 0.9, opacity: 0 });
+      gsap.to(gridEl.value.children, {
+        scale: 1,
+        opacity: 1,
+        duration: 0.5,
+        stagger: 0.08,
+        ease: 'back.out(1.2)',
+      });
+    }
+  });
 });
 
 const filterTags = computed(() => {
