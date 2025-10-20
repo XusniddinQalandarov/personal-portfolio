@@ -3,6 +3,15 @@ export default defineNuxtConfig({
   compatibilityDate: '2025-07-15',
   devtools: { enabled: true },
   
+  // App configuration
+  app: {
+    head: {
+      link: [
+        { rel: 'icon', type: 'image/png', href: '/images/icon.png' }
+      ]
+    }
+  },
+  
   // Netlify deployment preset
   nitro: {
     preset: 'netlify'

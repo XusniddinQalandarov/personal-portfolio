@@ -1,6 +1,6 @@
 <template>
-  <div class="min-h-screen py-12 md:py-20 bg-dark-charcoal">
-    <div class="max-w-4xl mx-auto px-4">
+  <div class="min-h-screen py-12 md:py-20">
+    <div class="max-w-4xl mx-auto px-4 relative">
       <!-- Header -->
       <div ref="headerEl" class="text-center mb-12 md:mb-16">
         <h1 class="text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-bold mb-6 text-main">Professional Journey</h1>
@@ -21,65 +21,56 @@
         <div class="hidden md:block absolute left-1/2 transform -translate-x-1/2 w-1 glow-border h-full"></div>
         
         <!-- Timeline Items -->
-        <div v-for="(experience, index) in experiences" :key="experience.id" class="relative mb-8 md:mb-12">
+        <div v-for="(experience, index) in experiences" :key="experience.id" class="mb-8 md:mb-12">
           <!-- Mobile Layout (stacked) -->
-          <div class="md:hidden">
-            <!-- Timeline Marker -->
-            <div class="flex items-start mb-4">
-              <button 
-                @click="selectedExperience = index"
-                class="w-10 h-10 rounded-full flex items-center justify-center transition-all duration-300 cursor-pointer flex-shrink-0"
-                :class="[
-                  selectedExperience === index 
-                    ? 'bg-gray-500 scale-110' 
-                    : 'bg-gray-600 hover:bg-gray-500'
-                ]">
-                <i :class="experience.icon || 'pi pi-briefcase'" class="text-white text-sm"></i>
-              </button>
-              <div class="ml-4 flex-1 bg-[#1E2128FF] p-4 rounded-lg">
-                <div class="mb-3">
-                  <h3 class="text-lg font-bold text-main mb-1">{{ experience.title }}</h3>
-                  <h4 class="text-base text-[#704343FF] font-semibold mb-1">{{ experience.company }}</h4>
-                  <p class="text-xs text-[#704343FF] font-medium">{{ experience.period }}</p>
+          <div class="block md:hidden">
+            <div class="bg-[#1E2128FF] p-4 rounded-lg">
+              <div class="flex items-center mb-3">
+                <div class="w-8 h-8 rounded-full bg-gray-600 flex items-center justify-center mr-3">
+                  <i :class="experience.icon || 'pi pi-briefcase'" class="text-white text-xs"></i>
                 </div>
-                
-                <p class="text-sub text-sm mb-3">{{ experience.description }}</p>
-                
-                <!-- Technologies/Skills -->
-                <div class="flex flex-wrap gap-1.5 mb-3" v-if="experience.technologies">
-                  <span 
-                    v-for="tech in experience.technologies" 
-                    :key="tech"
-                    class="px-2 py-0.5 bg-[#71444433] text-white rounded-2xl text-xs"
-                  >
-                    {{ tech }}
-                  </span>
+                <div>
+                  <h3 class="text-lg font-bold text-main">{{ experience.title }}</h3>
+                  <h4 class="text-sm text-[#704343FF]">{{ experience.company }}</h4>
+                  <p class="text-xs text-[#704343FF]">{{ experience.period }}</p>
                 </div>
+              </div>
+              
+              <p class="text-sub text-sm mb-3">{{ experience.description }}</p>
+              
+              <!-- Technologies/Skills -->
+              <div class="flex flex-wrap gap-2 mb-3" v-if="experience.technologies">
+                <span 
+                  v-for="tech in experience.technologies" 
+                  :key="tech"
+                  class="px-2 py-1 bg-[#71444433] text-white rounded-2xl text-xs"
+                >
+                  {{ tech }}
+                </span>
+              </div>
 
-                <!-- Key Achievements -->
-                <div v-if="experience.achievements" class="mt-3">
-                  <h5 class="text-xs font-semibold text-main mb-1">Key Achievements:</h5>
-                  <ul class="text-xs text-sub space-y-0.5">
-                    <li v-for="achievement in experience.achievements" :key="achievement" class="flex items-start">
-                      <span class="text-gray-400 mr-1">•</span>
-                      {{ achievement }}
-                    </li>
-                  </ul>
-                </div>
+              <!-- Key Achievements -->
+              <div v-if="experience.achievements" class="mt-3">
+                <h5 class="text-sm font-semibold text-main mb-2">Key Achievements:</h5>
+                <ul class="text-sm text-sub space-y-1">
+                  <li v-for="achievement in experience.achievements" :key="achievement" class="flex items-start">
+                    <span class="text-gray-400 mr-2">•</span>
+                    {{ achievement }}
+                  </li>
+                </ul>
               </div>
             </div>
           </div>
 
           <!-- Desktop Layout (alternating) -->
-          <div class="hidden md:flex" :class="[
-            'items-start',
+          <div class="hidden md:flex relative" :class="[
+            'items-center',
             index % 2 === 0 ? 'flex-row-reverse' : 'flex-row'
           ]">
             <!-- Content Card -->
-            <div :class="[
-              'w-5/12 transition-all duration-300 p-6 rounded-lg mt-8 bg-[#1E2128FF]',
+            <div class="w-5/12 bg-[#1E2128FF] p-6 rounded-lg transition-all duration-300" :class="[
               index % 2 === 0 ? 'mr-auto' : 'ml-auto',
-              selectedExperience === index ? 'transform scale-105' : ''
+              selectedExperience === index ? 'transform scale-105 border border-gray-500' : 'border border-transparent hover:border-gray-600'
             ]">
               <div class="mb-4">
                 <h3 class="text-xl font-bold text-main mb-2">{{ experience.title }}</h3>
@@ -321,7 +312,7 @@ onMounted(async () => {
 
     // Load education from database
     try {
-      const eduResponse = await $fetch('/api/admin/education');
+      const eduResponse = await $fetch('/api/education');
       let dbEducation = [];
       
       // Handle response format

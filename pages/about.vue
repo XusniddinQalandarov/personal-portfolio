@@ -13,33 +13,53 @@
        <div ref="mainContentEl" class="grid lg:grid-cols-2 gap-8 md:gap-12 items-center bg-[#171A1FFF] p-6 md:p-12 lg:p-24 shadow-lg mx-4 md:mx-auto rounded-lg">
           <div class="bg-[#1E2128FF] p-6 md:p-8 rounded-lg flex items-center justify-center max-h-[280px] max-w-[300px] mx-auto">
           <NuxtImg
-            src="/images/img1.png"
+            src="/images/second.jpg"
             alt="About Me Photo"
             width="250"
             height="250"
             class="w-[200px] h-[200px] md:w-[250px] md:h-[250px] rounded-full object-cover shadow-md"
+            style="transform: rotate(90deg);"
           />
           </div>
           <!-- Bio Section -->
           <div>
           <div class="-mt-4">
             <h2 class="text-2xl md:text-3xl lg:text-4xl font-semibold text-white mb-4">My Story</h2>
-            <div class="space-y-4 text-white text-sm md:text-base">
+                        <div class="space-y-6 text-white text-sm md:text-base leading-relaxed">
               <p>
-                Hello! I'm a passionate full-stack developer with {{ yearsOfExperience }} years of experience 
-                in creating digital solutions that make a difference. My journey in tech started with 
-                curiosity and has evolved into a deep passion for building innovative applications.
+                Hey, I'm a full-stack developer with real-world experience in building scalable, meaningful digital products — but my journey is about more than just writing code. I come from a place where success isn't handed to you — it's built line by line, like software.
               </p>
+              
               <p>
-                I specialize in modern web technologies and enjoy working on projects that challenge 
-                me to grow and learn new skills. When I'm not coding, you can find me exploring new 
-                technologies, contributing to open-source projects, or sharing knowledge with the community.
+                What began as curiosity has transformed into a mission: to master technology, build impactful solutions, and create a life of freedom — for myself, my family, and others who dream big.
               </p>
+              
               <p>
-                I believe in writing clean, maintainable code and creating user experiences that are 
-                both functional and delightful. Every project is an opportunity to solve real problems 
-                and create value for users.
+                Over the past {{ yearsOfExperience }} years, I've worked professionally as a frontend developer (Angular & Nuxt), expanded into full-stack development, and built AI-powered applications, Telegram bots, and automation tools. I love taking an idea from concept to deployment — frontend, backend, logic, UX, AI integration — the full journey.
               </p>
+
+              <p>
+                I'm currently leveling up my expertise to senior-level standards, mastering product thinking, building automation startups, and exploring how AI can power the next generation of digital experiences.
+              </p>
+
+              <div class="mt-6">
+                <p class="font-medium mb-3">When I'm not developing, I'm probably:</p>
+                <ul class="space-y-2 ml-4">
+                  <li>⚡ Lifting weights and pushing physical limits</li>
+                  <li>📚 Learning something that makes me sharper</li>
+                  <li>🤖 Exploring AI workflows and building side products</li>
+                  <li>💡 Planning how to build something that impacts thousands</li>
+                </ul>
+              </div>
+
+              <div class="text-center mt-8 pt-4">
+                <p class="text-lg font-medium mb-2">
+                  I don't just build apps — I build solutions, freedom, and a future where technology works for people, not the other way around.
+                </p>
+                <p class="text-xl font-bold">
+                  Let's create something game-changing.
+                </p>
+              </div>
             </div>
           </div>
         </div>

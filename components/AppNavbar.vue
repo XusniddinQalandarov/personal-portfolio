@@ -45,7 +45,7 @@
         leave-from-class="opacity-100 translate-y-0"
         leave-to-class="opacity-0 -translate-y-2"
       >
-        <div v-if="isMobileMenuOpen" class="md:hidden py-4 border-t glow-border bg-dark-charcoal glass-panel">
+        <div v-if="isMobileMenuOpen" class="md:hidden py-4 border-t glow-border bg-transparent glass-panel">
           <div class="flex flex-col space-y-4">
             <NuxtLink 
               v-for="item in navigation" 
