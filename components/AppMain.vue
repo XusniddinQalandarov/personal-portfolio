@@ -8,7 +8,6 @@
                   width="320"
                   height="320"
                   class="w-52 h-52 md:w-80 md:h-80 rounded-full object-cover shadow-lg md:-mt-32"
-                  style="transform: rotate(90deg);"
                 />
             </div>
             

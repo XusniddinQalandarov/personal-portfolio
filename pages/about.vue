@@ -18,7 +18,6 @@
             width="250"
             height="250"
             class="w-[200px] h-[200px] md:w-[250px] md:h-[250px] rounded-full object-cover shadow-md"
-            style="transform: rotate(90deg);"
           />
           </div>
           <!-- Bio Section -->
