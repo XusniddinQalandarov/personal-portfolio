@@ -201,38 +201,39 @@ const animateFitness = () => {
   
   // Workout cards with enhanced animations
   if (workoutsEl.value) {
-    const workoutCards = workoutsEl.value.querySelectorAll(':scope > div');
+    const workoutCards = workoutsEl.value.children;
     if (workoutCards.length > 0) {
-      // Animate cards
+      // Set initial visible state to prevent stuck animations
+      gsap.set(workoutCards, { opacity: 1, y: 0, scale: 1, rotation: 0 });
+      
+      // Simple animation from bottom with stagger
       gsap.from(workoutCards, {
-        y: 50,
+        y: 30,
         opacity: 0,
-        scale: 0.9,
-        rotation: -5,
-        duration: 0.8,
-        stagger: 0.15,
-        ease: 'power3.out',
+        duration: 0.6,
+        stagger: 0.1,
+        ease: 'power2.out',
         scrollTrigger: {
           trigger: workoutsEl.value,
-          start: 'top 80%',
+          start: 'top 85%',
           toggleActions: 'play none none none',
         },
       });
       
-      // Animate icons inside cards
-      workoutCards.forEach((card, index) => {
+      // Animate icons inside cards separately and simply
+      Array.from(workoutCards).forEach((card, index) => {
         const icon = card.querySelector('i');
         if (icon) {
+          gsap.set(icon, { opacity: 1, scale: 1, rotation: 0 });
           gsap.from(icon, {
-            scale: 0,
-            rotation: 360,
+            scale: 0.5,
             opacity: 0,
-            duration: 0.6,
-            delay: 0.3 + (index * 0.15),
-            ease: 'back.out(2)',
+            duration: 0.4,
+            delay: 0.2 + (index * 0.1),
+            ease: 'back.out(1.7)',
             scrollTrigger: {
               trigger: workoutsEl.value,
-              start: 'top 80%',
+              start: 'top 85%',
               toggleActions: 'play none none none',
             },
           });
@@ -258,47 +259,50 @@ const animateFitness = () => {
   
   // PR cards with rotation
   if (prsEl.value) {
-    const prCards = prsEl.value.querySelectorAll('.grid > div');
-    if (prCards.length > 0) {
-      gsap.from(prCards, {
-        y: 40,
-        opacity: 0,
-        scale: 0.95,
-        rotation: 3,
-        duration: 0.8,
-        stagger: 0.15,
-        ease: 'power3.out',
-        scrollTrigger: {
-          trigger: prsEl.value.querySelector('.grid'),
-          start: 'top 80%',
-          toggleActions: 'play none none none',
-        },
-      });
-      
-      // Animate PR icons
-      prCards.forEach((card) => {
-        const icon = card.querySelector('i');
-        if (icon) {
-          gsap.from(icon, {
-            scale: 0,
-            rotation: -180,
-            opacity: 0,
-            duration: 0.6,
-            ease: 'back.out(2)',
-            scrollTrigger: {
-              trigger: card,
-              start: 'top 85%',
-              toggleActions: 'play none none none',
-            },
-          });
-        }
-      });
+    const gridContainer = prsEl.value.querySelector('.grid');
+    if (gridContainer) {
+      const prCards = gridContainer.children;
+      if (prCards.length > 0) {
+        gsap.from(prCards, {
+          y: 40,
+          opacity: 0,
+          scale: 0.95,
+          rotation: 3,
+          duration: 0.8,
+          stagger: 0.15,
+          ease: 'power3.out',
+          scrollTrigger: {
+            trigger: gridContainer,
+            start: 'top 80%',
+            toggleActions: 'play none none none',
+          },
+        });
+        
+        // Animate PR icons
+        Array.from(prCards).forEach((card) => {
+          const icon = card.querySelector('i');
+          if (icon) {
+            gsap.from(icon, {
+              scale: 0,
+              rotation: -180,
+              opacity: 0,
+              duration: 0.6,
+              ease: 'back.out(2)',
+              scrollTrigger: {
+                trigger: card,
+                start: 'top 85%',
+                toggleActions: 'play none none none',
+              },
+            });
+          }
+        });
+      }
     }
   }
   
   // Stats with bounce
   if (statsEl.value) {
-    const statCards = statsEl.value.querySelectorAll('> div');
+    const statCards = statsEl.value.children;
     if (statCards.length > 0) {
       gsap.from(statCards, {
         y: 30,
@@ -315,7 +319,7 @@ const animateFitness = () => {
       });
       
       // Animate stat values with counting effect
-      statCards.forEach((card) => {
+      Array.from(statCards).forEach((card) => {
         const value = card.querySelector('.text-2xl, .text-3xl');
         if (value) {
           gsap.from(value, {
