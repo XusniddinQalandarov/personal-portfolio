@@ -11,8 +11,8 @@
 
       <!-- Loading State -->
       <div v-if="loading" class="text-center py-12">
-        <div class="inline-block animate-spin rounded-full h-12 w-12 border-b-2 border-white"></div>
-        <p class="text-gray-400 mt-4">Loading experience...</p>
+        <div class="inline-block animate-spin rounded-full h-12 w-12 border-b-2 border-cyan-400"></div>
+        <p class="text-sub mt-4">Loading experience...</p>
       </div>
 
       <!-- Experience Timeline -->
@@ -24,15 +24,15 @@
         <div v-for="(experience, index) in experiences" :key="experience.id" class="mb-8 md:mb-12">
           <!-- Mobile Layout (stacked) -->
           <div class="block md:hidden">
-            <div class="bg-[#1E2128FF] p-4 rounded-lg">
+            <div class="glass-panel p-4 rounded-lg">
               <div class="flex items-center mb-3">
                 <div class="w-8 h-8 rounded-full bg-gray-600 flex items-center justify-center mr-3">
-                  <i :class="experience.icon || 'pi pi-briefcase'" class="text-white text-xs"></i>
+                  <i :class="experience.icon || 'pi pi-briefcase'" class="text-main text-xs"></i>
                 </div>
                 <div>
                   <h3 class="text-lg font-bold text-main">{{ experience.title }}</h3>
-                  <h4 class="text-sm text-[#704343FF]">{{ experience.company }}</h4>
-                  <p class="text-xs text-[#704343FF]">{{ experience.period }}</p>
+                  <h4 class="text-sm text-sub">{{ experience.company }}</h4>
+                  <p class="text-xs text-sub">{{ experience.period }}</p>
                 </div>
               </div>
               
@@ -43,7 +43,7 @@
                 <span 
                   v-for="tech in experience.technologies" 
                   :key="tech"
-                  class="px-2 py-1 bg-[#71444433] text-white rounded-2xl text-xs"
+                  class="px-2 py-1 bg-cyan-400/20 text-cyan-400 rounded-2xl text-xs border border-cyan-400/30"
                 >
                   {{ tech }}
                 </span>
@@ -54,7 +54,7 @@
                 <h5 class="text-sm font-semibold text-main mb-2">Key Achievements:</h5>
                 <ul class="text-sm text-sub space-y-1">
                   <li v-for="achievement in experience.achievements" :key="achievement" class="flex items-start">
-                    <span class="text-gray-400 mr-2">•</span>
+                    <span class="text-sub mr-2">•</span>
                     {{ achievement }}
                   </li>
                 </ul>
@@ -68,14 +68,14 @@
             index % 2 === 0 ? 'flex-row-reverse' : 'flex-row'
           ]">
             <!-- Content Card -->
-            <div class="w-5/12 bg-[#1E2128FF] p-6 rounded-lg transition-all duration-300" :class="[
+            <div class="w-5/12 glass-panel p-6 rounded-lg transition-all duration-300" :class="[
               index % 2 === 0 ? 'mr-auto' : 'ml-auto',
-              selectedExperience === index ? 'transform scale-105 border border-gray-500' : 'border border-transparent hover:border-gray-600'
+              selectedExperience === index ? 'transform scale-105 border border-cyan-400' : 'border border-transparent hover:border-cyan-400/50'
             ]">
               <div class="mb-4">
                 <h3 class="text-xl font-bold text-main mb-2">{{ experience.title }}</h3>
-                <h4 class="text-lg text-[#704343FF] font-semibold mb-2">{{ experience.company }}</h4>
-                <p class="text-sm text-[#704343FF] font-medium">{{ experience.period }}</p>
+                <h4 class="text-lg text-sub font-semibold mb-2">{{ experience.company }}</h4>
+                <p class="text-sm text-sub font-medium">{{ experience.period }}</p>
               </div>
               
               <p class="text-sub mb-4">{{ experience.description }}</p>
@@ -85,7 +85,7 @@
                 <span 
                   v-for="tech in experience.technologies" 
                   :key="tech"
-                  class="px-3 py-1 bg-[#71444433] text-white rounded-2xl text-sm"
+                  class="px-3 py-1 bg-cyan-400/20 text-cyan-400 rounded-2xl text-sm border border-cyan-400/30"
                 >
                   {{ tech }}
                 </span>
@@ -122,10 +122,10 @@
       <div v-if="!loading" class="mt-16 md:mt-20">
         <h2 class="text-2xl md:text-3xl font-bold text-center text-main mb-8 md:mb-12">Education & Certifications</h2>
         <div class="grid md:grid-cols-2 gap-6 md:gap-8">
-          <div v-for="edu in education" :key="edu.id" class="bg-[#1E2128FF] p-4 md:p-6 rounded-lg transition-all hover:scale-105 duration-300">
+          <div v-for="edu in education" :key="edu.id" class="glass-panel p-4 md:p-6 rounded-lg transition-all hover:scale-105 duration-300">
             <h3 class="text-base md:text-lg font-bold text-main mb-2">{{ edu.degree }}</h3>
             <h4 class="text-main font-semibold mb-1 text-sm md:text-base">{{ edu.school }}</h4>
-            <p class="text-[#704343FF] font-medium mb-3 text-sm">{{ edu.year }}</p>
+            <p class="text-sub font-medium mb-3 text-sm">{{ edu.year }}</p>
             <p class="text-sub text-sm" v-if="edu.description">{{ edu.description }}</p>
           </div>
         </div>
@@ -252,7 +252,7 @@ const defaultEducation = [
     degree: "High School Diploma",
     school: "Khiva Presidential School, Khiva, Khorezm",
     year: "June 2022",
-    description: "GPA: 4.92 / 5.00 • Class Rank: 2 / 12 • SAT: 1270 / 1600 • IELTS: 7.5 / 9.0"
+    description: "GPA: 4.92 / 5.00 • SAT: 1270 / 1600 • IELTS: 7.5 / 9.0"
   },
   {
     id: 3,

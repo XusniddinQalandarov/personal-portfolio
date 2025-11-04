@@ -30,7 +30,7 @@
         <div 
           v-for="day in workoutSplit" 
           :key="day.id"
-          class="bg-[#1E2128FF] p-4 md:p-6 rounded-lg hover:scale-105 transition-all duration-300 cursor-pointer"
+          class="glass-panel p-4 md:p-6 rounded-lg hover:scale-105 transition-all duration-300 cursor-pointer"
           @click="selectDay(day.id)"
           :class="selectedDay === day.id ? 'ring-2 ring-cyan-400/50' : ''"
         >
@@ -65,7 +65,7 @@
           <div 
             v-for="category in prCategories" 
             :key="category.name"
-            class="bg-[#1E2128FF] p-4 md:p-6 rounded-lg"
+            class="glass-panel p-4 md:p-6 rounded-lg"
           >
             <div class="flex items-center gap-4 mb-5 md:mb-6">
               <i :class="category.icon" class="text-3xl md:text-4xl text-cyan-400 flex-shrink-0"></i>
@@ -76,7 +76,7 @@
               <div 
                 v-for="exercise in category.exercises" 
                 :key="exercise.name"
-                class="flex justify-between items-center p-2 md:p-3 bg-gray-800/50 rounded"
+                class="flex justify-between items-center p-2 md:p-3 bg-opacity-20 border border-gray-600 rounded backdrop-blur-sm"
               >
                 <span class="text-sub font-medium text-sm md:text-base">{{ exercise.name }}</span>
                 <span class="text-cyan-400 font-bold text-sm md:text-base">{{ exercise.pr }}</span>
@@ -91,7 +91,7 @@
         <div 
           v-for="stat in progressStats" 
           :key="stat.label"
-          class="bg-[#1E2128FF] p-4 md:p-6 rounded-lg text-center"
+          class="glass-panel p-4 md:p-6 rounded-lg text-center"
         >
           <div class="text-2xl md:text-3xl font-bold text-cyan-400 mb-1 md:mb-2">{{ stat.value }}</div>
           <div class="text-sub text-xs md:text-sm">{{ stat.label }}</div>
@@ -99,7 +99,7 @@
       </div>
 
       <!-- Training Philosophy Quote -->
-      <div ref="quoteEl" class="text-center bg-[#1E2128FF] p-6 md:p-8 rounded-lg">
+      <div ref="quoteEl" class="text-center glass-panel p-6 md:p-8 rounded-lg">
         <blockquote class="text-base sm:text-lg md:text-xl lg:text-2xl font-medium text-main mb-4 italic">
           "The iron never lies to you. You can walk outside and listen to all kinds of talk, get told you're a god or a total bastard. The iron will always kick you the real deal."
         </blockquote>

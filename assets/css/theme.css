@@ -1,34 +1,97 @@
-/* Theme color variables and reusable classes for neon/modern dark UI */
+/* Theme color variables and reusable classes for neon/modern UI with light/dark mode */
 :root {
-  --color-navy: #0A1128;
-  --color-charcoal: #1B1F3B;
-  --color-panel: rgba(22, 36, 71, 0.7);
-  --color-gym-bg: #0C0F1A;
+  /* Light mode variables (default) */
+  --color-navy: #F8FAFC;
+  --color-charcoal: #E2E8F0;
+  --color-panel: rgba(255, 255, 255, 0.8);
+  --color-gym-bg: #F1F5F9;
+  --color-cyan: #0891B2;
+  --color-violet: #7C3AED;
+  --color-white: #1E293B;
+  --color-light-gray: #475569;
+  --border-glow-cyan: 0 0 8px 2px rgba(8,145,178,0.2);
+  --border-glow-violet: 0 0 8px 2px rgba(124,58,237,0.2);
+  
+  /* Background and text colors that change with theme */
+  --bg-primary: #FFFFFF;
+  --bg-secondary: #F8FAFC;
+  --bg-panel: rgba(255, 255, 255, 0.9);
+  --text-primary: #1E293B;
+  --text-secondary: #475569;
+  --border-color: rgba(8,145,178,0.2);
+}
+
+/* Dark mode variables */
+[data-theme="dark"] {
+  --color-navy: #161A1F;
+  --color-charcoal: #161A1F;
+  --color-panel: rgba(22, 26, 31, 0.7);
+  --color-gym-bg: #161A1F;
   --color-cyan: #00FFF7;
   --color-violet: #BB00FF;
   --color-white: #FFFFFF;
   --color-light-gray: #B0BAC9;
   --border-glow-cyan: 0 0 8px 2px rgba(0,255,247,0.2);
   --border-glow-violet: 0 0 8px 2px rgba(187,0,255,0.2);
+  
+  /* Dark mode specific colors */
+  --bg-primary: #161A1F;
+  --bg-secondary: #161A1F;
+  --bg-panel: rgba(22, 26, 31, 0.7);
+  --text-primary: #FFFFFF;
+  --text-secondary: #B0BAC9;
+  --border-color: rgba(0,255,247,0.15);
 }
 
 .bg-primary {
-  background: var(--color-navy);
+  background: var(--bg-primary);
 }
 .bg-charcoal {
-  background: var(--color-charcoal);
+  background: var(--bg-secondary);
 }
 .bg-dark-charcoal {
-  background: #000000FF;
+  background: var(--bg-primary);
 }
 
 /* Glassy panel/card */
 .glass-panel {
-  /* background removed to allow parent bg to show */
+  background: var(--bg-panel);
   backdrop-filter: blur(12px);
   border-radius: 1rem;
-  border: 1px solid rgba(0,255,247,0.15);
+  border: 1px solid var(--border-color);
   box-shadow: var(--border-glow-cyan);
+}
+
+/* Add glass-panel as a component for Tailwind compatibility */
+@layer components {
+  .glass-panel {
+    background: var(--bg-panel);
+    backdrop-filter: blur(12px);
+    border-radius: 1rem;
+    border: 1px solid var(--border-color);
+    box-shadow: var(--border-glow-cyan);
+  }
+  
+  .card {
+    background: var(--bg-panel);
+    backdrop-filter: blur(12px);
+    border-radius: 1rem;
+    border: 1px solid var(--border-color);
+    box-shadow: var(--border-glow-cyan);
+    transition: box-shadow 0.2s ease;
+  }
+  
+  .card:hover {
+    box-shadow: var(--border-glow-cyan), 0 10px 25px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+  }
+}
+
+@layer base {
+  body {
+    background: var(--bg-primary);
+    color: var(--text-primary);
+    transition: background-color 0.3s ease, color 0.3s ease;
+  }
 }
 
 /* Gym & lifestyle page */
@@ -49,14 +112,16 @@
 
 /* Buttons */
 .btn-primary {
-  background: black !important;
-  color: var(--color-white);
-  border: white 1px solid;
+  background: var(--bg-primary) !important;
+  color: var(--text-primary);
+  border: var(--text-primary) 1px solid;
   border-radius: 22px !important;
+  transition: all 0.3s ease;
 }
 .btn-primary:hover {
   box-shadow: 0 0 18px 4px var(--color-cyan);
-  background: #1ffcf7;
+  background: var(--color-cyan) !important;
+  color: var(--bg-primary) !important;
 }
 
 .btn-secondary {
@@ -73,10 +138,10 @@
 
 /* Typography */
 .text-main {
-  color: var(--color-white);
+  color: var(--text-primary);
 }
 .text-sub {
-  color: var(--color-light-gray);
+  color: var(--text-secondary);
 }
 .text-quote-cyan {
   color: var(--color-cyan);
@@ -89,7 +154,7 @@
 
 /* Navbar links */
 .nav-link {
-  color: var(--color-white);
+  color: var(--text-primary);
   transition: color 0.2s;
 }
 .nav-link:hover {
@@ -103,13 +168,13 @@
 
 /* Borders & dividers */
 .glow-border {
-  border: 1px solid rgba(0,255,247,0.2);
+  border: 1px solid var(--border-color);
   box-shadow: var(--border-glow-cyan);
 }
 
 /* Icons */
 .icon {
-  color: var(--color-white);
+  color: var(--text-primary);
   transition: color 0.2s, text-shadow 0.2s;
 }
 .icon:hover {
@@ -119,14 +184,14 @@
 
 /* Form fields */
 .input-neon {
-  background: rgba(24, 41, 70, 0.8);
+  background: var(--bg-panel);
   border: 2px solid var(--color-cyan);
-  color: var(--color-white);
+  color: var(--text-primary);
   border-radius: 0.5rem;
   padding: 0.5rem 1rem;
 }
 .input-neon::placeholder {
-  color: var(--color-white);
+  color: var(--text-secondary);
   opacity: 0.7;
 }
 .input-neon:focus {
@@ -134,3 +199,14 @@
   border-color: var(--color-violet);
   box-shadow: 0 0 8px var(--color-violet);
 }
+
+/* Theme toggle button */
+.theme-toggle {
+  border: none;
+  color: var(--text-primary);
+  border-radius: 0.5rem;
+  padding: 0.5rem;
+  transition: all 0.3s ease;
+  backdrop-filter: blur(12px);
+}
+

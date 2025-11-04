@@ -3,14 +3,14 @@
     <!-- Loading State -->
     <div v-if="loading" class="max-w-4xl mx-auto px-4 text-center py-20">
       <div class="inline-block animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-cyan-400"></div>
-      <p class="text-white mt-4">Loading blog...</p>
+      <p class="text-main mt-4">Loading blog...</p>
     </div>
 
     <!-- Error State -->
     <div v-else-if="error" class="max-w-4xl mx-auto px-4 text-center py-20">
       <i class="pi pi-exclamation-triangle text-6xl text-red-500 mb-4"></i>
-      <h1 class="text-3xl text-white font-bold mb-4">Blog Not Found</h1>
-      <p class="text-[#BDC1CAFF] mb-8">The blog post you're looking for doesn't exist.</p>
+      <h1 class="text-3xl text-main font-bold mb-4">Blog Not Found</h1>
+      <p class="text-sub mb-8">The blog post you're looking for doesn't exist.</p>
       <NuxtLink to="/blogs" class="btn-primary inline-block px-6 py-3">
         Back to Blogs
       </NuxtLink>
@@ -29,7 +29,7 @@
 
       <!-- Header -->
       <header class="mb-12 glass-panel p-6 md:p-8">
-        <h1 class="text-2xl sm:text-3xl md:text-4xl lg:text-5xl text-white font-bold mb-6">
+        <h1 class="text-2xl sm:text-3xl md:text-4xl lg:text-5xl text-main font-bold mb-6">
           {{ blog.title }}
         </h1>
         
@@ -62,17 +62,17 @@
       </header>
 
       <!-- Featured Image -->
-      <div v-if="blog.image_url" class="rounded-lg overflow-hidden mb-12">
+      <div v-if="blog.image_url" class="rounded-lg overflow-hidden mb-12 mx-auto max-w-2xl">
         <img
           :src="blog.image_url"
           :alt="blog.title"
-          class="w-full h-auto"
+          class="w-full h-auto rounded-lg"
         />
       </div>
 
       <!-- Excerpt -->
       <div v-if="blog.excerpt" class="glass-panel p-4 md:p-6 mb-8 md:mb-12">
-        <p class="text-lg md:text-xl text-[#BDC1CAFF] leading-relaxed italic">
+        <p class="text-lg md:text-xl text-sub leading-relaxed italic">
           {{ blog.excerpt }}
         </p>
       </div>
@@ -84,13 +84,13 @@
 
       <!-- Share Buttons -->
       <div class="glass-panel p-4 md:p-8 mb-8 md:mb-12">
-        <h3 class="text-lg md:text-xl text-white font-semibold mb-4">Share this post</h3>
+        <h3 class="text-lg md:text-xl text-main font-semibold mb-4">Share this post</h3>
         <div class="flex flex-wrap gap-3 md:gap-4">
           <a
             :href="shareUrls.twitter"
             target="_blank"
             rel="noopener noreferrer"
-            class="px-4 py-2 md:px-6 md:py-3 text-sm md:text-base bg-transparent border border-white text-white rounded-full hover:bg-cyan-400 hover:text-black hover:border-cyan-400 transition-all duration-300"
+            class="px-4 py-2 md:px-6 md:py-3 text-sm md:text-base bg-transparent border border-white text-main rounded-full hover:bg-cyan-400 hover:text-black hover:border-cyan-400 transition-all duration-300"
           >
             <i class="pi pi-twitter mr-2"></i>
             Twitter
@@ -99,14 +99,14 @@
             :href="shareUrls.linkedin"
             target="_blank"
             rel="noopener noreferrer"
-            class="px-4 py-2 md:px-6 md:py-3 text-sm md:text-base bg-transparent border border-white text-white rounded-full hover:bg-cyan-400 hover:text-black hover:border-cyan-400 transition-all duration-300"
+            class="px-4 py-2 md:px-6 md:py-3 text-sm md:text-base bg-transparent border border-white text-main rounded-full hover:bg-cyan-400 hover:text-black hover:border-cyan-400 transition-all duration-300"
           >
             <i class="pi pi-linkedin mr-2"></i>
             LinkedIn
           </a>
           <button
             @click="copyLink"
-            class="px-4 py-2 md:px-6 md:py-3 text-sm md:text-base bg-transparent border border-white text-white rounded-full hover:bg-cyan-400 hover:text-black hover:border-cyan-400 transition-all duration-300"
+            class="px-4 py-2 md:px-6 md:py-3 text-sm md:text-base bg-transparent border border-white text-main rounded-full hover:bg-cyan-400 hover:text-black hover:border-cyan-400 transition-all duration-300"
           >
             <i class="pi pi-link mr-2"></i>
             {{ linkCopied ? 'Copied!' : 'Copy Link' }}
@@ -116,13 +116,13 @@
 
       <!-- Related Tags -->
       <div v-if="blog.tags?.length" class="glass-panel p-4 md:p-8">
-        <h3 class="text-lg md:text-xl text-white font-semibold mb-4">Explore more topics</h3>
+        <h3 class="text-lg md:text-xl text-main font-semibold mb-4">Explore more topics</h3>
         <div class="flex flex-wrap gap-2 md:gap-3">
           <NuxtLink
             v-for="tag in blog.tags"
             :key="tag"
             :to="`/blogs?tag=${tag}`"
-            class="px-3 py-1.5 md:px-4 md:py-2 text-sm md:text-base bg-transparent border border-white text-white rounded-full hover:bg-cyan-400 hover:text-black hover:border-cyan-400 transition-all duration-300"
+            class="px-3 py-1.5 md:px-4 md:py-2 text-sm md:text-base bg-transparent border border-white text-main rounded-full hover:bg-cyan-400 hover:text-black hover:border-cyan-400 transition-all duration-300"
           >
             {{ tag }}
           </NuxtLink>
@@ -235,7 +235,7 @@ useSeoMeta({
 
 <style scoped>
 .blog-content {
-  color: white;
+  color: var(--text-primary);
   line-height: 1.8;
   font-size: 1.125rem;
 }
@@ -243,17 +243,17 @@ useSeoMeta({
 .blog-content :deep(h1) {
   font-size: 2.25rem;
   font-weight: 700;
-  color: white;
+  color: var(--text-primary);
   margin-bottom: 1.5rem;
   margin-top: 2.5rem;
-  border-bottom: 2px solid rgba(0, 255, 247, 0.3);
+  border-bottom: 2px solid var(--border-color);
   padding-bottom: 0.5rem;
 }
 
 .blog-content :deep(h2) {
   font-size: 1.875rem;
   font-weight: 700;
-  color: white;
+  color: var(--text-primary);
   margin-bottom: 1rem;
   margin-top: 2rem;
 }
@@ -261,30 +261,30 @@ useSeoMeta({
 .blog-content :deep(h3) {
   font-size: 1.5rem;
   font-weight: 600;
-  color: white;
+  color: var(--text-primary);
   margin-bottom: 0.75rem;
   margin-top: 1.5rem;
 }
 
 .blog-content :deep(p) {
-  color: #BDC1CA;
+  color: var(--text-secondary);
   margin-bottom: 1.5rem;
   line-height: 1.8;
 }
 
 .blog-content :deep(a) {
-  color: #00FFF7;
+  color: var(--color-cyan);
   text-decoration: underline;
   transition: color 0.3s;
 }
 
 .blog-content :deep(a:hover) {
-  color: #67e8f9;
+  color: var(--color-violet);
 }
 
 .blog-content :deep(ul),
 .blog-content :deep(ol) {
-  color: #BDC1CA;
+  color: var(--text-secondary);
   margin-bottom: 1.5rem;
   margin-left: 2rem;
 }
@@ -295,22 +295,22 @@ useSeoMeta({
 }
 
 .blog-content :deep(code) {
-  background: rgba(0, 255, 247, 0.1);
-  color: #00FFF7;
+  background: var(--bg-panel);
+  color: var(--color-cyan);
   padding: 0.25rem 0.5rem;
   border-radius: 0.375rem;
   font-size: 0.875rem;
   font-family: 'Monaco', 'Courier New', monospace;
-  border: 1px solid rgba(0, 255, 247, 0.3);
+  border: 1px solid var(--border-color);
 }
 
 .blog-content :deep(pre) {
-  background: rgba(0, 10, 20, 0.5);
+  background: var(--bg-panel);
   padding: 1.5rem;
   border-radius: 0.5rem;
   margin-bottom: 1.5rem;
   overflow-x: auto;
-  border: 1px solid rgba(0, 255, 247, 0.2);
+  border: 1px solid var(--border-color);
 }
 
 .blog-content :deep(pre code) {
@@ -320,12 +320,12 @@ useSeoMeta({
 }
 
 .blog-content :deep(blockquote) {
-  border-left: 4px solid #00FFF7;
+  border-left: 4px solid var(--color-cyan);
   padding-left: 1.5rem;
   font-style: italic;
-  color: #BDC1CA;
+  color: var(--text-secondary);
   margin-bottom: 1.5rem;
-  background: rgba(0, 255, 247, 0.05);
+  background: var(--bg-panel);
   padding: 1rem 1.5rem;
   border-radius: 0 0.5rem 0.5rem 0;
 }
@@ -340,32 +340,32 @@ useSeoMeta({
 .blog-content :deep(table) {
   width: 100%;
   margin-bottom: 1.5rem;
-  border: 1px solid rgba(0, 255, 247, 0.2);
+  border: 1px solid var(--border-color);
   border-radius: 0.5rem;
   overflow: hidden;
 }
 
 .blog-content :deep(th) {
-  background: rgba(0, 255, 247, 0.1);
-  color: white;
+  background: var(--bg-panel);
+  color: var(--text-primary);
   padding: 0.75rem;
-  border: 1px solid rgba(0, 255, 247, 0.2);
+  border: 1px solid var(--border-color);
   font-weight: 600;
 }
 
 .blog-content :deep(td) {
-  color: #BDC1CA;
+  color: var(--text-secondary);
   padding: 0.75rem;
-  border: 1px solid rgba(0, 255, 247, 0.2);
+  border: 1px solid var(--border-color);
 }
 
 .blog-content :deep(strong) {
-  color: white;
+  color: var(--text-primary);
   font-weight: 600;
 }
 
 .blog-content :deep(em) {
-  color: #00FFF7;
+  color: var(--color-cyan);
   font-style: italic;
 }
 </style>

@@ -3,7 +3,7 @@
     <div class="max-w-4xl mx-auto px-4">
       <!-- Header -->
       <div ref="headerEl" class="text-center mb-12 md:mb-16">
-        <h1 class="text-2xl sm:text-3xl md:text-4xl lg:text-5xl text-white font-bold mb-6">Get In Touch</h1>
+        <h1 class="text-2xl sm:text-3xl md:text-4xl lg:text-5xl text-main font-bold mb-6">Get In Touch</h1>
         <p class="text-base md:text-lg lg:text-xl text-sub max-w-2xl mx-auto">
           Have a project in mind or want to collaborate? I'd love to hear from you!
         </p>
@@ -13,13 +13,13 @@
 
         <!-- Contact Form -->
         <div ref="formEl">
-          <div class="bg-[#1E2128FF] p-4 md:p-6 rounded-lg">
-            <h2 class="text-xl md:text-2xl text-white font-semibold mb-4 md:mb-6">Send Me a Message</h2>
+          <div class="glass-panel p-4 md:p-6 rounded-lg">
+            <h2 class="text-xl md:text-2xl text-main font-semibold mb-4 md:mb-6">Send Me a Message</h2>
             
             <form @submit.prevent="submitForm" class="space-y-4 md:space-y-6">
               <div class="grid md:grid-cols-2 gap-4 md:gap-6">
                 <div>
-                  <label for="name" class="block text-sm font-medium text-white mb-2">
+                  <label for="name" class="block text-sm font-medium text-main mb-2">
                     Name  <span class="text-red-500">*</span>
                   </label>
                   <input
@@ -27,12 +27,12 @@
                     v-model="form.name"
                     type="text"
                     required
-                    class="w-full px-3 md:px-4 py-2 md:py-2.5 rounded-lg bg-[#323743FF] text-white text-sm md:text-base border border-transparent focus:border-cyan-400 focus:outline-none transition-colors"
+                    class="w-full px-3 md:px-4 py-2 md:py-2.5 rounded-lg bg-charcoal text-main text-sm md:text-base border border-transparent focus:border-cyan-400 focus:outline-none transition-colors"
                     placeholder="Your name"
                   >
                 </div>
                 <div>
-                  <label for="email" class="block text-sm font-medium text-white mb-2">
+                  <label for="email" class="block text-sm font-medium text-main mb-2">
                     Email <span class="text-red-500">*</span>
                   </label>
                   <input
@@ -40,14 +40,14 @@
                     v-model="form.email"
                     type="email"
                     required
-                    class="w-full px-3 md:px-4 py-2 md:py-2.5 rounded-lg bg-[#323743FF] text-white text-sm md:text-base border border-transparent focus:border-cyan-400 focus:outline-none transition-colors"
+                    class="w-full px-3 md:px-4 py-2 md:py-2.5 rounded-lg bg-charcoal text-main text-sm md:text-base border border-transparent focus:border-cyan-400 focus:outline-none transition-colors"
                     placeholder="name@gmail.com"
                   >
                 </div>
               </div>
 
               <div>
-                <label for="subject" class="block text-sm font-medium text-white mb-2">
+                <label for="subject" class="block text-sm font-medium text-main mb-2">
                   Subject <span class="text-red-500">*</span>
                 </label>
                 <input
@@ -55,13 +55,13 @@
                   v-model="form.subject"
                   type="text"
                   required
-                  class="w-full px-3 md:px-4 py-2 md:py-2.5 rounded-lg bg-[#323743FF] text-white text-sm md:text-base border border-transparent focus:border-cyan-400 focus:outline-none transition-colors"
+                  class="w-full px-3 md:px-4 py-2 md:py-2.5 rounded-lg bg-charcoal text-main text-sm md:text-base border border-transparent focus:border-cyan-400 focus:outline-none transition-colors"
                   placeholder="What's this about?"
                 >
               </div>
 
               <div>
-                <label for="message" class="block text-sm font-medium text-white mb-2">
+                <label for="message" class="block text-sm font-medium text-main mb-2">
                   Message <span class="text-red-500">*</span>
                 </label>
                 <textarea
@@ -69,7 +69,7 @@
                   v-model="form.message"
                   rows="5"
                   required
-                  class="w-full px-3 md:px-4 py-2 md:py-2.5 rounded-lg bg-[#323743FF] text-white resize-none text-sm md:text-base border border-transparent focus:border-cyan-400 focus:outline-none transition-colors"
+                  class="w-full px-3 md:px-4 py-2 md:py-2.5 rounded-lg bg-charcoal text-main resize-none text-sm md:text-base border border-transparent focus:border-cyan-400 focus:outline-none transition-colors"
                   placeholder="Tell me about your project or just say hello!"
                 ></textarea>
               </div>
@@ -82,7 +82,7 @@
                     'w-full py-2.5 md:py-3 px-4 md:px-6 rounded-lg font-semibold transition-colors text-sm md:text-base',
                     isSubmitting
                       ? 'bg-gray-300 text-gray-500 cursor-not-allowed'
-                      : 'bg-[#253A6AFF] hover:bg-[#2c3e50] text-white'
+                      : 'btn-primary'
                   ]"
                 >
                   <span v-if="!isSubmitting">Send Message</span>
@@ -108,7 +108,7 @@
         </div>
         <!-- Contact Information -->
         <div ref="contactInfoEl">
-          <div class="bg-[#1E2128FF] p-4 md:p-6 rounded-lg">
+          <div class="glass-panel p-4 md:p-6 rounded-lg">
             <h2 class="text-xl md:text-2xl text-main font-semibold mb-4 md:mb-6">Let's Connect</h2>
             <p class="text-sub mb-6 md:mb-8 text-sm">
              Always open to collaboration, code, or a good workout.
@@ -117,48 +117,48 @@
             <!-- Contact Methods -->
             <div class="space-y-4 md:space-y-6">
               <div class="flex items-center gap-3 md:gap-4">
-                <div class="w-10 h-10 md:w-12 md:h-12 flex-shrink-0 rounded-lg flex items-center justify-center bg-transparent border border-white">
+                <div class="w-10 h-10 md:w-12 md:h-12 flex-shrink-0 rounded-lg flex items-center justify-center bg-transparent border border-cyan-400">
                   <i class="pi pi-envelope text-red-600 text-lg md:text-2xl"></i>
                 </div>
                 <div class="min-w-0 flex-1">
                   <h3 class="font-semibold text-main text-sm md:text-base">Email</h3>
-                  <a href="mailto:xusniddinqalandarov2004@gmail.com" class="text-blue-600 hover:underline text-xs md:text-sm break-all">
+                  <a href="mailto:xusniddinqalandarov2004@gmail.com" class="text-cyan-400 hover:underline text-xs md:text-sm break-all">
                     xusniddinqalandarov2004@gmail.com
                   </a>
                 </div>
               </div>
 
               <div class="flex items-center gap-3 md:gap-4">
-                  <div class="w-10 h-10 md:w-12 md:h-12 flex-shrink-0 rounded-lg flex items-center justify-center bg-transparent border border-white">
-                  <i class="pi pi-twitter text-white text-lg md:text-2xl"></i>
+                  <div class="w-10 h-10 md:w-12 md:h-12 flex-shrink-0 rounded-lg flex items-center justify-center bg-transparent border border-cyan-400">
+                  <i class="pi pi-twitter text-main text-lg md:text-2xl"></i>
                 </div>
                 <div class="min-w-0 flex-1">
                   <h3 class="font-semibold text-main text-sm md:text-base">X</h3>
-                  <a href="https://x.com/Xusniddin_Q" target="_blank" class="text-blue-600 hover:underline text-xs md:text-sm">
+                  <a href="https://x.com/Xusniddin_Q" target="_blank" class="text-cyan-400 hover:underline text-xs md:text-sm">
                     @Xusniddin_Q
                   </a>
                 </div>
               </div>
 
               <div class="flex items-center gap-3 md:gap-4">
-                <div class="w-10 h-10 md:w-12 md:h-12 flex-shrink-0 rounded-lg flex items-center justify-center bg-transparent border border-white">
+                <div class="w-10 h-10 md:w-12 md:h-12 flex-shrink-0 rounded-lg flex items-center justify-center bg-transparent border border-cyan-400">
                   <i class="pi pi-linkedin text-blue-600 text-lg md:text-2xl"></i>
                 </div>
                 <div class="min-w-0 flex-1">
                   <h3 class="font-semibold text-main text-sm md:text-base">LinkedIn</h3>
-                  <a href="https://www.linkedin.com/in/xusniddin-qalandarov/" target="_blank" class="text-blue-600 hover:underline text-xs md:text-sm">
+                  <a href="https://www.linkedin.com/in/xusniddin-qalandarov/" target="_blank" class="text-cyan-400 hover:underline text-xs md:text-sm">
                     @xusniddin-qalandarov
                   </a>
                 </div>
               </div>
 
               <div class="flex items-center gap-3 md:gap-4">
-                  <div class="w-10 h-10 md:w-12 md:h-12 flex-shrink-0 rounded-lg flex items-center justify-center bg-transparent border border-white">
-                  <i class="pi pi-github text-white text-lg md:text-2xl"></i>
+                  <div class="w-10 h-10 md:w-12 md:h-12 flex-shrink-0 rounded-lg flex items-center justify-center bg-transparent border border-cyan-400">
+                  <i class="pi pi-github text-main text-lg md:text-2xl"></i>
                 </div>
                 <div class="min-w-0 flex-1">
                   <h3 class="font-semibold text-main text-sm md:text-base">GitHub</h3>
-                  <a href="https://github.com/Xusniddin-devv" target="_blank" class="text-blue-600 hover:underline text-xs md:text-sm">
+                  <a href="https://github.com/Xusniddin-devv" target="_blank" class="text-cyan-400 hover:underline text-xs md:text-sm">
                     @Xusniddin-devv
                   </a>
                 </div>

@@ -19,11 +19,22 @@
           </div>
         </div>
 
-        <!-- Mobile Menu Button -->
-        <div class="flex items-center">
+        <!-- Theme Toggle & Mobile Menu Button -->
+        <div class="flex items-center space-x-2">
+          <!-- Theme Toggle Button -->
+          <button
+            @click="toggleTheme"
+            class="theme-toggle p-2"
+            :aria-label="isDark ? 'Switch to light mode' : 'Switch to dark mode'"
+          >
+            <i v-if="isDark" class="pi pi-sun text-lg"></i>
+            <i v-else class="pi pi-moon text-lg"></i>
+          </button>
+
+          <!-- Mobile Menu Button -->
           <button
             @click.stop="toggleMobileMenu"
-            class="md:hidden p-2 ml-2"
+            class="md:hidden p-2"
             aria-label="Toggle menu"
           >
             <svg v-if="!isMobileMenuOpen" class="w-6 h-6 icon" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -59,6 +70,17 @@
             >
               {{ item.name }}
             </NuxtLink>
+            
+            <!-- Mobile Theme Toggle -->
+            <button
+              @click="toggleTheme"
+              class="theme-toggle p-2 mx-2 flex items-center gap-2"
+              :aria-label="isDark ? 'Switch to light mode' : 'Switch to dark mode'"
+            >
+              <i v-if="isDark" class="pi pi-sun"></i>
+              <i v-else class="pi pi-moon"></i>
+              <span>{{ isDark ? 'Light Mode' : 'Dark Mode' }}</span>
+            </button>
           </div>
         </div>
       </Transition>
@@ -70,6 +92,8 @@
 </template>
 
 <script setup>
+const { isDark, toggleTheme, initTheme } = useTheme()
+
 const navigation = [
   { name: 'Home', href: '/' },
   { name: 'About', href: '/about' },
@@ -82,7 +106,6 @@ const navigation = [
 ];
 
 const isMobileMenuOpen = ref(false);
-const isDark = ref(false);
 
 const toggleMobileMenu = () => {
   isMobileMenuOpen.value = !isMobileMenuOpen.value;
@@ -92,18 +115,19 @@ const closeMobileMenu = () => {
   isMobileMenuOpen.value = false;
 };
 
-const toggleTheme = () => {
-  isDark.value = !isDark.value;
-  // You can implement actual theme switching here
-  // For now, it's just a visual toggle
-};
-
 watch(() => useRoute().path, () => {
   closeMobileMenu();
 });
 
-// Close mobile menu when clicking outside
+// Initialize theme on mount
 onMounted(() => {
+  initTheme()
+  
+  // Add a small delay to ensure DOM is ready
+  nextTick(() => {
+    initTheme()
+  })
+  
   const handleClickOutside = (event) => {
     if (isMobileMenuOpen.value && !event.target.closest('nav')) {
       closeMobileMenu();

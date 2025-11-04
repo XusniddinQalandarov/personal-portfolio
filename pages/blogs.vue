@@ -3,8 +3,8 @@
     <div class="max-w-6xl mx-auto px-4">
       <!-- Header -->
       <div ref="headerEl" class="text-center mb-12 md:mb-16">
-        <h1 class="text-2xl sm:text-3xl md:text-4xl lg:text-5xl text-white font-bold mb-6">Blog & Insights</h1>
-        <p class="text-base md:text-lg lg:text-xl text-[#BDC1CAFF] max-w-2xl mx-auto">
+        <h1 class="text-2xl sm:text-3xl md:text-4xl lg:text-5xl text-main font-bold mb-6">Blog & Insights</h1>
+        <p class="text-base md:text-lg lg:text-xl text-sub max-w-2xl mx-auto">
           Thoughts, tutorials, and insights on web development
         </p>
       </div>
@@ -21,7 +21,7 @@
             @input="searchBlogs"
             type="text"
             placeholder="Search blogs..."
-            class="w-full pl-12 pr-4 py-3 bg-[#1E2128FF] text-white rounded-lg border border-white/10 focus:border-cyan-400 focus:outline-none focus:ring-2 focus:ring-cyan-400/20 transition-all placeholder-gray-400"
+            class="w-full pl-12 pr-4 py-3 bg-charcoal text-main rounded-lg border border-white/10 focus:border-cyan-400 focus:outline-none focus:ring-2 focus:ring-cyan-400/20 transition-all placeholder-gray-400"
           />
         </div>
         
@@ -33,10 +33,10 @@
           <select
             v-model="selectedTag"
             @change="filterByTag"
-            class="w-full md:w-56 pl-12 pr-10 py-3 bg-[#1E2128FF] text-white rounded-lg border border-white/10 focus:border-cyan-400 focus:outline-none focus:ring-2 focus:ring-cyan-400/20 transition-all appearance-none cursor-pointer"
+            class="w-full md:w-56 pl-12 pr-10 py-3 bg-charcoal text-main rounded-lg border border-white/10 focus:border-cyan-400 focus:outline-none focus:ring-2 focus:ring-cyan-400/20 transition-all appearance-none cursor-pointer"
           >
-            <option value="" class="bg-[#1E2128FF] text-white py-2">All Tags</option>
-            <option v-for="tag in allTags" :key="tag" :value="tag" class="bg-[#1E2128FF] text-white py-2">
+            <option value="" class="bg-charcoal text-main py-2">All Tags</option>
+            <option v-for="tag in allTags" :key="tag" :value="tag" class="bg-charcoal text-main py-2">
               {{ tag }}
             </option>
           </select>
@@ -49,7 +49,7 @@
       <!-- Loading State -->
       <div v-if="loading" class="text-center py-20">
         <div class="inline-block animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-cyan-400"></div>
-        <p class="text-white mt-4">Loading blogs...</p>
+        <p class="text-main mt-4">Loading blogs...</p>
       </div>
 
       <!-- No Blogs -->
@@ -82,11 +82,11 @@
 
           <!-- Content -->
           <div>
-            <h3 class="text-2xl font-semibold text-white mb-3 group-hover:text-cyan-400 transition-colors">
+            <h3 class="text-2xl font-semibold text-main mb-3 group-hover:text-cyan-400 transition-colors">
               {{ blog.title }}
             </h3>
             
-            <p class="text-[#BDC1CAFF] text-sm mb-4 line-clamp-2 leading-relaxed">
+            <p class="text-sub text-sm mb-4 line-clamp-2 leading-relaxed">
               {{ blog.excerpt || 'Read more...' }}
             </p>
 
@@ -118,7 +118,7 @@
 
       <!-- Popular Tags -->
       <div v-if="allTags.length" class="mt-16">
-        <h2 class="text-2xl text-white font-semibold mb-6 text-center">Popular Tags</h2>
+        <h2 class="text-2xl text-main font-semibold mb-6 text-center">Popular Tags</h2>
         <div class="flex flex-wrap justify-center gap-3">
           <button
             v-for="tag in allTags"
@@ -128,7 +128,7 @@
               'px-4 py-2 rounded-full text-sm font-medium transition-all duration-300',
               selectedTag === tag
                 ? 'bg-white text-black'
-                : 'bg-transparent text-white border border-white hover:border-cyan-400 hover:text-cyan-400'
+                : 'bg-transparent text-main border border-white hover:border-cyan-400 hover:text-cyan-400'
             ]"
           >
             {{ tag }}
@@ -184,18 +184,22 @@ const loadBlogs = async () => {
 }
 
 const animateBlogs = () => {
-  // Animate header from top
-  gsap.from(headerEl.value, {
-    y: -30,
-    opacity: 0,
+  // Set initial states
+  gsap.set(headerEl.value, { y: -30, opacity: 0 })
+  gsap.set(filtersEl.value, { y: 20, opacity: 0 })
+  
+  // Animate header to visible
+  gsap.to(headerEl.value, {
+    y: 0,
+    opacity: 1,
     duration: 0.8,
     ease: 'power3.out',
   })
   
-  // Animate filters slide in
-  gsap.from(filtersEl.value, {
-    y: 20,
-    opacity: 0,
+  // Animate filters to visible
+  gsap.to(filtersEl.value, {
+    y: 0,
+    opacity: 1,
     duration: 0.8,
     delay: 0.3,
     ease: 'power3.out',
@@ -205,9 +209,12 @@ const animateBlogs = () => {
   if (gridEl.value) {
     const cards = gridEl.value.querySelectorAll('.blog-card')
     if (cards.length > 0) {
-      gsap.from(cards, {
-        y: 30,
-        opacity: 0,
+      // Set initial states for cards
+      gsap.set(cards, { y: 30, opacity: 0 })
+      
+      gsap.to(cards, {
+        y: 0,
+        opacity: 1,
         duration: 0.8,
         stagger: 0.15,
         ease: 'power3.out',
@@ -247,9 +254,12 @@ const searchBlogs = () => {
     if (gridEl.value) {
       const cards = gridEl.value.querySelectorAll('.blog-card')
       if (cards.length > 0) {
-        gsap.from(cards, {
-          scale: 0.9,
-          opacity: 0,
+        // Set initial states for filter animation
+        gsap.set(cards, { scale: 0.9, opacity: 0 })
+        
+        gsap.to(cards, {
+          scale: 1,
+          opacity: 1,
           duration: 0.4,
           stagger: 0.1,
           ease: 'back.out(1.2)',
