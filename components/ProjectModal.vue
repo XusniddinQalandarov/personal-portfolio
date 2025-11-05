@@ -1,7 +1,7 @@
 <template>
   <Teleport to="body">
     <div 
-      v-if="isOpen" 
+      v-if="isOpen && project" 
       class="fixed inset-0 z-50 flex items-center justify-center p-4"
       @click="closeModal"
     >
@@ -204,7 +204,8 @@ const props = defineProps({
   },
   project: {
     type: Object,
-    required: true
+    required: false,
+    default: () => null
   }
 })
 
@@ -254,6 +255,8 @@ watch(() => props.isOpen, (isOpen) => {
 
 const handleImageError = (event) => {
   // Fallback for missing project images
+  if (!props.project?.title) return
+  
   const fallbackColor = ['3b82f6', '10b981', 'f59e0b', 'ef4444', '8b5cf6'][Math.floor(Math.random() * 5)]
   event.target.src = `https://ui-avatars.com/api/?name=${encodeURIComponent(props.project.title)}&size=800&background=${fallbackColor}&color=fff`
 }
