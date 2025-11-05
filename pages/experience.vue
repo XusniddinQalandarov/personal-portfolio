@@ -11,7 +11,7 @@
 
       <!-- Loading State -->
       <div v-if="loading" class="text-center py-12">
-        <div class="inline-block animate-spin rounded-full h-12 w-12 border-b-2 border-cyan-400"></div>
+        <div class="inline-block animate-spin rounded-full h-12 w-12 border-b-2 border-blue-400"></div>
         <p class="text-sub mt-4">Loading experience...</p>
       </div>
 
@@ -40,10 +40,15 @@
               
               <!-- Technologies/Skills -->
               <div class="flex flex-wrap gap-2 mb-3" v-if="experience.technologies">
-                <span 
-                  v-for="tech in experience.technologies" 
+                <span
+                  v-for="tech in experience.technologies"
                   :key="tech"
-                  class="px-2 py-1 bg-cyan-400/20 text-cyan-400 rounded-2xl text-xs border border-cyan-400/30"
+                  :class="[
+                    'px-2 py-1 rounded-full text-xs font-medium border transition-colors',
+                    isDark
+                      ? 'bg-gradient-to-r from-blue-500/20 to-purple-500/20 text-blue-300 border-blue-500/30 hover:bg-blue-500/30'
+                      : 'bg-gradient-to-r from-blue-100 to-purple-100 text-blue-700 border-blue-200 hover:bg-blue-200'
+                  ]"
                 >
                   {{ tech }}
                 </span>
@@ -70,7 +75,7 @@
             <!-- Content Card -->
             <div class="w-5/12 glass-panel p-6 rounded-lg transition-all duration-300" :class="[
               index % 2 === 0 ? 'mr-auto' : 'ml-auto',
-              selectedExperience === index ? 'transform scale-105 border border-cyan-400' : 'border border-transparent hover:border-cyan-400/50'
+              selectedExperience === index ? 'transform scale-105 border border-blue-400' : 'border border-transparent hover:border-blue-400/50'
             ]">
               <div class="mb-4">
                 <h3 class="text-xl font-bold text-main mb-2">{{ experience.title }}</h3>
@@ -82,10 +87,15 @@
               
               <!-- Technologies/Skills -->
               <div class="flex flex-wrap gap-2 mb-4" v-if="experience.technologies">
-                <span 
-                  v-for="tech in experience.technologies" 
+                <span
+                  v-for="tech in experience.technologies"
                   :key="tech"
-                  class="px-3 py-1 bg-cyan-400/20 text-cyan-400 rounded-2xl text-sm border border-cyan-400/30"
+                  :class="[
+                    'px-3 py-1.5 rounded-full text-sm font-medium border transition-colors',
+                    isDark
+                      ? 'bg-gradient-to-r from-blue-500/20 to-purple-500/20 text-blue-300 border-blue-500/30 hover:bg-blue-500/30'
+                      : 'bg-gradient-to-r from-blue-100 to-purple-100 text-blue-700 border-blue-200 hover:bg-blue-200'
+                  ]"
                 >
                   {{ tech }}
                 </span>
@@ -139,6 +149,9 @@ import { gsap } from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
 
 gsap.registerPlugin(ScrollTrigger);
+
+// Theme composable
+const { isDark } = useTheme();
 
 const selectedExperience = ref(null);
 const loading = ref(true);

@@ -5,6 +5,7 @@ export interface Project {
   description: string
   long_description?: string
   image?: string
+  image_url?: string
   technologies: string[]
   category?: string
   github_url?: string

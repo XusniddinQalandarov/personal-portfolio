@@ -32,7 +32,7 @@
           :key="day.id"
           class="glass-panel p-4 md:p-6 rounded-lg hover:scale-105 transition-all duration-300 cursor-pointer"
           @click="selectDay(day.id)"
-          :class="selectedDay === day.id ? 'ring-2 ring-cyan-400/50' : ''"
+          :class="selectedDay === day.id ? 'ring-2 ring-blue-400/50' : ''"
         >
           <div class="flex items-center gap-4 mb-5 md:mb-6">
             <i :class="day.icon" class="text-3xl md:text-4xl flex-shrink-0" :style="{ color: day.color }"></i>
@@ -47,7 +47,7 @@
               :key="exercise"
               class="text-sm md:text-base text-sub flex items-center"
             >
-              <span class="w-2 h-2 md:w-2.5 md:h-2.5 bg-cyan-400 rounded-full mr-3 flex-shrink-0"></span>
+              <span class="w-2 h-2 md:w-2.5 md:h-2.5 bg-blue-400 rounded-full mr-3 flex-shrink-0"></span>
               {{ exercise }}
             </li>
           </ul>
@@ -68,7 +68,7 @@
             class="glass-panel p-4 md:p-6 rounded-lg"
           >
             <div class="flex items-center gap-4 mb-5 md:mb-6">
-              <i :class="category.icon" class="text-3xl md:text-4xl text-cyan-400 flex-shrink-0"></i>
+              <i :class="category.icon" class="text-3xl md:text-4xl text-blue-400 flex-shrink-0"></i>
               <h3 class="text-xl md:text-2xl font-bold text-main">{{ category.name }}</h3>
             </div>
             
@@ -79,7 +79,7 @@
                 class="flex justify-between items-center p-2 md:p-3 bg-opacity-20 border border-gray-600 rounded backdrop-blur-sm"
               >
                 <span class="text-sub font-medium text-sm md:text-base">{{ exercise.name }}</span>
-                <span class="text-cyan-400 font-bold text-sm md:text-base">{{ exercise.pr }}</span>
+                <span class="text-blue-400 font-bold text-sm md:text-base">{{ exercise.pr }}</span>
               </div>
             </div>
           </div>
@@ -93,7 +93,7 @@
           :key="stat.label"
           class="glass-panel p-4 md:p-6 rounded-lg text-center"
         >
-          <div class="text-2xl md:text-3xl font-bold text-cyan-400 mb-1 md:mb-2">{{ stat.value }}</div>
+          <div class="text-2xl md:text-3xl font-bold text-blue-400 mb-1 md:mb-2">{{ stat.value }}</div>
           <div class="text-sub text-xs md:text-sm">{{ stat.label }}</div>
         </div>
       </div>

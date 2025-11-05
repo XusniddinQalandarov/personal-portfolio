@@ -15,7 +15,7 @@
               v-model="password"
               type="password"
               placeholder="Enter admin password"
-              class="w-full px-4 py-3 bg-transparent text-white rounded-lg border border-white/20 focus:border-cyan-400 focus:outline-none transition-colors"
+              class="w-full px-4 py-3 bg-transparent text-white rounded-lg border border-white/20 focus:border-blue-400 focus:outline-none transition-colors"
               required
             />
           </div>
@@ -55,7 +55,7 @@
           :class="[
             'px-4 md:px-6 py-2 rounded-lg font-semibold transition-colors text-sm md:text-base',
             activeTab === tab
-              ? 'bg-cyan-400 text-black'
+              ? 'bg-blue-400 text-black'
               : 'bg-[#1E2128FF] text-white hover:bg-[#323743FF]'
           ]"
         >
@@ -155,6 +155,33 @@
               >
             </div>
 
+            <!-- Image Upload -->
+            <div>
+              <label class="block text-sm font-medium text-white mb-2">Project Image</label>
+              <div class="space-y-2">
+                <input
+                  ref="projectImageInput"
+                  type="file"
+                  accept="image/*"
+                  @change="handleProjectImageUpload"
+                  class="w-full px-4 py-2 rounded-lg bg-[#1E2128FF] text-white file:mr-4 file:py-2 file:px-4 file:rounded-lg file:border-0 file:text-sm file:font-medium file:bg-blue-600 file:text-white hover:file:bg-blue-700"
+                >
+                <div v-if="imageUploadStatus" class="text-sm" :class="imageUploadStatus.success ? 'text-green-500' : 'text-red-500'">
+                  {{ imageUploadStatus.message }}
+                </div>
+                <div v-if="projectForm.image_url" class="mt-2">
+                  <img :src="projectForm.image_url" alt="Project preview" class="w-32 h-20 object-cover rounded-lg">
+                  <button 
+                    type="button" 
+                    @click="removeProjectImage"
+                    class="ml-2 text-red-500 text-sm hover:text-red-700"
+                  >
+                    Remove
+                  </button>
+                </div>
+              </div>
+            </div>
+
             <div class="grid md:grid-cols-3 gap-4">
               <div>
                 <label class="block text-sm font-medium text-white mb-2">Status</label>
@@ -250,7 +277,7 @@
               <span
                 :class="[
                   'px-3 py-1 rounded text-xs',
-                  message.read ? 'bg-gray-600 text-gray-300' : 'bg-cyan-400 text-black'
+                  message.read ? 'bg-gray-600 text-gray-300' : 'bg-blue-400 text-black'
                 ]"
               >
                 {{ message.read ? 'Read' : 'New' }}
@@ -264,7 +291,7 @@
             <button
               v-if="!message.read"
               @click="markAsRead(message.id)"
-              class="mt-2 px-3 py-1 bg-cyan-400 text-black rounded hover:bg-cyan-500 text-sm"
+              class="mt-2 px-3 py-1 bg-blue-400 text-black rounded hover:bg-blue-500 text-sm"
             >
               Mark as Read
             </button>
@@ -334,7 +361,7 @@
               
               <!-- Image Upload Option -->
               <div class="mb-3">
-                <label class="inline-flex items-center px-4 py-2 bg-cyan-400 text-black rounded-lg cursor-pointer hover:bg-cyan-500 transition-colors">
+                <label class="inline-flex items-center px-4 py-2 bg-blue-400 text-black rounded-lg cursor-pointer hover:bg-blue-500 transition-colors">
                   <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z" />
                   </svg>
@@ -346,7 +373,7 @@
                     class="hidden"
                   />
                 </label>
-                <span v-if="uploadingImage" class="ml-3 text-cyan-400">Uploading...</span>
+                <span v-if="uploadingImage" class="ml-3 text-blue-400">Uploading...</span>
                 <span v-if="uploadError" class="ml-3 text-red-500">{{ uploadError }}</span>
               </div>
 
@@ -431,7 +458,7 @@
                   <span
                     v-for="tag in blog.tags"
                     :key="tag"
-                    class="px-2 py-1 bg-cyan-400/20 text-cyan-400 rounded text-xs"
+                    class="px-2 py-1 bg-blue-400/20 text-blue-400 rounded text-xs"
                   >
                     {{ tag }}
                   </span>
@@ -566,7 +593,7 @@
                     Current
                   </span>
                 </div>
-                <p class="text-cyan-400 text-sm mb-2">{{ exp.company }}</p>
+                <p class="text-blue-400 text-sm mb-2">{{ exp.company }}</p>
                 <p class="text-sub text-sm mb-2">{{ exp.period }}</p>
                 <p class="text-sub text-sm">{{ exp.description }}</p>
               </div>
@@ -677,7 +704,7 @@
             <div class="flex justify-between items-start">
               <div class="flex-1">
                 <h3 class="text-lg text-white font-semibold mb-2">{{ edu.degree }}</h3>
-                <p class="text-cyan-400 text-sm mb-2">{{ edu.school }}</p>
+                <p class="text-blue-400 text-sm mb-2">{{ edu.school }}</p>
                 <p class="text-sub text-sm mb-2">{{ edu.year }}</p>
                 <p class="text-sub text-sm">{{ edu.description }}</p>
               </div>
@@ -788,6 +815,7 @@ const projectForm = ref({
   title: '',
   description: '',
   long_description: '',
+  image_url: '',
   category: 'Frontend',
   github_url: '',
   demo_url: '',
@@ -797,6 +825,8 @@ const projectForm = ref({
 })
 
 const technologiesString = ref('')
+const projectImageInput = ref(null)
+const imageUploadStatus = ref(null)
 
 // Blogs
 const showBlogForm = ref(false)
@@ -933,6 +963,7 @@ const cancelProjectForm = () => {
     title: '',
     description: '',
     long_description: '',
+    image_url: '',
     category: 'Frontend',
     github_url: '',
     demo_url: '',
@@ -941,6 +972,42 @@ const cancelProjectForm = () => {
     featured: false
   }
   technologiesString.value = ''
+  imageUploadStatus.value = null
+}
+
+// Image upload functions
+const handleProjectImageUpload = async (event) => {
+  const file = event.target.files[0]
+  if (!file) return
+
+  const formData = new FormData()
+  formData.append('file', file)
+
+  try {
+    imageUploadStatus.value = { message: 'Uploading...', success: true }
+    const response = await authFetch('/api/admin/upload-project-image', {
+      method: 'POST',
+      body: formData
+    })
+    
+    if (response.success) {
+      projectForm.value.image_url = response.url
+      imageUploadStatus.value = { message: 'Image uploaded successfully!', success: true }
+    } else {
+      throw new Error(response.error || 'Upload failed')
+    }
+  } catch (error) {
+    console.error('Failed to upload image:', error)
+    imageUploadStatus.value = { message: 'Failed to upload image', success: false }
+  }
+}
+
+const removeProjectImage = () => {
+  projectForm.value.image_url = ''
+  imageUploadStatus.value = null
+  if (projectImageInput.value) {
+    projectImageInput.value.value = ''
+  }
 }
 
 const markAsRead = async (id) => {

@@ -1,14 +1,15 @@
-export const useTheme = () => {
-  const isDark = ref(false) // Start with light mode to match what's shown
+// Create shared state outside the composable function
+const isDarkState = ref(false)
 
+export const useTheme = () => {
   const toggleTheme = () => {
-    isDark.value = !isDark.value
+    isDarkState.value = !isDarkState.value
     updateTheme()
   }
 
   const updateTheme = () => {
     if (process.client) {
-      const theme = isDark.value ? 'dark' : 'light'
+      const theme = isDarkState.value ? 'dark' : 'light'
       document.documentElement.setAttribute('data-theme', theme)
       localStorage.setItem('theme', theme)
       console.log('Theme updated to:', theme) // Debug log
@@ -20,17 +21,17 @@ export const useTheme = () => {
       // Check localStorage first, then system preference
       const savedTheme = localStorage.getItem('theme')
       if (savedTheme) {
-        isDark.value = savedTheme === 'dark'
+        isDarkState.value = savedTheme === 'dark'
       } else {
         // Default to light mode for now
-        isDark.value = false
+        isDarkState.value = false
       }
       updateTheme()
     }
   }
 
   return {
-    isDark: readonly(isDark),
+    isDark: readonly(isDarkState),
     toggleTheme,
     initTheme
   }

@@ -5,20 +5,20 @@
   --color-charcoal: #E2E8F0;
   --color-panel: rgba(255, 255, 255, 0.8);
   --color-gym-bg: #F1F5F9;
-  --color-cyan: #0891B2;
+  --color-cyan: #3B82F6;
   --color-violet: #7C3AED;
   --color-white: #1E293B;
   --color-light-gray: #475569;
-  --border-glow-cyan: 0 0 8px 2px rgba(8,145,178,0.2);
+  --border-glow-cyan: 0 0 8px 2px rgba(59,130,246,0.2);
   --border-glow-violet: 0 0 8px 2px rgba(124,58,237,0.2);
-  
+
   /* Background and text colors that change with theme */
   --bg-primary: #FFFFFF;
   --bg-secondary: #F8FAFC;
   --bg-panel: rgba(255, 255, 255, 0.9);
   --text-primary: #1E293B;
   --text-secondary: #475569;
-  --border-color: rgba(8,145,178,0.2);
+  --border-color: rgba(59,130,246,0.2);
 }
 
 /* Dark mode variables */
@@ -27,20 +27,20 @@
   --color-charcoal: #161A1F;
   --color-panel: rgba(22, 26, 31, 0.7);
   --color-gym-bg: #161A1F;
-  --color-cyan: #00FFF7;
+  --color-cyan: #60A5FA;
   --color-violet: #BB00FF;
   --color-white: #FFFFFF;
   --color-light-gray: #B0BAC9;
-  --border-glow-cyan: 0 0 8px 2px rgba(0,255,247,0.2);
+  --border-glow-cyan: 0 0 8px 2px rgba(96,165,250,0.3);
   --border-glow-violet: 0 0 8px 2px rgba(187,0,255,0.2);
-  
+
   /* Dark mode specific colors */
   --bg-primary: #161A1F;
   --bg-secondary: #161A1F;
   --bg-panel: rgba(22, 26, 31, 0.7);
   --text-primary: #FFFFFF;
   --text-secondary: #B0BAC9;
-  --border-color: rgba(0,255,247,0.15);
+  --border-color: rgba(96,165,250,0.2);
 }
 
 .bg-primary {

@@ -3,9 +3,22 @@
     <div class="max-w-6xl mx-auto px-4">
       <!-- Header -->
       <div ref="headerEl" class="text-center mb-12 md:mb-16">
-        <h1 class="text-2xl sm:text-3xl md:text-4xl lg:text-5xl text-white font-bold mb-6">Pioneering Projects &amp; Innovations</h1>
-        <p class="text-base md:text-lg lg:text-xl text-[#BDC1CAFF] max-w-2xl mx-auto">
-A curated selection of my work in Frontend Development, AI Automation, and inspired by a disciplined lifestyle. Each project reflects a commitment to precision and impactful solutions.        </p>
+        <h1
+          :class="[
+            'text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-bold mb-6',
+            isDark ? 'text-white' : 'text-gray-900'
+          ]"
+        >
+          Pioneering Projects &amp; Innovations
+        </h1>
+        <p
+          :class="[
+            'text-base md:text-lg lg:text-xl max-w-2xl mx-auto',
+            isDark ? 'text-[#BDC1CAFF]' : 'text-gray-600'
+          ]"
+        >
+          A curated selection of my work in Frontend Development, AI Automation, and inspired by a disciplined lifestyle. Each project reflects a commitment to precision and impactful solutions.
+        </p>
       </div>
 
       <!-- Filter Tags -->
@@ -17,8 +30,10 @@ A curated selection of my work in Frontend Development, AI Automation, and inspi
           :class="[
             'px-4 py-2 rounded-full text-sm font-medium transition-colors',
             selectedFilter === tag
-              ? 'bg-white text-black'
-              : 'bg-transparent text-white border border-white rounded-[50%]'
+              ? (isDark ? 'bg-white text-black' : 'bg-gray-900 text-white')
+              : (isDark
+                  ? 'bg-transparent text-white border border-white'
+                  : 'bg-transparent text-gray-900 border border-gray-900 hover:bg-gray-100')
           ]"
         >
           {{ tag }}
@@ -27,8 +42,20 @@ A curated selection of my work in Frontend Development, AI Automation, and inspi
 
       <!-- Loading State -->
       <div v-if="loading" class="text-center py-12">
-        <div class="inline-block animate-spin rounded-full h-12 w-12 border-b-2 border-white"></div>
-        <p class="text-gray-400 mt-4">Loading projects...</p>
+        <div
+          :class="[
+            'inline-block animate-spin rounded-full h-12 w-12 border-b-2',
+            isDark ? 'border-white' : 'border-gray-900'
+          ]"
+        ></div>
+        <p
+          :class="[
+            'mt-4',
+            isDark ? 'text-gray-400' : 'text-gray-600'
+          ]"
+        >
+          Loading projects...
+        </p>
       </div>
 
       <!-- Error State -->
@@ -45,18 +72,33 @@ A curated selection of my work in Frontend Development, AI Automation, and inspi
             :key="project.id"
             :project="project"
             :detailed="true"
+            @openProject="openProjectModal"
           />
         </div>
         
         <!-- Empty State - No projects at all -->
         <div v-if="projects.length === 0" class="text-center py-12">
-          <p class="text-gray-500 text-lg mb-2">No projects found.</p>
+          <p
+            :class="[
+              'text-lg mb-2',
+              isDark ? 'text-gray-500' : 'text-gray-600'
+            ]"
+          >
+            No projects found.
+          </p>
         </div>
-        
+
         <!-- Empty State - Filter has no results -->
         <div v-else-if="filteredProjects.length === 0" class="text-center py-12">
-          <p class="text-gray-500 text-lg mb-2">No projects found for the selected filter.</p>
-          <button 
+          <p
+            :class="[
+              'text-lg mb-2',
+              isDark ? 'text-gray-500' : 'text-gray-600'
+            ]"
+          >
+            No projects found for the selected filter.
+          </p>
+          <button
             @click="selectedFilter = 'All'"
             class="btn-primary mt-4"
           >
@@ -67,11 +109,16 @@ A curated selection of my work in Frontend Development, AI Automation, and inspi
 
       <!-- GitHub Link -->
       <div class="text-center">
-        <p class="text-[#BDC1CAFF] mb-4">
+        <p
+          :class="[
+            'mb-4',
+            isDark ? 'text-[#BDC1CAFF]' : 'text-gray-600'
+          ]"
+        >
           Want to see more of my work?
         </p>
         <NuxtLink
-          href="https://github.com/XusniddinQalandarov" 
+          href="https://github.com/XusniddinQalandarov"
           target="_blank"
           class="btn-primary inline-flex items-center gap-2 px-4 py-2"
         >
@@ -82,6 +129,13 @@ A curated selection of my work in Frontend Development, AI Automation, and inspi
         </NuxtLink>
       </div>
     </div>
+    
+    <!-- Project Modal -->
+    <ProjectModal 
+      :isOpen="isModalOpen" 
+      :project="selectedProject" 
+      @close="closeProjectModal"
+    />
   </div>
 </template>
 
@@ -91,10 +145,17 @@ import { ScrollTrigger } from 'gsap/ScrollTrigger';
 
 gsap.registerPlugin(ScrollTrigger);
 
+// Theme composable
+const { isDark } = useTheme();
+
 const projects = ref([]);
 const loading = ref(true);
 const error = ref(null);
 const selectedFilter = ref('All');
+
+// Modal state
+const isModalOpen = ref(false);
+const selectedProject = ref(null);
 
 const headerEl = ref(null);
 const tagsEl = ref(null);
@@ -199,6 +260,17 @@ const filteredProjects = computed(() => {
   }
   return projects.value.filter(project => project.category === selectedFilter.value);
 });
+
+// Modal functions
+const openProjectModal = (project) => {
+  selectedProject.value = project;
+  isModalOpen.value = true;
+};
+
+const closeProjectModal = () => {
+  isModalOpen.value = false;
+  selectedProject.value = null;
+};
 
 // SEO Meta
 useSeoMeta({

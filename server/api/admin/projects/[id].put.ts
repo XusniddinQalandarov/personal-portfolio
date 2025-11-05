@@ -2,33 +2,54 @@ import { createClient } from '@supabase/supabase-js'
 
 export default defineEventHandler(async (event) => {
   const config = useRuntimeConfig()
+
+  // Check authentication
+  const authHeader = getHeader(event, 'authorization')
+  if (!authHeader) {
+    throw createError({
+      statusCode: 401,
+      statusMessage: 'Unauthorized'
+    })
+  }
+
   const client = createClient(
     config.public.supabaseUrl as string,
     config.public.supabaseKey as string
   )
-  
+
+  const id = getRouterParam(event, 'id')
+
+  if (!id) {
+    throw createError({
+      statusCode: 400,
+      statusMessage: 'Project ID is required'
+    })
+  }
+
   try {
-    const id = event.context.params?.id
     const body = await readBody(event)
-    
-    const { data, error} = await client
+
+    const updateData: any = {
+      updated_at: new Date().toISOString()
+    }
+
+    if (body.title !== undefined) updateData.title = body.title
+    if (body.description !== undefined) updateData.description = body.description
+    if (body.long_description !== undefined) updateData.long_description = body.long_description
+    if (body.image_url !== undefined) updateData.image_url = body.image_url
+    if (body.technologies !== undefined) updateData.technologies = body.technologies
+    if (body.category !== undefined) updateData.category = body.category
+    if (body.github_url !== undefined) updateData.github_url = body.github_url
+    if (body.demo_url !== undefined) updateData.demo_url = body.demo_url
+    if (body.featured !== undefined) updateData.featured = body.featured
+    if (body.status !== undefined) updateData.status = body.status
+
+    const { data, error } = await client
       .from('projects')
-      .update({
-        title: body.title,
-        description: body.description,
-        long_description: body.long_description,
-        image: body.image,
-        technologies: body.technologies || [],
-        category: body.category,
-        github_url: body.github_url,
-        demo_url: body.demo_url,
-        featured: body.featured || false,
-        status: body.status || 'Completed',
-        updated_at: new Date().toISOString()
-      })
+      .update(updateData)
       .eq('id', id)
       .select()
-    
+
     if (error) {
       console.error('Supabase error:', error)
       throw createError({
@@ -36,19 +57,29 @@ export default defineEventHandler(async (event) => {
         statusMessage: 'Failed to update project'
       })
     }
-    
+
+    if (!data || data.length === 0) {
+      throw createError({
+        statusCode: 404,
+        statusMessage: 'Project not found'
+      })
+    }
+
     return {
       success: true,
-      message: 'Project updated successfully!',
-      data
+      data: data[0]
     }
-    
-  } catch (error) {
-    console.error('Update project error:', error)
-    
+
+  } catch (error: any) {
+    console.error('Update project API error:', error)
+
+    if (error.statusCode) {
+      throw error
+    }
+
     throw createError({
       statusCode: 500,
-      statusMessage: 'An error occurred while updating project'
+      statusMessage: error.message || 'Internal server error'
     })
   }
 })

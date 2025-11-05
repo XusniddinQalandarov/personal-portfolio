@@ -21,7 +21,7 @@
             @input="searchBlogs"
             type="text"
             placeholder="Search blogs..."
-            class="w-full pl-12 pr-4 py-3 bg-charcoal text-main rounded-lg border border-white/10 focus:border-cyan-400 focus:outline-none focus:ring-2 focus:ring-cyan-400/20 transition-all placeholder-gray-400"
+            class="w-full pl-12 pr-4 py-3 bg-charcoal text-main rounded-lg border border-white/10 focus:border-blue-400 focus:outline-none focus:ring-2 focus:ring-blue-400/20 transition-all placeholder-gray-400"
           />
         </div>
         
@@ -33,7 +33,7 @@
           <select
             v-model="selectedTag"
             @change="filterByTag"
-            class="w-full md:w-56 pl-12 pr-10 py-3 bg-charcoal text-main rounded-lg border border-white/10 focus:border-cyan-400 focus:outline-none focus:ring-2 focus:ring-cyan-400/20 transition-all appearance-none cursor-pointer"
+            class="w-full md:w-56 pl-12 pr-10 py-3 bg-charcoal text-main rounded-lg border border-white/10 focus:border-blue-400 focus:outline-none focus:ring-2 focus:ring-blue-400/20 transition-all appearance-none cursor-pointer"
           >
             <option value="" class="bg-charcoal text-main py-2">All Tags</option>
             <option v-for="tag in allTags" :key="tag" :value="tag" class="bg-charcoal text-main py-2">
@@ -48,7 +48,7 @@
 
       <!-- Loading State -->
       <div v-if="loading" class="text-center py-20">
-        <div class="inline-block animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-cyan-400"></div>
+        <div class="inline-block animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-blue-400"></div>
         <p class="text-main mt-4">Loading blogs...</p>
       </div>
 
@@ -82,7 +82,7 @@
 
           <!-- Content -->
           <div>
-            <h3 class="text-2xl font-semibold text-main mb-3 group-hover:text-cyan-400 transition-colors">
+            <h3 class="text-2xl font-semibold text-main mb-3 group-hover:text-blue-400 transition-colors">
               {{ blog.title }}
             </h3>
             
@@ -95,7 +95,12 @@
               <span
                 v-for="tag in blog.tags?.slice(0, 3)"
                 :key="tag"
-                class="px-3 py-1 bg-cyan-400/10 text-cyan-400 rounded-full text-xs border border-cyan-400/30"
+                :class="[
+                  'px-3 py-1 rounded-full text-xs font-medium border transition-colors',
+                  isDark
+                    ? 'bg-gradient-to-r from-blue-500/20 to-purple-500/20 text-blue-300 border-blue-500/30 hover:bg-blue-500/30'
+                    : 'bg-gradient-to-r from-blue-100 to-purple-100 text-blue-700 border-blue-200 hover:bg-blue-200'
+                ]"
               >
                 {{ tag }}
               </span>
@@ -128,7 +133,7 @@
               'px-4 py-2 rounded-full text-sm font-medium transition-all duration-300',
               selectedTag === tag
                 ? 'bg-white text-black'
-                : 'bg-transparent text-main border border-white hover:border-cyan-400 hover:text-cyan-400'
+                : 'bg-transparent text-main border border-white hover:border-blue-400 hover:text-blue-400'
             ]"
           >
             {{ tag }}
@@ -144,6 +149,9 @@ import { gsap } from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
 
 gsap.registerPlugin(ScrollTrigger);
+
+// Theme composable
+const { isDark } = useTheme();
 
 const loading = ref(true)
 const blogs = ref([])

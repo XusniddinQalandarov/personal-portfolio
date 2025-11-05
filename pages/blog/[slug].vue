@@ -2,7 +2,7 @@
   <div class="min-h-screen py-20">
     <!-- Loading State -->
     <div v-if="loading" class="max-w-4xl mx-auto px-4 text-center py-20">
-      <div class="inline-block animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-cyan-400"></div>
+      <div class="inline-block animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-blue-400"></div>
       <p class="text-main mt-4">Loading blog...</p>
     </div>
 
@@ -21,7 +21,7 @@
       <!-- Back Button -->
       <NuxtLink
         to="/blogs"
-        class="inline-flex items-center gap-2 text-cyan-400 hover:text-cyan-300 mb-8 transition-colors"
+        class="inline-flex items-center gap-2 text-blue-400 hover:text-blue-300 mb-8 transition-colors"
       >
         <i class="pi pi-arrow-left"></i>
         Back to Blogs
@@ -54,7 +54,12 @@
           <span
             v-for="tag in blog.tags"
             :key="tag"
-            class="px-3 py-1 bg-cyan-400/10 text-cyan-400 rounded-full text-sm border border-cyan-400/30"
+            :class="[
+              'px-3 py-1 rounded-full text-sm font-medium border transition-colors',
+              isDark
+                ? 'bg-gradient-to-r from-blue-500/20 to-purple-500/20 text-blue-300 border-blue-500/30 hover:bg-blue-500/30'
+                : 'bg-gradient-to-r from-blue-100 to-purple-100 text-blue-700 border-blue-200 hover:bg-blue-200'
+            ]"
           >
             {{ tag }}
           </span>
@@ -90,7 +95,7 @@
             :href="shareUrls.twitter"
             target="_blank"
             rel="noopener noreferrer"
-            class="px-4 py-2 md:px-6 md:py-3 text-sm md:text-base bg-transparent border border-white text-main rounded-full hover:bg-cyan-400 hover:text-black hover:border-cyan-400 transition-all duration-300"
+            class="px-4 py-2 md:px-6 md:py-3 text-sm md:text-base bg-transparent border border-white text-main rounded-full hover:bg-blue-400 hover:text-black hover:border-blue-400 transition-all duration-300"
           >
             <i class="pi pi-twitter mr-2"></i>
             Twitter
@@ -99,14 +104,14 @@
             :href="shareUrls.linkedin"
             target="_blank"
             rel="noopener noreferrer"
-            class="px-4 py-2 md:px-6 md:py-3 text-sm md:text-base bg-transparent border border-white text-main rounded-full hover:bg-cyan-400 hover:text-black hover:border-cyan-400 transition-all duration-300"
+            class="px-4 py-2 md:px-6 md:py-3 text-sm md:text-base bg-transparent border border-white text-main rounded-full hover:bg-blue-400 hover:text-black hover:border-blue-400 transition-all duration-300"
           >
             <i class="pi pi-linkedin mr-2"></i>
             LinkedIn
           </a>
           <button
             @click="copyLink"
-            class="px-4 py-2 md:px-6 md:py-3 text-sm md:text-base bg-transparent border border-white text-main rounded-full hover:bg-cyan-400 hover:text-black hover:border-cyan-400 transition-all duration-300"
+            class="px-4 py-2 md:px-6 md:py-3 text-sm md:text-base bg-transparent border border-white text-main rounded-full hover:bg-blue-400 hover:text-black hover:border-blue-400 transition-all duration-300"
           >
             <i class="pi pi-link mr-2"></i>
             {{ linkCopied ? 'Copied!' : 'Copy Link' }}
@@ -122,7 +127,12 @@
             v-for="tag in blog.tags"
             :key="tag"
             :to="`/blogs?tag=${tag}`"
-            class="px-3 py-1.5 md:px-4 md:py-2 text-sm md:text-base bg-transparent border border-white text-main rounded-full hover:bg-cyan-400 hover:text-black hover:border-cyan-400 transition-all duration-300"
+            :class="[
+              'px-3 py-1.5 md:px-4 md:py-2 text-sm md:text-base rounded-full font-medium border transition-all duration-300',
+              isDark
+                ? 'bg-gradient-to-r from-blue-500/20 to-purple-500/20 text-blue-300 border-blue-500/30 hover:from-blue-500/30 hover:to-purple-500/30'
+                : 'bg-gradient-to-r from-blue-100 to-purple-100 text-blue-700 border-blue-200 hover:from-blue-200 hover:to-purple-200'
+            ]"
           >
             {{ tag }}
           </NuxtLink>
@@ -133,6 +143,9 @@
 </template>
 
 <script setup>
+// Theme composable
+const { isDark } = useTheme();
+
 const route = useRoute()
 const slug = route.params.slug
 
