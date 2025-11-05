@@ -1,5 +1,5 @@
 <template>
-  <div class="min-h-screen py-12 md:py-20">
+  <div class="min-h-screen py-12 md:py-20 projects-container">
     <div class="max-w-6xl mx-auto px-4">
       <!-- Header -->
       <div ref="headerEl" class="text-center mb-12 md:mb-16">
@@ -141,14 +141,6 @@
 </template>
 
 <script setup>
-import { gsap } from 'gsap';
-import { ScrollTrigger } from 'gsap/ScrollTrigger';
-
-// Register GSAP plugins only on client side
-if (process.client) {
-  gsap.registerPlugin(ScrollTrigger);
-}
-
 // Theme composable
 const { isDark } = useTheme();
 
@@ -161,9 +153,38 @@ const selectedFilter = ref('All');
 const isModalOpen = ref(false);
 const selectedProject = ref(null);
 
+// Template refs
 const headerEl = ref(null);
 const tagsEl = ref(null);
 const gridEl = ref(null);
+
+// Animation state
+const isAnimating = ref(false);
+let animationContext = {
+  headerAnimation: null,
+  tagsAnimation: null,
+  gridAnimation: null,
+  scrollTrigger: null
+};
+
+// Clean animation function
+const cleanupAnimations = () => {
+  // Kill specific animations
+  if (animationContext.headerAnimation) animationContext.headerAnimation.kill();
+  if (animationContext.tagsAnimation) animationContext.tagsAnimation.kill();
+  if (animationContext.gridAnimation) animationContext.gridAnimation.kill();
+  if (animationContext.scrollTrigger) animationContext.scrollTrigger.kill();
+  
+  // Reset context
+  animationContext = {
+    headerAnimation: null,
+    tagsAnimation: null,
+    gridAnimation: null,
+    scrollTrigger: null
+  };
+  
+  isAnimating.value = false;
+};
 
 // Load projects from database
 onMounted(async () => {
@@ -186,141 +207,172 @@ onMounted(async () => {
   } finally {
     loading.value = false;
     
-    // Animate after projects load with proper DOM ready check
-    await nextTick();
-    requestAnimationFrame(() => {
-      animateElements();
-    });
+    // Only animate on client side and after proper DOM mounting
+    if (process.client) {
+      await nextTick();
+      requestAnimationFrame(() => {
+        initializeAnimations();
+      });
+    }
+    
+    // Fallback: ensure content is visible even if animations fail
+    setTimeout(() => {
+      if (headerEl.value) headerEl.value.style.opacity = '1';
+      if (tagsEl.value) tagsEl.value.style.opacity = '1';
+      if (gridEl.value) gridEl.value.style.opacity = '1';
+    }, 100);
   }
 });
 
-// Cleanup animations on unmount
+// Cleanup on unmount
 onUnmounted(() => {
-  // Clear any pending timeouts
+  // Clear timeout
   if (filterTimeout) {
     clearTimeout(filterTimeout);
     filterTimeout = null;
   }
   
-  // Kill all GSAP animations and ScrollTriggers
-  gsap.killTweensOf("*");
-  ScrollTrigger.getAll().forEach(st => st.kill());
-  ScrollTrigger.clearScrollMemory();
+  // Clean up animations
+  cleanupAnimations();
 });
 
-const animateElements = () => {
-  // Ensure elements exist before animating
+// Initialize animations only once on mount
+const initializeAnimations = async () => {
+  if (isAnimating.value || !process.client) return;
+  
+  // Verify all elements exist
   if (!headerEl.value || !tagsEl.value || !gridEl.value) {
-    return;
-  }
-
-  // Kill any existing animations on these specific elements
-  gsap.killTweensOf([headerEl.value, tagsEl.value.children, gridEl.value.children]);
-  
-  // Clear any existing ScrollTriggers for this grid
-  ScrollTrigger.getAll().forEach(st => {
-    if (st.trigger === gridEl.value) {
-      st.kill();
-    }
-  });
-  
-  // Header fade in from top
-  gsap.from(headerEl.value, {
-    y: -30,
-    opacity: 0,
-    duration: 0.8,
-    ease: 'power3.out',
-  });
-  
-  // Tags slide in and stagger
-  if (tagsEl.value.children.length > 0) {
-    gsap.from(tagsEl.value.children, {
-      y: 20,
-      opacity: 0,
-      duration: 0.6,
-      stagger: 0.1,
-      ease: 'power3.out',
-      delay: 0.3,
-    });
-  }
-  
-  // Projects grid items - initial load animation
-  animateProjectsGrid(true);
-};
-
-const animateProjectsGrid = (isInitialLoad = false) => {
-  if (!gridEl.value?.children || gridEl.value.children.length === 0) {
+    console.warn('Animation elements not ready');
     return;
   }
   
-  // Convert HTMLCollection to Array for better control
-  const gridItems = Array.from(gridEl.value.children);
-  
-  // Kill existing animations on grid items
-  gsap.killTweensOf(gridItems);
-  
-  if (isInitialLoad) {
-    // Initial load with ScrollTrigger - but only create one
-    gsap.from(gridItems, {
-      y: 50,
-      opacity: 0,
-      duration: 0.8,
-      stagger: 0.15,
-      ease: 'power3.out',
-      scrollTrigger: {
-        trigger: gridEl.value,
-        start: 'top 80%',
-        end: 'bottom 20%',
-        toggleActions: 'play none none none',
-        once: true, // Only trigger once
-        id: 'projectsGrid', // Give it an ID for easier management
-      },
-    });
-  } else {
-    // Filter change animation (no ScrollTrigger)
-    gsap.set(gridItems, { 
-      scale: 0.8, 
-      opacity: 0,
-      y: 20,
+  try {
+    // Ensure GSAP is available
+    const { gsap } = await import('gsap');
+    
+    isAnimating.value = true;
+    
+    // Clean up any existing animations first
+    cleanupAnimations();
+    
+    // Make sure elements are visible first (set to default state)
+    gsap.set([headerEl.value, tagsEl.value.children, gridEl.value.children], {
+      opacity: 1,
+      scale: 1,
+      y: 0
     });
     
-    gsap.to(gridItems, {
+    // Header animation - start from hidden state
+    gsap.set(headerEl.value, { opacity: 0, y: -30 });
+    animationContext.headerAnimation = gsap.to(headerEl.value, {
+      y: 0,
+      opacity: 1,
+      duration: 0.8,
+      ease: 'power3.out',
+    });
+    
+    // Tags animation - start from hidden state
+    const tagElements = tagsEl.value.children;
+    if (tagElements.length > 0) {
+      gsap.set(tagElements, { opacity: 0, y: 20 });
+      animationContext.tagsAnimation = gsap.to(tagElements, {
+        y: 0,
+        opacity: 1,
+        duration: 0.6,
+        stagger: 0.1,
+        ease: 'power3.out',
+        delay: 0.3,
+      });
+    }
+    
+    // Grid animation - start from hidden state
+    const gridElements = gridEl.value.children;
+    if (gridElements.length > 0) {
+      gsap.set(gridElements, { opacity: 0, y: 50 });
+      animationContext.gridAnimation = gsap.to(gridElements, {
+        y: 0,
+        opacity: 1,
+        duration: 0.8,
+        stagger: 0.15,
+        ease: 'power3.out',
+        delay: 0.5,
+      });
+    }
+    
+  } catch (error) {
+    console.error('Animation error:', error);
+    // Fallback: ensure elements are visible if animation fails
+    if (headerEl.value) headerEl.value.style.opacity = '1';
+    if (tagsEl.value) tagsEl.value.style.opacity = '1';
+    if (gridEl.value) gridEl.value.style.opacity = '1';
+  } finally {
+    isAnimating.value = false;
+  }
+};
+
+// Simple filter animation
+const animateFilterChange = async () => {
+  if (isAnimating.value || !process.client) return;
+  
+  const gridElements = gridEl.value?.children;
+  if (!gridElements || gridElements.length === 0) return;
+  
+  try {
+    const { gsap } = await import('gsap');
+    
+    isAnimating.value = true;
+    
+    // Kill existing grid animation
+    if (animationContext.gridAnimation) {
+      animationContext.gridAnimation.kill();
+    }
+    
+    // Ensure elements are visible first, then animate from a slightly scaled/faded state
+    gsap.set(gridElements, { 
+      opacity: 1,  // Make sure they're visible
+      scale: 0.95, 
+      y: 10
+    });
+    
+    animationContext.gridAnimation = gsap.to(gridElements, {
       scale: 1,
       opacity: 1,
       y: 0,
       duration: 0.4,
-      stagger: 0.06,
-      ease: 'back.out(1.2)', // Reduced bounce
+      stagger: 0.08,
+      ease: 'power2.out',
     });
+    
+  } catch (error) {
+    console.error('Filter animation error:', error);
+    // Fallback: ensure elements are visible
+    if (gridElements) {
+      Array.from(gridElements).forEach(el => {
+        el.style.opacity = '1';
+        el.style.transform = 'none';
+      });
+    }
+  } finally {
+    isAnimating.value = false;
   }
 };
 
-// Re-animate when filter changes (with proper debounce)
+// Watch for filter changes with debounce
 let filterTimeout = null;
 watch(selectedFilter, () => {
-  // Clear any existing timeout
   if (filterTimeout) {
     clearTimeout(filterTimeout);
   }
   
-  // Debounce the animation to prevent rapid filter changes
   filterTimeout = setTimeout(async () => {
-    // Wait for DOM update after filter change
-    await nextTick();
+    await nextTick(); // Wait for DOM updates
     
-    // Use requestAnimationFrame for smoother animation timing
-    requestAnimationFrame(() => {
-      // Kill any existing ScrollTriggers for the grid to prevent conflicts
-      ScrollTrigger.getAll().forEach(st => {
-        if (st.vars && st.vars.id === 'projectsGrid') {
-          st.kill();
-        }
+    if (process.client) {
+      requestAnimationFrame(() => {
+        animateFilterChange();
       });
-      
-      // Animate projects with filter-specific animation
-      animateProjectsGrid(false);
-    });
-  }, 100); // Slightly longer delay for better debouncing
+    }
+  }, 150);
 });
 
 const filterTags = computed(() => {
@@ -361,3 +413,24 @@ useSeoMeta({
   ogDescription: 'A collection of projects that showcase my skills and passion for creating digital solutions.',
 })
 </script>
+
+<style scoped>
+/* Ensure elements are visible by default - GSAP animations enhance but don't break */
+.projects-container {
+  opacity: 1;
+  transform: none;
+}
+
+/* Fallback visibility for critical elements */
+[ref="headerEl"],
+[ref="tagsEl"], 
+[ref="gridEl"] {
+  opacity: 1 !important;
+  transform: none !important;
+}
+
+/* Smooth transitions for filter changes */
+.project-card {
+  transition: opacity 0.3s ease, transform 0.3s ease;
+}
+</style>
