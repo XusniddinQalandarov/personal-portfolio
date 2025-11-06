@@ -15,8 +15,10 @@
           <NuxtImg
             src="/images/second.jpg"
             alt="About Me Photo"
-            width="250"
-            height="250"
+            width="600"
+            height="600"
+            quality="90"
+            format="webp"
             class="w-[200px] h-[200px] md:w-[250px] md:h-[250px] lg:w-[500px] lg:h-[600px] rounded-full lg:rounded-3xl object-cover shadow-lg"
           />
           </div>
