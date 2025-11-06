@@ -11,13 +11,13 @@
     </div>
         <!-- Main Content -->
        <div ref="mainContentEl" class="grid lg:grid-cols-2 gap-8 md:gap-12 items-center glass-panel p-6 md:p-12 lg:p-24 shadow-lg mx-4 md:mx-auto rounded-lg">
-          <div class="glass-panel p-6 md:p-8 rounded-lg flex items-center justify-center max-h-[280px] max-w-[300px] mx-auto">
+          <div class="flex items-center justify-center mx-auto">
           <NuxtImg
             src="/images/second.jpg"
             alt="About Me Photo"
             width="250"
             height="250"
-            class="w-[200px] h-[200px] md:w-[250px] md:h-[250px] rounded-full object-cover shadow-md"
+            class="w-[200px] h-[200px] md:w-[250px] md:h-[250px] lg:w-[500px] lg:h-[600px] rounded-full lg:rounded-3xl object-cover shadow-lg"
           />
           </div>
           <!-- Bio Section -->
