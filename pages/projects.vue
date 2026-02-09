@@ -141,9 +141,7 @@ onMounted(async () => {
     console.error(e);
   } finally {
     loading.value = false;
-    setTimeout(() => {
-      nextTick(() => initAnimations());
-    }, 700);
+    nextTick(() => initAnimations());
   }
 });
 

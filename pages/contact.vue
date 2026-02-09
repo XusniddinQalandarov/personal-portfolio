@@ -142,13 +142,11 @@ const submitForm = async () => {
 };
 
 onMounted(() => {
-  setTimeout(() => {
-    const tl = gsap.timeline();
-    
-    tl.fromTo(headerEl.value, { y: 50, opacity: 0 }, { y: 0, opacity: 1, duration: 1, ease: "power3.out" })
-      .fromTo(formEl.value, { x: -30, opacity: 0 }, { x: 0, opacity: 1, duration: 1, ease: "power3.out" }, "-=0.5")
-      .fromTo(contactInfoEl.value, { x: 30, opacity: 0 }, { x: 0, opacity: 1, duration: 1, ease: "power3.out" }, "-=0.8");
-  }, 700);
+  const tl = gsap.timeline();
+  
+  tl.fromTo(headerEl.value, { y: 50, opacity: 0 }, { y: 0, opacity: 1, duration: 1, ease: "power3.out" })
+    .fromTo(formEl.value, { x: -30, opacity: 0 }, { x: 0, opacity: 1, duration: 1, ease: "power3.out" }, "-=0.5")
+    .fromTo(contactInfoEl.value, { x: 30, opacity: 0 }, { x: 0, opacity: 1, duration: 1, ease: "power3.out" }, "-=0.8");
 });
 
 useSeoMeta({

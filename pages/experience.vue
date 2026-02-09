@@ -184,29 +184,27 @@ const timelineEl = ref(null);
 
 onMounted(() => {
   if (process.client) {
-    setTimeout(() => {
-      // Header Animation
-      gsap.fromTo(headerEl.value, { y: 50, opacity: 0 }, { y: 0, opacity: 1, duration: 1.2, ease: "power3.out" });
+    // Header Animation
+    gsap.fromTo(headerEl.value, { y: 50, opacity: 0 }, { y: 0, opacity: 1, duration: 1.2, ease: "power3.out" });
 
-      // Timeline Items Animation
-      const items = timelineEl.value.querySelectorAll('.group');
-      items.forEach((item, i) => {
-        gsap.fromTo(item, 
-          { y: 50, opacity: 0 },
-          {
-            y: 0,
-            opacity: 1,
-            duration: 1,
-            ease: "power3.out",
-            scrollTrigger: {
-              trigger: item,
-              start: "top 85%",
-              toggleActions: "play none none reverse"
-            }
+    // Timeline Items Animation
+    const items = timelineEl.value.querySelectorAll('.group');
+    items.forEach((item, i) => {
+      gsap.fromTo(item, 
+        { y: 50, opacity: 0 },
+        {
+          y: 0,
+          opacity: 1,
+          duration: 1,
+          ease: "power3.out",
+          scrollTrigger: {
+            trigger: item,
+            start: "top 85%",
+            toggleActions: "play none none reverse"
           }
-        );
-      });
-    }, 700);
+        }
+      );
+    });
   }
 });
 

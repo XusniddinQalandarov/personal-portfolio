@@ -116,26 +116,24 @@ const interests = [
 ];
 
 onMounted(() => {
-  setTimeout(() => {
-    if(process.client) {
-      const tl = gsap.timeline();
+  if(process.client) {
+    const tl = gsap.timeline();
+    
+    tl.fromTo(headerEl.value, { y: 50, opacity: 0 }, { y: 0, opacity: 1, duration: 1.2, ease: "power3.out" })
+      .fromTo(imageEl.value, { x: -30, opacity: 0 }, { x: 0, opacity: 1, duration: 1, ease: "power3.out" }, "-=0.8")
+      .fromTo(textEl.value, { x: 30, opacity: 0 }, { x: 0, opacity: 1, duration: 1, ease: "power3.out" }, "-=0.8");
       
-      tl.fromTo(headerEl.value, { y: 50, opacity: 0 }, { y: 0, opacity: 1, duration: 1.2, ease: "power3.out" })
-        .fromTo(imageEl.value, { x: -30, opacity: 0 }, { x: 0, opacity: 1, duration: 1, ease: "power3.out" }, "-=0.8")
-        .fromTo(textEl.value, { x: 30, opacity: 0 }, { x: 0, opacity: 1, duration: 1, ease: "power3.out" }, "-=0.8");
-        
-      // Parallax for image
-      gsap.to(imageEl.value, {
-        y: 50,
-        scrollTrigger: {
-          trigger: imageEl.value,
-          start: "top center",
-          end: "bottom top",
-          scrub: true
-        }
-      });
-    }
-  }, 700);
+    // Parallax for image
+    gsap.to(imageEl.value, {
+      y: 50,
+      scrollTrigger: {
+        trigger: imageEl.value,
+        start: "top center",
+        end: "bottom top",
+        scrub: true
+      }
+    });
+  }
 });
 
 useSeoMeta({

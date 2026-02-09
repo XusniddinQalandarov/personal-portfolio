@@ -145,78 +145,76 @@ const prCategories = [
 ];
 
 onMounted(() => {
-  setTimeout(() => {
-    // Hero Animation
-    const tl = gsap.timeline();
-    
-    tl.fromTo(heroBg.value, { scale: 1.2, opacity: 0 }, { scale: 1.1, opacity: 0.6, duration: 2, ease: "power2.out" })
-      .fromTo(heroTitle.value, { y: 100, opacity: 0 }, { y: 0, opacity: 1, duration: 1.5, ease: "power3.out" }, "-=1.5")
-      .fromTo(heroSubtitle.value, { y: 20, opacity: 0 }, { y: 0, opacity: 1, duration: 1, ease: "power3.out" }, "-=1");
+  // Hero Animation
+  const tl = gsap.timeline();
+  
+  tl.fromTo(heroBg.value, { scale: 1.2, opacity: 0 }, { scale: 1.1, opacity: 0.6, duration: 2, ease: "power2.out" })
+    .fromTo(heroTitle.value, { y: 100, opacity: 0 }, { y: 0, opacity: 1, duration: 1.5, ease: "power3.out" }, "-=1.5")
+    .fromTo(heroSubtitle.value, { y: 20, opacity: 0 }, { y: 0, opacity: 1, duration: 1, ease: "power3.out" }, "-=1");
 
-    // Parallax Effect for Hero
-    gsap.to(heroBg.value, {
-      yPercent: 30,
-      ease: "none",
+  // Parallax Effect for Hero
+  gsap.to(heroBg.value, {
+    yPercent: 30,
+    ease: "none",
+    scrollTrigger: {
+      trigger: heroBg.value,
+      start: "top top",
+      end: "bottom top",
+      scrub: true
+    }
+  });
+
+  // Philosophy Text Reveal
+  gsap.fromTo(philosophyText.value, 
+    { opacity: 0, y: 50 },
+    {
+      opacity: 1,
+      y: 0,
+      duration: 1.5,
+      ease: "power3.out",
       scrollTrigger: {
-        trigger: heroBg.value,
-        start: "top top",
-        end: "bottom top",
-        scrub: true
+        trigger: philosophyText.value,
+        start: "top 80%",
+        toggleActions: "play none none reverse"
       }
-    });
+    }
+  );
 
-    // Philosophy Text Reveal
-    gsap.fromTo(philosophyText.value, 
-      { opacity: 0, y: 50 },
+  // Routine Items Stagger
+  const workoutRows = document.querySelectorAll('.workout-row');
+  workoutRows.forEach((row, i) => {
+    gsap.fromTo(row,
+      { opacity: 0, x: -50 },
       {
         opacity: 1,
-        y: 0,
-        duration: 1.5,
+        x: 0,
+        duration: 1,
         ease: "power3.out",
         scrollTrigger: {
-          trigger: philosophyText.value,
-          start: "top 80%",
+          trigger: row,
+          start: "top 85%",
           toggleActions: "play none none reverse"
         }
       }
     );
+  });
 
-    // Routine Items Stagger
-    const workoutRows = document.querySelectorAll('.workout-row');
-    workoutRows.forEach((row, i) => {
-      gsap.fromTo(row,
-        { opacity: 0, x: -50 },
-        {
-          opacity: 1,
-          x: 0,
-          duration: 1,
-          ease: "power3.out",
-          scrollTrigger: {
-            trigger: row,
-            start: "top 85%",
-            toggleActions: "play none none reverse"
-          }
+  // Stats Count Up
+  const statItems = document.querySelectorAll('.stat-item');
+  statItems.forEach((item) => {
+    gsap.fromTo(item,
+      { opacity: 0, y: 30 },
+      {
+        opacity: 1,
+        y: 0,
+        duration: 1,
+        scrollTrigger: {
+          trigger: item,
+          start: "top 90%",
         }
-      );
-    });
-
-    // Stats Count Up
-    const statItems = document.querySelectorAll('.stat-item');
-    statItems.forEach((item) => {
-      gsap.fromTo(item,
-        { opacity: 0, y: 30 },
-        {
-          opacity: 1,
-          y: 0,
-          duration: 1,
-          scrollTrigger: {
-            trigger: item,
-            start: "top 90%",
-          }
-        }
-      );
-    });
-  }, 700);
+      }
+    );
+  });
 });
 </script>
 

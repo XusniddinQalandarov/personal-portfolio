@@ -119,31 +119,29 @@ onMounted(async () => {
   await loadBlogs()
   
   if (process.client) {
-    setTimeout(() => {
-      nextTick(() => {
-        // Animations
-        const tl = gsap.timeline();
-        tl.fromTo(headerEl.value, { y: 50, opacity: 0 }, { y: 0, opacity: 1, duration: 1, ease: 'power3.out' })
-          .fromTo(filtersEl.value, { y: 30, opacity: 0 }, { y: 0, opacity: 1, duration: 0.8 }, '-=0.5');
+    nextTick(() => {
+      // Animations
+      const tl = gsap.timeline();
+      tl.fromTo(headerEl.value, { y: 50, opacity: 0 }, { y: 0, opacity: 1, duration: 1, ease: 'power3.out' })
+        .fromTo(filtersEl.value, { y: 30, opacity: 0 }, { y: 0, opacity: 1, duration: 0.8 }, '-=0.5');
 
-        // List Items
-        const items = document.querySelectorAll('.blog-item');
-        items.forEach((item, i) => {
-          gsap.fromTo(item, 
-            { y: 50, opacity: 0 },
-            {
-              y: 0,
-              opacity: 1,
-              duration: 1,
-              scrollTrigger: {
-                trigger: item,
-                start: "top 90%",
-              }
+      // List Items
+      const items = document.querySelectorAll('.blog-item');
+      items.forEach((item, i) => {
+        gsap.fromTo(item, 
+          { y: 50, opacity: 0 },
+          {
+            y: 0,
+            opacity: 1,
+            duration: 1,
+            scrollTrigger: {
+              trigger: item,
+              start: "top 90%",
             }
-          );
-        });
+          }
+        );
       });
-    }, 700);
+    });
   }
 })
 

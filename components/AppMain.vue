@@ -70,15 +70,13 @@ const buttonsEl = ref(null);
 const imageEl = ref(null);
 
 onMounted(() => {
-  setTimeout(() => {
-    const tl = gsap.timeline();
+  const tl = gsap.timeline();
 
-    tl.fromTo(tagEl.value, { x: -20, opacity: 0 }, { x: 0, opacity: 1, duration: 1, ease: "power3.out" })
-      .fromTo(titleEl.value, { y: 50, opacity: 0 }, { y: 0, opacity: 1, duration: 1.2, ease: "power3.out" }, "-=0.8")
-      .fromTo(subtitleEl.value, { y: 20, opacity: 0 }, { y: 0, opacity: 1, duration: 1, ease: "power3.out" }, "-=0.8")
-      .fromTo(buttonsEl.value, { y: 20, opacity: 0 }, { y: 0, opacity: 1, duration: 1, ease: "power3.out" }, "-=0.8")
-      .fromTo(imageEl.value, { x: 50, opacity: 0 }, { x: 0, opacity: 1, duration: 1.5, ease: "power3.out" }, "-=1");
-  }, 700);
+  tl.fromTo(tagEl.value, { x: -20, opacity: 0 }, { x: 0, opacity: 1, duration: 1, ease: "power3.out" })
+    .fromTo(titleEl.value, { y: 50, opacity: 0 }, { y: 0, opacity: 1, duration: 1.2, ease: "power3.out" }, "-=0.8")
+    .fromTo(subtitleEl.value, { y: 20, opacity: 0 }, { y: 0, opacity: 1, duration: 1, ease: "power3.out" }, "-=0.8")
+    .fromTo(buttonsEl.value, { y: 20, opacity: 0 }, { y: 0, opacity: 1, duration: 1, ease: "power3.out" }, "-=0.8")
+    .fromTo(imageEl.value, { x: 50, opacity: 0 }, { x: 0, opacity: 1, duration: 1.5, ease: "power3.out" }, "-=1");
 });
 </script>
 
