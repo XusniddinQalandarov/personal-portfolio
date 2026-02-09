@@ -1,5 +1,5 @@
 <template>
-  <div ref="particlesContainer" class="relative min-h-screen bg-dark-charcoal">
+  <div ref="particlesContainer" class="relative min-h-screen">
     <AppMain/>
   </div>
 </template>

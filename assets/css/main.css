@@ -3,3 +3,76 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+@tailwind utilities;
+
+/* Smooth Page Transitions */
+.page-enter-active,
+.page-leave-active {
+    transition: all 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.page-enter-from {
+    opacity: 0;
+    transform: translateY(20px);
+    filter: blur(8px);
+}
+
+.page-leave-to {
+    opacity: 0;
+    transform: translateY(-20px);
+    filter: blur(8px);
+}
+
+/* Cinematic Slide */
+/* Slide Left (Forward Navigation: Enter Left-to-Right? No, Slide Left means content moves Left, new comes from Right) */
+/* The user asked: "routes from left to right and right to left, just like in slide moving" */
+/* Standard Push:
+   Forward: Current leaves too Left (-100%), New enters from Right (100%).
+   Backward: Current leaves to Right (100%), New enters from Left (-100%).
+*/
+
+.slide-left-enter-active,
+.slide-left-leave-active,
+.slide-right-enter-active,
+.slide-right-leave-active {
+    transition: transform 0.6s cubic-bezier(0.16, 1, 0.3, 1), opacity 0.6s cubic-bezier(0.16, 1, 0.3, 1);
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    width: 100%;
+    height: 100vh;
+    overflow: hidden;
+    z-index: 10;
+    background: var(--gradient-mesh-1), var(--gradient-mesh-2), var(--gradient-mesh-3), var(--color-bg-primary);
+    background-color: var(--color-bg-primary);
+    /* Fallback */
+    /* Ensure background is solid during transition */
+}
+
+/* Slide Left (Forward) */
+.slide-left-enter-from {
+    transform: translateX(100%);
+    z-index: 20;
+}
+
+.slide-left-leave-to {
+    transform: translateX(-30%);
+    /* Parallax leave */
+    opacity: 0;
+    z-index: 0;
+}
+
+/* Slide Right (Backward) */
+.slide-right-enter-from {
+    transform: translateX(-100%);
+    z-index: 20;
+}
+
+.slide-right-leave-to {
+    transform: translateX(30%);
+    /* Parallax leave */
+    opacity: 0;
+    z-index: 0;
+}

@@ -1,145 +1,85 @@
 <template>
-  <div class="min-h-screen py-12 md:py-20">
-    <div class="max-w-4xl mx-auto px-4 relative">
-      <!-- Header -->
-      <div ref="headerEl" class="text-center mb-12 md:mb-16">
-        <h1 class="text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-bold mb-6 text-main">Professional Journey</h1>
-        <p class="text-base md:text-lg lg:text-xl text-sub max-w-2xl mx-auto">
-          Aspiring computer scientist passionate about frontend development and AI agent building. My journey from high school projects to professional development roles.
+  <div class="min-h-screen py-20 px-4 md:px-0">
+    <div class="max-w-5xl mx-auto">
+      
+      <!-- Minimalist Header -->
+      <div ref="headerEl" class="mb-24 px-4 md:px-0 opacity-0">
+        <h1 class="text-6xl md:text-8xl font-black tracking-tighter mb-8 text-main opacity-90">
+          EXPERIENCE
+        </h1>
+        <p class="text-xl md:text-2xl font-light text-sub max-w-2xl leading-relaxed">
+          A timeline of technical evolution. From high school algorithms to enterprise-scale applications and AI agents.
         </p>
       </div>
 
-      <!-- Loading State -->
-      <div v-if="loading" class="text-center py-12">
-        <div class="inline-block animate-spin rounded-full h-12 w-12 border-b-2 border-blue-400"></div>
-        <p class="text-sub mt-4">Loading experience...</p>
-      </div>
+      <!-- Minimalist Timeline -->
+      <div ref="timelineEl" class="relative pl-8 md:pl-0">
+        <!-- Vertical Line (Desktop Centered, Mobile Left) -->
+        <div class="absolute left-0 md:left-1/2 top-0 bottom-0 w-px bg-gradient-to-b from-transparent via-gray-300 dark:via-white/20 to-transparent"></div>
 
-      <!-- Experience Timeline -->
-      <div v-else ref="timelineEl" class="relative">
-        <!-- Timeline Line - Hidden on mobile, shown on md+ -->
-        <div class="hidden md:block absolute left-1/2 transform -translate-x-1/2 w-1 glow-border h-full"></div>
-        
-        <!-- Timeline Items -->
-        <div v-for="(experience, index) in experiences" :key="experience.id" class="mb-8 md:mb-12">
-          <!-- Mobile Layout (stacked) -->
-          <div class="block md:hidden">
-            <div class="glass-panel p-4 rounded-lg">
-              <div class="flex items-center mb-3">
-                <div class="w-8 h-8 rounded-full bg-gray-600 flex items-center justify-center mr-3">
-                  <i :class="experience.icon || 'pi pi-briefcase'" class="text-main text-xs"></i>
-                </div>
-                <div>
-                  <h3 class="text-lg font-bold text-main">{{ experience.title }}</h3>
-                  <h4 class="text-sm text-sub">{{ experience.company }}</h4>
-                  <p class="text-xs text-sub">{{ experience.period }}</p>
-                </div>
-              </div>
-              
-              <p class="text-sub text-sm mb-3">{{ experience.description }}</p>
-              
-              <!-- Technologies/Skills -->
-              <div class="flex flex-wrap gap-2 mb-3" v-if="experience.technologies">
-                <span
-                  v-for="tech in experience.technologies"
-                  :key="tech"
-                  :class="[
-                    'px-2 py-1 rounded-full text-xs font-medium border transition-colors',
-                    isDark
-                      ? 'bg-gradient-to-r from-blue-500/20 to-purple-500/20 text-blue-300 border-blue-500/30 hover:bg-blue-500/30'
-                      : 'bg-gradient-to-r from-blue-100 to-purple-100 text-blue-700 border-blue-200 hover:bg-blue-200'
-                  ]"
-                >
-                  {{ tech }}
-                </span>
-              </div>
+        <div v-for="(experience, index) in experiences" :key="experience.id" 
+             class="group relative mb-24 md:mb-32 flex flex-col md:flex-row w-full opacity-0"
+             :class="index % 2 === 0 ? 'md:flex-row-reverse' : ''">
+          
+          <!-- Timeline Dot -->
+          <div class="absolute left-[-4.5px] md:left-1/2 md:-ml-[5px] top-2 w-2.5 h-2.5 bg-blue-500 rounded-full z-10 shadow-[0_0_10px_rgba(59,130,246,0.5)]"></div>
 
-              <!-- Key Achievements -->
-              <div v-if="experience.achievements" class="mt-3">
-                <h5 class="text-sm font-semibold text-main mb-2">Key Achievements:</h5>
-                <ul class="text-sm text-sub space-y-1">
-                  <li v-for="achievement in experience.achievements" :key="achievement" class="flex items-start">
-                    <span class="text-sub mr-2">•</span>
-                    {{ achievement }}
-                  </li>
-                </ul>
-              </div>
-            </div>
-          </div>
+          <!-- Spacer for Desktop -->
+          <div class="hidden md:block md:w-1/2"></div>
+          
+          <!-- Content Side -->
+          <div class="md:w-1/2 pl-8 md:px-12 relative">
+            
+            <!-- Period -->
+            <span class="inline-block text-sm font-mono text-blue-500 mb-2 tracking-widest uppercase opacity-80">
+              {{ experience.period }}
+            </span>
 
-          <!-- Desktop Layout (alternating) -->
-          <div class="hidden md:flex relative" :class="[
-            'items-center',
-            index % 2 === 0 ? 'flex-row-reverse' : 'flex-row'
-          ]">
-            <!-- Content Card -->
-            <div class="w-5/12 glass-panel p-6 rounded-lg transition-all duration-300" :class="[
-              index % 2 === 0 ? 'mr-auto' : 'ml-auto',
-              selectedExperience === index ? 'transform scale-105 border border-blue-400' : 'border border-transparent hover:border-blue-400/50'
-            ]">
-              <div class="mb-4">
-                <h3 class="text-xl font-bold text-main mb-2">{{ experience.title }}</h3>
-                <h4 class="text-lg text-sub font-semibold mb-2">{{ experience.company }}</h4>
-                <p class="text-sm text-sub font-medium">{{ experience.period }}</p>
-              </div>
-              
-              <p class="text-sub mb-4">{{ experience.description }}</p>
-              
-              <!-- Technologies/Skills -->
-              <div class="flex flex-wrap gap-2 mb-4" v-if="experience.technologies">
-                <span
-                  v-for="tech in experience.technologies"
-                  :key="tech"
-                  :class="[
-                    'px-3 py-1.5 rounded-full text-sm font-medium border transition-colors',
-                    isDark
-                      ? 'bg-gradient-to-r from-blue-500/20 to-purple-500/20 text-blue-300 border-blue-500/30 hover:bg-blue-500/30'
-                      : 'bg-gradient-to-r from-blue-100 to-purple-100 text-blue-700 border-blue-200 hover:bg-blue-200'
-                  ]"
-                >
-                  {{ tech }}
-                </span>
-              </div>
+            <!-- Title & Company -->
+            <h2 class="text-3xl md:text-4xl font-bold text-main mb-1 group-hover:text-blue-500 transition-colors duration-300">
+              {{ experience.title }}
+            </h2>
+            <h3 class="text-xl text-sub font-medium mb-6">{{ experience.company }}</h3>
 
-              <!-- Key Achievements -->
-              <div v-if="experience.achievements" class="mt-4">
-                <h5 class="text-sm font-semibold text-main mb-2">Key Achievements:</h5>
-                <ul class="text-sm text-sub space-y-1">
-                  <li v-for="achievement in experience.achievements" :key="achievement" class="flex items-start">
-                    <span class="text-gray-400 mr-2">•</span>
-                    {{ achievement }}
-                  </li>
-                </ul>
-              </div>
+            <!-- Description -->
+            <p class="text-lg text-sub font-light leading-relaxed mb-6">
+              {{ experience.description }}
+            </p>
+
+            <!-- Tech Stack (Minimal) -->
+            <div class="flex flex-wrap gap-x-6 gap-y-2 mb-6">
+              <span v-for="tech in experience.technologies" :key="tech" 
+                    class="text-sm font-mono text-gray-500 dark:text-gray-400 group-hover:text-main transition-colors">
+                #{{ tech }}
+              </span>
             </div>
 
-            <!-- Timeline Marker -->
-            <button 
-              @click="selectedExperience = index"
-              class="absolute left-1/2 transform -translate-x-1/2 -translate-y-2 w-12 h-12 rounded-full flex items-center justify-center z-10 transition-all duration-300 cursor-pointer"
-              :class="[
-                selectedExperience === index 
-                  ? 'bg-gray-500 scale-110' 
-                  : 'bg-gray-600 hover:bg-gray-500 hover:scale-105'
-              ]">
-              <i :class="experience.icon || 'pi pi-briefcase'" class="text-white text-lg"></i>
-            </button>
+            <!-- Achievements (Bulleted, Minimal) -->
+            <ul v-if="experience.achievements" class="space-y-2 border-l border-gray-300 dark:border-white/10 pl-6">
+              <li v-for="ach in experience.achievements" :key="ach" class="text-sub text-sm leading-relaxed">
+                {{ ach }}
+              </li>
+            </ul>
+
           </div>
         </div>
       </div>
-      
-      <!-- Education Section -->
-      <div v-if="!loading" class="mt-16 md:mt-20">
-        <h2 class="text-2xl md:text-3xl font-bold text-center text-main mb-8 md:mb-12">Education & Certifications</h2>
-        <div class="grid md:grid-cols-2 gap-6 md:gap-8">
-          <div v-for="edu in education" :key="edu.id" class="glass-panel p-4 md:p-6 rounded-lg transition-all hover:scale-105 duration-300">
-            <h3 class="text-base md:text-lg font-bold text-main mb-2">{{ edu.degree }}</h3>
-            <h4 class="text-main font-semibold mb-1 text-sm md:text-base">{{ edu.school }}</h4>
-            <p class="text-sub font-medium mb-3 text-sm">{{ edu.year }}</p>
-            <p class="text-sub text-sm" v-if="edu.description">{{ edu.description }}</p>
+
+      <!-- Education Section (List Style) -->
+      <div class="mt-32 px-4 md:px-0">
+        <h2 class="text-4xl md:text-5xl font-black text-main mb-16 tracking-tight">EDUCATION</h2>
+        <div class="grid gap-12 border-t border-gray-200 dark:border-white/10 pt-12">
+          <div v-for="edu in education" :key="edu.id" class="grid md:grid-cols-12 gap-6 group hover:bg-gray-100 dark:hover:bg-gray-800 p-6 rounded-lg transition-colors -mx-6">
+            <div class="md:col-span-3 text-sub font-mono text-sm">{{ edu.year }}</div>
+            <div class="md:col-span-9">
+              <h3 class="text-2xl font-bold text-main mb-2 group-hover:text-blue-500 transition-colors">{{ edu.degree }}</h3>
+              <div class="text-xl text-sub mb-4">{{ edu.school }}</div>
+              <p class="text-sub font-light">{{ edu.description }}</p>
+            </div>
           </div>
         </div>
       </div>
+
     </div>
   </div>
 </template>
@@ -150,366 +90,134 @@ import { ScrollTrigger } from 'gsap/ScrollTrigger';
 
 gsap.registerPlugin(ScrollTrigger);
 
-// Theme composable
-const { isDark } = useTheme();
-
-const selectedExperience = ref(null);
-const loading = ref(true);
-const error = ref(null);
-
-// Default experiences - kept as fallback/initial data
-const defaultExperiences = [
+// Data
+const experiences = ref([
   {
     id: 1,
     title: "Frontend Developer",
     company: "UZINFOCOM",
     period: "May 2025 - Present",
     description: "Building responsive SPAs and improving UX across multiple projects. Developing interactive data visualization solutions and modernizing university websites.",
-    technologies: ["Angular 19, Angular 20", "Tailwind CSS v4", "Angular Material", "PrimeNG", "Apache ECharts", "SVG", "RxJS", "Ng-Zorro"],
+    technologies: ["Angular 19", "Tailwind CSS", "ECharts", "RxJS"],
     achievements: [
-      "Improved page load times by ~20% using Angular 19 and Tailwind CSS",
-      "Built interactive SVG map of Uzbekistan with real-time data visualization",
-      "Reduced manual reporting workload by 30% with custom dashboards",
-      "Attracted ~50 weekly users to personal tech-blog application",
-      "Contributed to 10+ end-to-end projects across different domains"
-    ],
-    icon: "pi pi-code"
+      "Improved page load times by ~20%",
+      "Built interactive SVG map of Uzbekistan",
+      "Reduced manual reporting by 30%"
+    ]
   },
   {
     id: 2,
     title: "Mobile Developer",
     company: "Startup",
     period: "June 2025 - Present",
-    description: "Developing a React Native Expo mobile app that allows football enthusiasts to book stadiums. Integrated push notifications, deep linking, and over-the-air (OTA) updates using Firebase and CodePush.",
-    technologies: ["React Native", "Expo", "Firebase", "CodePush", "FlatList", "Reanimated"],
+    description: "Developing a React Native Expo mobile app for stadium booking. Integrated push notifications and OTA updates.",
+    technologies: ["React Native", "Expo", "Firebase", "CodePush"],
     achievements: [
-      "Improved user engagement and experience with push notifications",
-      "Implemented custom animations and optimized list rendering",
-      "Integrated deep linking and OTA updates for seamless user experience"
-    ],
-    icon: "pi pi-mobile"
+      "Integrated deep linking & OTA updates",
+      "Optimized list rendering performance"
+    ]
   },
   {
     id: 3,
-    title: "AI & Telegram Bot Developer",
-    company: "Independent Projects",
+    title: "AI & Automation Developer",
+    company: "Independent",
     period: "Dec 2024 - Present",
-    description: "Developing intelligent Telegram bots and AI-powered applications for various clients and personal projects.",
-    technologies: ["Node.js", "OpenAI API", "Telegram Bot API", "GitHub Actions", "Firebase", "Angular 19"],
+    description: "Developing intelligent automation tools and AI-powered applications for various clients.",
+    technologies: ["Node.js", "OpenAI API", "Python", "Angular"],
     achievements: [
-      "Built Content Creator Bot with auto-posting and weather integration",
-      "Created Birthday Manager Bot replacing static file checks with database",
-      "Developed Notifier Bot sold to U.S. logistics company",
-      "Built StudyAssistant bot with AI-integrated quizzes",
-      "Created NewsAnalyzeBot for credibility analysis and trust scoring"
-    ],
-    icon: "pi pi-android"
+      "Built Content Creator Bot with auto-posting",
+      "Developed Notifier Bot sold to US logistics co."
+    ]
   },
   {
     id: 4,
-    title: "General English / IELTS Instructor",
+    title: "IELTS Instructor",
     company: "King's Academy",
     period: "Oct 2023 - Oct 2024",
-    description: "Teaching English and IELTS preparation to 100+ students, developing comprehensive lesson plans and advising on university applications.",
-    technologies: ["IELTS", "Problem Solving", "Leadership", "Quizlet", "Lesson Planning", "Assessment Tools"],
+    description: "Teaching English and IELTS preparation to 100+ students.",
+    technologies: ["Leadership", "Communication", "Planning"],
     achievements: [
-      "Achieved +1.5 average band-score improvement with 85% pass rate",
-      "Taught 100+ students achieving Band 7+ targets",
-      "Advised 40+ applicants on essays and interviews",
-      "Many students secured scholarships to international universities"
-    ],
-    icon: "pi pi-book"
+      "+1.5 average band-score improvement",
+      "85% pass rate for students"
+    ]
   },
   {
     id: 5,
-    title: "Front-end Developer",
+    title: "Frontend Developer",
     company: "Selected Projects",
     period: "Dec 2024 - Apr 2025",
-    description: "Developing various front-end applications including e-commerce platforms and interactive museum portals.",
-    technologies: ["Angular 19", "Ng-Zorro", "Angular Material", "GraphQL", "RxJS"],
+    description: "Developing various front-end applications including e-commerce platforms.",
+    technologies: ["Angular", "GraphQL", "RxJS", "Material"],
     achievements: [
-      "Built secure e-commerce platform with real-time inventory",
-      "Cut initial payload by 25% using lazy loading and OnPush",
-      "Created interactive museum portal with exhibit maps and search",
-      "Ensured responsive design across all projects"
-    ],
-    icon: "pi pi-desktop"
-  },
-  {
-    id: 6,
-    title: "Front-end & Game Developer",
-    company: "Khiva Presidential School",
-    period: "Mar 2020 - May 2021",
-    description: "Delivered freelance web projects and developed HTML5 games while creating school website components.",
-    technologies: ["HTML5 Canvas", "JavaScript", "CSS3", "Game Development"],
-    achievements: [
-      "Delivered 5+ freelance web projects on Fiverr",
-      "Built Vue.js site for U.S. client boosting CTR by 30%",
-      "Developed three 2D HTML5 Canvas games with 80%+ positive feedback",
-      "Created login/support pages improving navigation and access control"
-    ],
-    icon: "pi pi-globe"
+      "Built secure e-commerce platform",
+      "Cut initial payload by 25%"
+    ]
   }
-];
+]);
 
-const defaultEducation = [
+const education = ref([
   {
     id: 1,
-    degree: "Bachelor of Science in Computer Science & Engineering",
+    degree: "B.Sc. Computer Science",
     school: "Presidential University, Tashkent",
-    year: "Expected June 2026",
-    description: "Relevant Coursework: Data Structures & Algorithms, Web Development, Network Security. Aspiring computer scientist passionate about frontend development and AI agent building."
+    year: "Expected 2026",
+    description: "Focus on Data Structures, Algorithms, and AI Agents."
   },
   {
     id: 2,
     degree: "High School Diploma",
-    school: "Khiva Presidential School, Khiva, Khorezm",
-    year: "June 2022",
-    description: "GPA: 4.92 / 5.00 • SAT: 1270 / 1600 • IELTS: 7.5 / 9.0"
+    school: "Khiva Presidential School",
+    year: "2022",
+    description: "GPA: 4.92/5.00 | IELTS: 7.5 | SAT: 1270"
   },
   {
     id: 3,
-    degree: "Front-end Development Course",
+    degree: "Frontend Certification",
     school: "USTUDY",
-    year: "March 2025",
-    description: "Comprehensive frontend development certification covering modern frameworks and best practices."
-  },
-  {
-    id: 4,
-    degree: "Bronze Medal - AIMO",
-    school: "International Mathematical Olympiad",
-    year: "2020",
-    description: "International recognition in mathematics demonstrating analytical and problem-solving skills."
-  },
-  {
-    id: 5,
-    degree: "Top 100 Uzbekistan Start-ups Award",
-    school: "National Recognition",
-    year: "2020",
-    description: "Recognition for innovative startup idea and entrepreneurial excellence in technology sector."
+    year: "2025",
+    description: "Advanced modern web development practices."
   }
-];
-
-const experiences = ref([...defaultExperiences]);
-const education = ref([...defaultEducation]);
+]);
 
 const headerEl = ref(null);
 const timelineEl = ref(null);
 
-// Load data from database
-onMounted(async () => {
-  try {
-    loading.value = true;
-    
-    // Load experience from database
-    try {
-      const expResponse = await $fetch('/api/experience');
-      let dbExperiences = [];
-      
-      // Handle response format
-      if (expResponse && typeof expResponse === 'object' && 'data' in expResponse) {
-        dbExperiences = Array.isArray(expResponse.data) ? expResponse.data : [];
-      } else if (Array.isArray(expResponse)) {
-        dbExperiences = expResponse;
-      }
-      
-      if (dbExperiences.length > 0) {
-        // Merge database entries with defaults, avoiding duplicates by id
-        const dbIds = dbExperiences.map(exp => exp.id);
-        const filteredDefaults = defaultExperiences.filter(exp => !dbIds.includes(exp.id));
-        experiences.value = [...dbExperiences, ...filteredDefaults];
-      }
-    } catch (expErr) {
-      console.warn('Failed to load experience from database, using defaults:', expErr);
-    }
-
-    // Load education from database
-    try {
-      const eduResponse = await $fetch('/api/education');
-      let dbEducation = [];
-      
-      // Handle response format
-      if (eduResponse && typeof eduResponse === 'object' && 'data' in eduResponse) {
-        dbEducation = Array.isArray(eduResponse.data) ? eduResponse.data : [];
-      } else if (Array.isArray(eduResponse)) {
-        dbEducation = eduResponse;
-      }
-      
-      if (dbEducation.length > 0) {
-        // Merge database entries with defaults, avoiding duplicates by id
-        const dbIds = dbEducation.map(edu => edu.id);
-        const filteredDefaults = defaultEducation.filter(edu => !dbIds.includes(edu.id));
-        education.value = [...dbEducation, ...filteredDefaults];
-      }
-    } catch (eduErr) {
-      console.warn('Failed to load education from database, using defaults:', eduErr);
-    }
-  } catch (err) {
-    console.error('Failed to load data:', err);
-    error.value = 'Failed to load some data. Showing defaults.';
-  } finally {
-    loading.value = false;
-    
-    // Animate after content loads with delay to ensure DOM is ready
+onMounted(() => {
+  if (process.client) {
     setTimeout(() => {
-      nextTick(() => {
-        animateExperience();
+      // Header Animation
+      gsap.fromTo(headerEl.value, { y: 50, opacity: 0 }, { y: 0, opacity: 1, duration: 1.2, ease: "power3.out" });
+
+      // Timeline Items Animation
+      const items = timelineEl.value.querySelectorAll('.group');
+      items.forEach((item, i) => {
+        gsap.fromTo(item, 
+          { y: 50, opacity: 0 },
+          {
+            y: 0,
+            opacity: 1,
+            duration: 1,
+            ease: "power3.out",
+            scrollTrigger: {
+              trigger: item,
+              start: "top 85%",
+              toggleActions: "play none none reverse"
+            }
+          }
+        );
       });
-    }, 100);
+    }, 700);
   }
 });
 
-const animateExperience = () => {
-  try {
-    console.log('Experience animations initialized');
-  
-  // Header fade in
-  gsap.from(headerEl.value, {
-    y: -30,
-    opacity: 0,
-    duration: 0.8,
-    ease: 'power3.out',
-  });
-  
-  // Animate timeline line
-  const timelineLine = timelineEl.value?.querySelector('.glow-border');
-  if (timelineLine) {
-    gsap.from(timelineLine, {
-      scaleY: 0,
-      transformOrigin: 'top center',
-      duration: 1.2,
-      ease: 'power2.out',
-      scrollTrigger: {
-        trigger: timelineEl.value,
-        start: 'top 80%',
-        toggleActions: 'play none none none',
-      },
-    });
-  }
-  
-  // Get all timeline items - use simpler selector
-  const timelineItems = timelineEl.value?.querySelectorAll(':scope > .relative');
-  if (timelineItems && timelineItems.length > 0) {
-    // Animate each timeline item individually with ScrollTrigger
-    timelineItems.forEach((item, index) => {
-      // Animate markers/buttons with bounce effect
-      const marker = item.querySelector('button');
-      if (marker) {
-        gsap.from(marker, {
-          scale: 0,
-          rotation: -180,
-          opacity: 0,
-          duration: 0.6,
-          ease: 'back.out(1.7)',
-          scrollTrigger: {
-            trigger: item,
-            start: 'top 85%',
-            toggleActions: 'play none none none',
-          },
-        });
-      }
-      
-      // Animate cards with alternating direction based on index
-      const cards = item.querySelectorAll('.bg-\\[\\#1E2128FF\\]');
-      cards.forEach((card) => {
-        const isEven = index % 2 === 0;
-        gsap.from(card, {
-          x: isEven ? 80 : -80,
-          opacity: 0,
-          duration: 0.8,
-          ease: 'power3.out',
-          scrollTrigger: {
-            trigger: item,
-            start: 'top 80%',
-            toggleActions: 'play none none none',
-          },
-        });
-      });
-      
-      // Animate technology tags with stagger
-      const techTags = item.querySelectorAll('.flex-wrap span');
-      if (techTags.length > 0) {
-        gsap.from(techTags, {
-          scale: 0,
-          opacity: 0,
-          duration: 0.4,
-          stagger: 0.05,
-          ease: 'back.out(1.7)',
-          scrollTrigger: {
-            trigger: item,
-            start: 'top 75%',
-            toggleActions: 'play none none none',
-          },
-        });
-      }
-    });
-  }
-  
-  // No animations for education section - keep it always visible
-  console.log('Education section loaded without animations');
-  
-  } catch (error) {
-    console.error('Animation error:', error);
-  }
-};
-
-// SEO Meta
 useSeoMeta({
   title: 'Experience - Xusniddin Qalandarov',
-  ogTitle: 'Experience - Xusniddin Qalandarov',
-  description: 'Professional journey of Xusniddin Qalandarov - Frontend Developer, AI & Telegram Bot Developer, and Computer Science student.',
-  ogDescription: 'Professional journey of Xusniddin Qalandarov - Frontend Developer, AI & Telegram Bot Developer, and Computer Science student.',
+  description: 'My professional timeline and education.'
 })
 </script>
 
 <style scoped>
-/* Mobile responsiveness */
-@media screen and (max-width: 768px) {
-  /* Timeline container adjustments */
-  .relative.mb-12 {
-    margin-left: 0 !important;
-    padding-left: 4rem;
-  }
-
-  /* Force all items to align left on mobile */
-  .flex.items-start {
-    flex-direction: row !important;
-    justify-content: flex-start !important;
-  }
-
-  .flex-row-reverse {
-    flex-direction: row !important;
-  }
-  
-  /* Content cards - full width on mobile */
-  .w-5\/12 {
-    width: 100% !important;
-  }
-  
-  /* Remove auto margins on mobile */
-  .mr-auto,
-  .ml-auto {
-    margin-left: 0 !important;
-    margin-right: 0 !important;
-  }
-
-  /* Timeline markers - position on left */
-  .absolute.left-1\/2 {
-    left: 1.5rem !important;
-    transform: translateX(-50%) translateY(-0.5rem) !important;
-  }
-
-  /* Timeline line - position on left */
-  .glow-border {
-    left: 1.5rem !important;
-    transform: translateX(-50%) !important;
-    width: 2px !important;
-  }
-
-  /* Ensure content doesn't overlap with timeline */
-  .w-5\/12.transition-all {
-    margin-left: 0 !important;
-    margin-right: 0 !important;
-  }
-}
+.text-main { color: var(--color-text-primary); }
+.text-sub { color: var(--color-text-secondary); }
+.bg-primary { background-color: var(--color-bg-primary); }
 </style>

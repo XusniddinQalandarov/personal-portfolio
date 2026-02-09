@@ -11,6 +11,11 @@ export const useTheme = () => {
     if (process.client) {
       const theme = isDarkState.value ? 'dark' : 'light'
       document.documentElement.setAttribute('data-theme', theme)
+      if (isDarkState.value) {
+        document.documentElement.classList.add('dark')
+      } else {
+        document.documentElement.classList.remove('dark')
+      }
       localStorage.setItem('theme', theme)
       console.log('Theme updated to:', theme) // Debug log
     }

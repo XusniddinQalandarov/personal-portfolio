@@ -1,124 +1,99 @@
 <template>
-        <div class="flex flex-col md:flex-row w-full h-screen md:h-full py-2 md:py-16 px-2 md:px-0 relative overflow-hidden">
-            <!-- Profile Image - Hidden on mobile, shown on desktop -->
-            <div ref="imageEl" class="flex md:w-2/5 items-start md:items-center justify-center pt-4 md:pt-0 relative z-10">
-                <NuxtImg
-                  src="/images/first.jpg"
-                  alt="Profile Picture"
-                  width="320"
-                  height="320"
-                  class="w-52 h-52 md:w-80 md:h-80 rounded-full object-cover shadow-lg md:-mt-32"
-                />
-            </div>
-            
-            <!-- Content Section -->
-            <div class="w-full md:w-3/5 flex items-start md:items-center justify-center p-2 md:p-8 mt-4 md:mt-0 relative z-10">
-                <div class="text-main w-full max-w-2xl">
-                    <!-- Main Heading - Responsive text sizes -->
-                    <h1 ref="titleEl" class="text-3xl sm:text-4xl md:text-5xl lg:text-7xl font-bold mb-4 md:mb-6 leading-tight text-shadow-lg">
-                      Building future-ready web solutions where design, performance, and AI meet.
-                    </h1>
+  <div class="h-screen w-full flex flex-col justify-center px-6 md:px-24 overflow-hidden relative">
+    
+    <!-- Background Gradient Mesh -->
+    <div class="absolute inset-0 z-0 opacity-30 dark:opacity-20 pointer-events-none">
+      <div class="absolute top-[-20%] right-[-10%] w-[60vw] h-[60vw] bg-blue-500/30 rounded-full blur-[100px] animate-float"></div>
+      <div class="absolute bottom-[-20%] left-[-10%] w-[50vw] h-[50vw] bg-purple-500/30 rounded-full blur-[100px] animate-float" style="animation-delay: 2s"></div>
+    </div>
 
-                    <div class="h-2 md:h-8"></div>
+    <div class="relative z-10 max-w-7xl mx-auto w-full">
+      
+      <!-- Greeting / Tag -->
+      <div ref="tagEl" class="mb-6 flex items-center gap-3 opacity-0">
+        <span class="w-12 h-[1px] bg-blue-500"></span>
+        <span class="text-blue-500 font-mono text-sm uppercase tracking-widest">Full-Stack Developer</span>
+      </div>
 
-                    <!-- Subtitle - Responsive text sizes -->
-                    <h2 ref="subtitleEl" class="text-base sm:text-lg md:text-xl font-semibold mb-4 md:mb-6">
-                      Frontend Development | AI Automation | Fitness &amp; Discipline
-                    </h2>
+      <!-- Main Headline -->
+      <h1 ref="titleEl" class="text-5xl md:text-7xl lg:text-9xl font-black text-main leading-[0.9] tracking-tighter mb-8 uppercase opacity-0">
+        Building<br>
+        <span class="text-transparent bg-clip-text bg-gradient-to-r from-blue-500 to-purple-600">Digital</span><br>
+        Future.
+      </h1>
 
-                    <div class="h-2 md:h-8"></div>
+      <!-- Subtitle -->
+      <p ref="subtitleEl" class="text-lg md:text-2xl text-sub max-w-2xl font-light leading-relaxed mb-12 opacity-0">
+        I engineer high-performance web applications and AI agents where design meets precision. Forging code with discipline.
+      </p>
 
-                    <!-- Action Buttons - Responsive layout -->
-                    <div ref="buttonsEl" class="flex flex-wrap items-center gap-3 md:gap-8">
-                      <NuxtLink 
-                        to="/about" 
-                        class="rounded-2xl border-2 border-white py-2 px-4 md:py-2 md:px-4 hover:bg-white hover:text-black transition-all duration-300 text-sm md:text-base backdrop-blur-md bg-white/20 font-medium"
-                      >
-                        About
-                      </NuxtLink>
+      <!-- Buttons -->
+      <div ref="buttonsEl" class="flex flex-wrap items-center gap-6 opacity-0">
+        <NuxtLink to="/projects" class="group relative px-8 py-4 bg-main text-charcoal font-bold text-lg rounded-full overflow-hidden hover:text-black transition-colors duration-300">
+          <span class="relative z-10 flex items-center">
+            View Projects 
+            <i class="pi pi-arrow-right ml-3 group-hover:translate-x-1 transition-transform"></i>
+          </span>
+        </NuxtLink>
 
-                      <NuxtLink 
-                        to="/projects" 
-                        class="rounded-2xl border-2 border-white py-2 px-4 md:py-2 md:px-4 hover:bg-white hover:text-black transition-all duration-300 text-sm md:text-base backdrop-blur-md bg-white/20 font-medium"
-                      >
-                        Projects
-                      </NuxtLink>
+        <NuxtLink to="/contact" class="px-8 py-4 border border-main/20 text-main font-medium rounded-full hover:border-main transition-colors text-lg">
+          Contact Me
+        </NuxtLink>
+      </div>
 
-                      <NuxtLink 
-                        to="/contact" 
-                        class="rounded-2xl border-2 border-white py-2 px-4 md:py-2 md:px-4 hover:bg-white hover:text-black transition-all duration-300 text-sm md:text-base backdrop-blur-md bg-white/20 font-medium"
-                      >
-                        Contact
-                      </NuxtLink>
-                    </div>
+    </div>
 
-                </div>
-            </div>
-        </div>
+    <!-- Scroll Indicator -->
+    <div class="absolute bottom-12 left-6 md:left-24 animate-bounce">
+      <i class="pi pi-arrow-down text-2xl text-sub"></i>
+    </div>
+
+    <!-- Floating Image (Right Side) -->
+    <div ref="imageEl" class="absolute top-1/2 right-[5%] -translate-y-1/2 hidden lg:block w-[400px] h-[500px] z-50 opacity-0">
+      <NuxtImg
+        src="/images/first.jpg"
+        alt="Profile"
+        class="w-full h-full object-cover rounded-[2rem] shadow-2xl transition-all duration-700 hover:scale-105 opacity-80 hover:opacity-100"
+      />
+    </div>
+
+  </div>
 </template>
- 
+
 <script setup>
-import { NuxtImg } from '#components';
 import { gsap } from 'gsap';
 
-const imageEl = ref(null);
+const tagEl = ref(null);
 const titleEl = ref(null);
 const subtitleEl = ref(null);
 const buttonsEl = ref(null);
+const imageEl = ref(null);
 
 onMounted(() => {
-  // Create a timeline for smooth sequential animations
-  const tl = gsap.timeline({ defaults: { ease: 'power3.out' } });
-  
-  // Set initial states (invisible)
-  gsap.set([imageEl.value, titleEl.value, subtitleEl.value], { opacity: 0 });
-  gsap.set(imageEl.value, { scale: 0.8 });
-  gsap.set([titleEl.value, subtitleEl.value], { x: -50 });
-  gsap.set(buttonsEl.value?.children || [], { y: 20, opacity: 0 });
-  
-  // Animate to visible states
-  tl.to(imageEl.value, {
-    scale: 1,
-    opacity: 1,
-    duration: 0.8,
-  })
-  .to(titleEl.value, {
-    x: 0,
-    opacity: 1,
-    duration: 0.8,
-  }, '-=0.4')
-  .to(subtitleEl.value, {
-    x: 0,
-    opacity: 1,
-    duration: 0.8,
-  }, '-=0.5')
-  .to(buttonsEl.value?.children || [], {
-    y: 0,
-    opacity: 1,
-    duration: 0.6,
-    stagger: 0.15,
-  }, '-=0.4');
+  setTimeout(() => {
+    const tl = gsap.timeline();
+
+    tl.fromTo(tagEl.value, { x: -20, opacity: 0 }, { x: 0, opacity: 1, duration: 1, ease: "power3.out" })
+      .fromTo(titleEl.value, { y: 50, opacity: 0 }, { y: 0, opacity: 1, duration: 1.2, ease: "power3.out" }, "-=0.8")
+      .fromTo(subtitleEl.value, { y: 20, opacity: 0 }, { y: 0, opacity: 1, duration: 1, ease: "power3.out" }, "-=0.8")
+      .fromTo(buttonsEl.value, { y: 20, opacity: 0 }, { y: 0, opacity: 1, duration: 1, ease: "power3.out" }, "-=0.8")
+      .fromTo(imageEl.value, { x: 50, opacity: 0 }, { x: 0, opacity: 1, duration: 1.5, ease: "power3.out" }, "-=1");
+  }, 700);
 });
 </script>
 
 <style scoped>
-.text-shadow-lg {
-  text-shadow: 2px 2px 8px rgba(0, 0, 0, 0.5);
+.bg-main {
+  /* Adapts to theme */
+  background: var(--color-text-primary);
 }
-
-/* Enhanced button styles */
-.rounded-2xl.backdrop-blur-md {
-  box-shadow: 0 4px 20px rgba(255, 255, 255, 0.1), 
-              0 2px 10px rgba(255, 255, 255, 0.1),
-              inset 0 1px 0 rgba(255, 255, 255, 0.2);
-  transition: all 0.3s ease;
+.text-charcoal {
+  color: var(--color-bg-primary);
 }
-
-.rounded-2xl.backdrop-blur-md:hover {
-  box-shadow: 0 8px 30px rgba(255, 255, 255, 0.3), 
-              0 4px 15px rgba(255, 255, 255, 0.2),
-              inset 0 1px 0 rgba(255, 255, 255, 0.3);
-  transform: translateY(-3px);
-  border-color: rgba(255, 255, 255, 0.9);
+.border-main\/20 {
+  border-color: rgba(var(--color-text-primary-rgb), 0.2); 
+  /* Fallback if rgb var missing: */
+  border-color: currentColor;
+  opacity: 0.6;
 }
 </style>

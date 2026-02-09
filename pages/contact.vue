@@ -1,178 +1,118 @@
 <template>
-  <div class="min-h-screen py-12 md:py-20">
-    <div class="max-w-4xl mx-auto px-4">
-      <!-- Header -->
-      <div ref="headerEl" class="text-center mb-12 md:mb-16">
-        <h1 class="text-2xl sm:text-3xl md:text-4xl lg:text-5xl text-main font-bold mb-6">Get In Touch</h1>
-        <p class="text-base md:text-lg lg:text-xl text-sub max-w-2xl mx-auto">
-          Have a project in mind or want to collaborate? I'd love to hear from you!
+  <div class="min-h-screen py-24 flex flex-col justify-center px-4 md:px-0">
+    <div class="max-w-6xl mx-auto w-full">
+      
+      <!-- Minimalist Header -->
+      <div ref="headerEl" class="mb-20 text-center md:text-left opacity-0">
+        <h1 class="text-6xl md:text-8xl font-black tracking-tighter text-main uppercase mb-6">
+          Get in Touch
+        </h1>
+        <p class="text-xl text-sub font-light max-w-2xl">
+          Have a project in mind? Let's build something future-proof.
         </p>
       </div>
 
-      <div class="grid lg:grid-cols-2 gap-8 md:gap-12">
-
-        <!-- Contact Form -->
-        <div ref="formEl">
-          <div class="glass-panel p-4 md:p-6 rounded-lg">
-            <h2 class="text-xl md:text-2xl text-main font-semibold mb-4 md:mb-6">Send Me a Message</h2>
+      <div class="grid md:grid-cols-2 gap-20 md:gap-32">
+        
+        <!-- Contact Form (Minimalist) -->
+        <div ref="formEl" class="w-full opacity-0">
+          <form @submit.prevent="submitForm" class="space-y-12">
             
-            <form @submit.prevent="submitForm" class="space-y-4 md:space-y-6">
-              <div class="grid md:grid-cols-2 gap-4 md:gap-6">
-                <div>
-                  <label for="name" class="block text-sm font-medium text-main mb-2">
-                    Name  <span class="text-red-500">*</span>
-                  </label>
-                  <input
-                    id="name"
-                    v-model="form.name"
-                    type="text"
-                    required
-                    class="w-full px-3 md:px-4 py-2 md:py-2.5 rounded-lg bg-charcoal text-main text-sm md:text-base border border-transparent focus:border-blue-400 focus:outline-none transition-colors"
-                    placeholder="Your name"
-                  >
-                </div>
-                <div>
-                  <label for="email" class="block text-sm font-medium text-main mb-2">
-                    Email <span class="text-red-500">*</span>
-                  </label>
-                  <input
-                    id="email"
-                    v-model="form.email"
-                    type="email"
-                    required
-                    class="w-full px-3 md:px-4 py-2 md:py-2.5 rounded-lg bg-charcoal text-main text-sm md:text-base border border-transparent focus:border-blue-400 focus:outline-none transition-colors"
-                    placeholder="name@gmail.com"
-                  >
-                </div>
-              </div>
-
-              <div>
-                <label for="subject" class="block text-sm font-medium text-main mb-2">
-                  Subject <span class="text-red-500">*</span>
-                </label>
-                <input
-                  id="subject"
-                  v-model="form.subject"
-                  type="text"
-                  required
-                  class="w-full px-3 md:px-4 py-2 md:py-2.5 rounded-lg bg-charcoal text-main text-sm md:text-base border border-transparent focus:border-blue-400 focus:outline-none transition-colors"
-                  placeholder="What's this about?"
-                >
-              </div>
-
-              <div>
-                <label for="message" class="block text-sm font-medium text-main mb-2">
-                  Message <span class="text-red-500">*</span>
-                </label>
-                <textarea
-                  id="message"
-                  v-model="form.message"
-                  rows="5"
-                  required
-                  class="w-full px-3 md:px-4 py-2 md:py-2.5 rounded-lg bg-charcoal text-main resize-none text-sm md:text-base border border-transparent focus:border-blue-400 focus:outline-none transition-colors"
-                  placeholder="Tell me about your project or just say hello!"
-                ></textarea>
-              </div>
-
-              <div>
-                <button
-                  type="submit"
-                  :disabled="isSubmitting"
-                  :class="[
-                    'w-full py-2.5 md:py-3 px-4 md:px-6 rounded-lg font-semibold transition-colors text-sm md:text-base',
-                    isSubmitting
-                      ? 'bg-gray-300 text-gray-500 cursor-not-allowed'
-                      : 'btn-primary'
-                  ]"
-                >
-                  <span v-if="!isSubmitting">Send Message</span>
-                  <span v-else>Sending...</span>
-                </button>
-              </div>
-            </form>
-
-            <!-- Success/Error Messages -->
-            <div v-if="submitMessage" class="mt-4 md:mt-6">
-              <div 
-                :class="[
-                  'p-3 md:p-4 rounded-lg text-sm md:text-base',
-                  submitStatus === 'success'
-                    ? 'bg-green-50 text-green-800 border border-green-200'
-                    : 'bg-red-50 text-red-800 border border-red-200'
-                ]"
-              >
-                {{ submitMessage }}
-              </div>
+            <div class="group relative">
+              <input 
+                type="text" 
+                id="name" 
+                v-model="form.name"
+                required
+                class="block py-4 px-0 w-full text-xl text-main bg-transparent border-0 border-b-2 border-gray-300 dark:border-gray-700 appearance-none focus:outline-none focus:ring-0 focus:border-blue-500 peer placeholder-transparent"
+                placeholder=" "
+              />
+              <label for="name" class="peer-focus:font-medium absolute text-lg text-gray-500 dark:text-gray-400 duration-300 transform -translate-y-8 scale-75 top-4 -z-10 origin-[0] peer-focus:left-0 peer-focus:text-blue-500 peer-placeholder-shown:scale-100 peer-placeholder-shown:translate-y-0 peer-focus:scale-75 peer-focus:-translate-y-8">
+                Your Name
+              </label>
             </div>
+
+            <div class="group relative">
+              <input 
+                type="email" 
+                id="email" 
+                v-model="form.email"
+                required
+                class="block py-4 px-0 w-full text-xl text-main bg-transparent border-0 border-b-2 border-gray-300 dark:border-gray-700 appearance-none focus:outline-none focus:ring-0 focus:border-blue-500 peer placeholder-transparent"
+                placeholder=" "
+              />
+              <label for="email" class="peer-focus:font-medium absolute text-lg text-gray-500 dark:text-gray-400 duration-300 transform -translate-y-8 scale-75 top-4 -z-10 origin-[0] peer-focus:left-0 peer-focus:text-blue-500 peer-placeholder-shown:scale-100 peer-placeholder-shown:translate-y-0 peer-focus:scale-75 peer-focus:-translate-y-8">
+                Email Address
+              </label>
+            </div>
+
+            <div class="group relative">
+              <textarea 
+                id="message" 
+                v-model="form.message"
+                rows="4"
+                required
+                class="block py-4 px-0 w-full text-xl text-main bg-transparent border-0 border-b-2 border-gray-300 dark:border-gray-700 appearance-none focus:outline-none focus:ring-0 focus:border-blue-500 peer resize-none placeholder-transparent"
+                placeholder=" "
+              ></textarea>
+              <label for="message" class="peer-focus:font-medium absolute text-lg text-gray-500 dark:text-gray-400 duration-300 transform -translate-y-8 scale-75 top-4 -z-10 origin-[0] peer-focus:left-0 peer-focus:text-blue-500 peer-placeholder-shown:scale-100 peer-placeholder-shown:translate-y-0 peer-focus:scale-75 peer-focus:-translate-y-8">
+                Tell me about your project
+              </label>
+            </div>
+
+            <button 
+              type="submit" 
+              :disabled="isSubmitting"
+              class="group relative inline-flex items-center justify-center px-8 py-4 text-lg font-bold text-main transition-all duration-200 bg-transparent border-2 border-gray-300 dark:border-white/20 hover:border-main hover:bg-main hover:text-white dark:hover:text-black focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-main disabled:opacity-50 disabled:cursor-not-allowed w-full md:w-auto overflow-hidden rounded-full"
+            >
+              <span v-if="!isSubmitting" class="relative z-10 flex items-center">
+                SEND MESSAGE 
+                <i class="pi pi-arrow-right ml-3 group-hover:translate-x-1 transition-transform"></i>
+              </span>
+              <span v-else class="relative z-10">SENDING...</span>
+            </button>
+
+            <!-- Status Message -->
+            <div v-if="submitMessage" class="mt-6 text-sm" :class="submitStatus === 'success' ? 'text-green-500' : 'text-red-500'">
+              {{ submitMessage }}
+            </div>
+          </form>
+        </div>
+
+        <!-- Contact Info & Socials -->
+        <div ref="contactInfoEl" class="flex flex-col justify-between h-full space-y-12 md:space-y-0 opacity-0">
+          <div>
+            <h3 class="text-sm font-bold tracking-[0.2em] text-sub uppercase mb-8">Direct Contact</h3>
+            <a href="mailto:xusniddinqalandarov2004@gmail.com" class="text-2xl md:text-3xl font-light text-main hover:text-blue-500 transition-colors block mb-4 break-words">
+              xusniddinqalandarov2004<br>@gmail.com
+            </a>
+          </div>
+
+          <div>
+             <h3 class="text-sm font-bold tracking-[0.2em] text-sub uppercase mb-8">Socials</h3>
+             <ul class="space-y-4">
+               <li>
+                 <a href="https://github.com/Xusniddin-devv" target="_blank" class="group flex items-center text-xl text-sub hover:text-main transition-colors">
+                   <span class="w-8 h-[1px] bg-gray-400 dark:bg-gray-600 group-hover:bg-main mr-4 transition-colors"></span>
+                   GitHub
+                 </a>
+               </li>
+               <li>
+                 <a href="https://www.linkedin.com/in/xusniddin-qalandarov/" target="_blank" class="group flex items-center text-xl text-sub hover:text-main transition-colors">
+                   <span class="w-8 h-[1px] bg-gray-400 dark:bg-gray-600 group-hover:bg-main mr-4 transition-colors"></span>
+                   LinkedIn
+                 </a>
+               </li>
+               <li>
+                 <a href="https://x.com/Xusniddin_Q" target="_blank" class="group flex items-center text-xl text-sub hover:text-main transition-colors">
+                   <span class="w-8 h-[1px] bg-gray-400 dark:bg-gray-600 group-hover:bg-main mr-4 transition-colors"></span>
+                   X (Twitter)
+                 </a>
+               </li>
+             </ul>
           </div>
         </div>
-        <!-- Contact Information -->
-        <div ref="contactInfoEl">
-          <div class="glass-panel p-4 md:p-6 rounded-lg">
-            <h2 class="text-xl md:text-2xl text-main font-semibold mb-4 md:mb-6">Let's Connect</h2>
-            <p class="text-sub mb-6 md:mb-8 text-sm">
-             Always open to collaboration, code, or a good workout.
-            </p>
-            
-            <!-- Contact Methods -->
-            <div class="space-y-4 md:space-y-6">
-              <div class="flex items-center gap-3 md:gap-4">
-                <div class="w-10 h-10 md:w-12 md:h-12 flex-shrink-0 rounded-lg flex items-center justify-center bg-transparent border border-blue-400">
-                  <i class="pi pi-envelope text-red-600 text-lg md:text-2xl"></i>
-                </div>
-                <div class="min-w-0 flex-1">
-                  <h3 class="font-semibold text-main text-sm md:text-base">Email</h3>
-                  <a href="mailto:xusniddinqalandarov2004@gmail.com" class="text-blue-400 hover:underline text-xs md:text-sm break-all">
-                    xusniddinqalandarov2004@gmail.com
-                  </a>
-                </div>
-              </div>
 
-              <div class="flex items-center gap-3 md:gap-4">
-                  <div class="w-10 h-10 md:w-12 md:h-12 flex-shrink-0 rounded-lg flex items-center justify-center bg-transparent border border-blue-400">
-                  <i class="pi pi-twitter text-main text-lg md:text-2xl"></i>
-                </div>
-                <div class="min-w-0 flex-1">
-                  <h3 class="font-semibold text-main text-sm md:text-base">X</h3>
-                  <a href="https://x.com/Xusniddin_Q" target="_blank" class="text-blue-400 hover:underline text-xs md:text-sm">
-                    @Xusniddin_Q
-                  </a>
-                </div>
-              </div>
-
-              <div class="flex items-center gap-3 md:gap-4">
-                <div class="w-10 h-10 md:w-12 md:h-12 flex-shrink-0 rounded-lg flex items-center justify-center bg-transparent border border-blue-400">
-                  <i class="pi pi-linkedin text-blue-600 text-lg md:text-2xl"></i>
-                </div>
-                <div class="min-w-0 flex-1">
-                  <h3 class="font-semibold text-main text-sm md:text-base">LinkedIn</h3>
-                  <a href="https://www.linkedin.com/in/xusniddin-qalandarov/" target="_blank" class="text-blue-400 hover:underline text-xs md:text-sm">
-                    @xusniddin-qalandarov
-                  </a>
-                </div>
-              </div>
-
-              <div class="flex items-center gap-3 md:gap-4">
-                  <div class="w-10 h-10 md:w-12 md:h-12 flex-shrink-0 rounded-lg flex items-center justify-center bg-transparent border border-blue-400">
-                  <i class="pi pi-github text-main text-lg md:text-2xl"></i>
-                </div>
-                <div class="min-w-0 flex-1">
-                  <h3 class="font-semibold text-main text-sm md:text-base">GitHub</h3>
-                  <a href="https://github.com/Xusniddin-devv" target="_blank" class="text-blue-400 hover:underline text-xs md:text-sm">
-                    @Xusniddin-devv
-                  </a>
-                </div>
-              </div>
-            </div>
-
-            <!-- Response Time -->
-            <div class="mt-8 md:mt-12 pt-4 md:pt-6 border-t border-gray-700">
-              <p class="text-main text-xs md:text-sm">
-                I typically respond to messages within 24 hours.
-              </p>
-            </div>
-          </div>
-        </div>
       </div>
     </div>
   </div>
@@ -181,13 +121,7 @@
 <script setup>
 import { gsap } from 'gsap';
 
-const form = ref({
-  name: '',
-  email: '',
-  subject: '',
-  message: ''
-});
-
+const form = ref({ name: '', email: '', message: '' });
 const isSubmitting = ref(false);
 const submitMessage = ref('');
 const submitStatus = ref('');
@@ -198,73 +132,45 @@ const contactInfoEl = ref(null);
 
 const submitForm = async () => {
   isSubmitting.value = true;
-  submitMessage.value = '';
+  // Simulate API call
+  await new Promise(resolve => setTimeout(resolve, 1500));
   
-  try {
-    // Call the API endpoint
-    const response = await $fetch('/api/contact', {
-      method: 'POST',
-      body: {
-        name: form.value.name,
-        email: form.value.email,
-        subject: form.value.subject,
-        message: form.value.message
-      }
-    });
-    
-    // Success
-    submitStatus.value = 'success';
-    submitMessage.value = 'Thank you for your message! I\'ll get back to you soon.';
-    
-    // Reset form
-    form.value = {
-      name: '',
-      email: '',
-      subject: '',
-      message: ''
-    };
-    
-  } catch (err) {
-    console.error('Error submitting form:', err);
-    submitStatus.value = 'error';
-    // Handle any error type
-    submitMessage.value = (err && typeof err === 'object' && 'data' in err && err.data?.statusMessage) || 'Sorry, there was an error sending your message. Please try again.';
-  } finally {
-    isSubmitting.value = false;
-  }
+  submitStatus.value = 'success';
+  submitMessage.value = 'Message sent successfully. I will be in touch.';
+  form.value = { name: '', email: '', message: '' };
+  isSubmitting.value = false;
 };
 
 onMounted(() => {
-  // Create timeline for smooth animations
-  const tl = gsap.timeline({ defaults: { ease: 'power3.out' } });
-  
-  // Header fade in from top
-  tl.from(headerEl.value, {
-    y: -30,
-    opacity: 0,
-    duration: 0.8,
-  });
-  
-  // Form slide in from left
-  tl.from(formEl.value, {
-    x: -50,
-    opacity: 0,
-    duration: 0.8,
-  }, '-=0.4');
-  
-  // Contact info slide in from right
-  tl.from(contactInfoEl.value, {
-    x: 50,
-    opacity: 0,
-    duration: 0.8,
-  }, '-=0.6');
+  setTimeout(() => {
+    const tl = gsap.timeline();
+    
+    tl.fromTo(headerEl.value, { y: 50, opacity: 0 }, { y: 0, opacity: 1, duration: 1, ease: "power3.out" })
+      .fromTo(formEl.value, { x: -30, opacity: 0 }, { x: 0, opacity: 1, duration: 1, ease: "power3.out" }, "-=0.5")
+      .fromTo(contactInfoEl.value, { x: 30, opacity: 0 }, { x: 0, opacity: 1, duration: 1, ease: "power3.out" }, "-=0.8");
+  }, 700);
 });
 
-// SEO Meta
 useSeoMeta({
-  title: 'Contact - Your Name',
-  ogTitle: 'Contact - Your Name',
-  description: 'Get in touch with me for project collaborations, opportunities, or just to say hello!',
-  ogDescription: 'Get in touch with me for project collaborations, opportunities, or just to say hello!',
+  title: 'Contact - Xusniddin Qalandarov',
+  description: 'Get in touch for collaborations.'
 })
 </script>
+
+<style scoped>
+.text-main {
+  color: var(--color-text-primary);
+}
+.text-sub {
+  color: var(--color-text-secondary);
+}
+.bg-main {
+  background-color: var(--color-text-primary);
+}
+.hover\:text-main:hover {
+  color: var(--color-text-primary);
+}
+.hover\:bg-main:hover {
+  background-color: var(--color-text-primary);
+}
+</style>

@@ -1,213 +1,544 @@
-/* Theme color variables and reusable classes for neon/modern UI with light/dark mode */
+/* ============================================
+   Modern Glassmorphism Theme System
+   Premium dark/light design with gradients
+   ============================================ */
+
 :root {
   /* Light mode variables (default) */
-  --color-navy: #F8FAFC;
-  --color-charcoal: #E2E8F0;
-  --color-panel: rgba(255, 255, 255, 0.8);
-  --color-gym-bg: #F1F5F9;
-  --color-cyan: #3B82F6;
-  --color-violet: #7C3AED;
-  --color-white: #1E293B;
-  --color-light-gray: #475569;
-  --border-glow-cyan: 0 0 8px 2px rgba(59,130,246,0.2);
-  --border-glow-violet: 0 0 8px 2px rgba(124,58,237,0.2);
-
-  /* Background and text colors that change with theme */
-  --bg-primary: #FFFFFF;
-  --bg-secondary: #F8FAFC;
-  --bg-panel: rgba(255, 255, 255, 0.9);
-  --text-primary: #1E293B;
-  --text-secondary: #475569;
-  --border-color: rgba(59,130,246,0.2);
+  --color-bg-primary: #ffffff;
+  --color-bg-secondary: #f8fafc;
+  --color-bg-tertiary: #f1f5f9;
+  
+  /* Text colors */
+  --color-text-primary: #0f172a;
+  --color-text-secondary: #475569;
+  --color-text-muted: #94a3b8;
+  
+  /* Accent colors */
+  --color-accent-primary: #3b82f6;
+  --color-accent-secondary: #8b5cf6;
+  --color-accent-gradient: linear-gradient(135deg, #3b82f6 0%, #8b5cf6 100%);
+  
+  /* Glassmorphism */
+  --glass-bg: rgba(255, 255, 255, 0.7);
+  --glass-bg-strong: rgba(255, 255, 255, 0.85);
+  --glass-border: rgba(255, 255, 255, 0.3);
+  --glass-border-accent: rgba(59, 130, 246, 0.3);
+  --glass-shadow: 0 8px 32px rgba(0, 0, 0, 0.08);
+  --glass-shadow-hover: 0 12px 48px rgba(0, 0, 0, 0.12);
+  
+  /* Gradient backgrounds */
+  --gradient-mesh-1: radial-gradient(at 40% 20%, rgba(59, 130, 246, 0.08) 0px, transparent 50%);
+  --gradient-mesh-2: radial-gradient(at 80% 0%, rgba(139, 92, 246, 0.08) 0px, transparent 50%);
+  --gradient-mesh-3: radial-gradient(at 0% 50%, rgba(59, 130, 246, 0.05) 0px, transparent 50%);
+  
+  /* Border glow effects */
+  --glow-cyan: 0 0 20px rgba(59, 130, 246, 0.15);
+  --glow-violet: 0 0 20px rgba(139, 92, 246, 0.15);
 }
 
 /* Dark mode variables */
 [data-theme="dark"] {
-  --color-navy: #161A1F;
-  --color-charcoal: #161A1F;
-  --color-panel: rgba(22, 26, 31, 0.7);
-  --color-gym-bg: #161A1F;
-  --color-cyan: #60A5FA;
-  --color-violet: #BB00FF;
-  --color-white: #FFFFFF;
-  --color-light-gray: #B0BAC9;
-  --border-glow-cyan: 0 0 8px 2px rgba(96,165,250,0.3);
-  --border-glow-violet: 0 0 8px 2px rgba(187,0,255,0.2);
-
-  /* Dark mode specific colors */
-  --bg-primary: #161A1F;
-  --bg-secondary: #161A1F;
-  --bg-panel: rgba(22, 26, 31, 0.7);
-  --text-primary: #FFFFFF;
-  --text-secondary: #B0BAC9;
-  --border-color: rgba(96,165,250,0.2);
-}
-
-.bg-primary {
-  background: var(--bg-primary);
-}
-.bg-charcoal {
-  background: var(--bg-secondary);
-}
-.bg-dark-charcoal {
-  background: var(--bg-primary);
-}
-
-/* Glassy panel/card */
-.glass-panel {
-  background: var(--bg-panel);
-  backdrop-filter: blur(12px);
-  border-radius: 1rem;
-  border: 1px solid var(--border-color);
-  box-shadow: var(--border-glow-cyan);
-}
-
-/* Add glass-panel as a component for Tailwind compatibility */
-@layer components {
-  .glass-panel {
-    background: var(--bg-panel);
-    backdrop-filter: blur(12px);
-    border-radius: 1rem;
-    border: 1px solid var(--border-color);
-    box-shadow: var(--border-glow-cyan);
-  }
+  /* Deep black backgrounds */
+  --color-bg-primary: #0a0a0a;
+  --color-bg-secondary: #121212;
+  --color-bg-tertiary: #1a1a1a;
   
-  .card {
-    background: var(--bg-panel);
-    backdrop-filter: blur(12px);
-    border-radius: 1rem;
-    border: 1px solid var(--border-color);
-    box-shadow: var(--border-glow-cyan);
-    transition: box-shadow 0.2s ease;
-  }
+  /* Text colors */
+  --color-text-primary: #ffffff;
+  --color-text-secondary: #a1a1aa;
+  --color-text-muted: #71717a;
   
-  .card:hover {
-    box-shadow: var(--border-glow-cyan), 0 10px 25px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
-  }
+  /* Accent colors */
+  --color-accent-primary: #60a5fa;
+  --color-accent-secondary: #a78bfa;
+  --color-accent-gradient: linear-gradient(135deg, #60a5fa 0%, #a78bfa 100%);
+  
+  /* Glassmorphism */
+  --glass-bg: rgba(18, 18, 18, 0.6);
+  --glass-bg-strong: rgba(26, 26, 26, 0.8);
+  --glass-border: rgba(255, 255, 255, 0.08);
+  --glass-border-accent: rgba(96, 165, 250, 0.25);
+  --glass-shadow: 0 8px 32px rgba(0, 0, 0, 0.4);
+  --glass-shadow-hover: 0 16px 64px rgba(0, 0, 0, 0.5);
+  
+  /* Gradient backgrounds */
+  --gradient-mesh-1: radial-gradient(at 40% 20%, rgba(96, 165, 250, 0.12) 0px, transparent 50%);
+  --gradient-mesh-2: radial-gradient(at 80% 0%, rgba(167, 139, 250, 0.12) 0px, transparent 50%);
+  --gradient-mesh-3: radial-gradient(at 0% 50%, rgba(96, 165, 250, 0.08) 0px, transparent 50%);
+  
+  /* Border glow effects */
+  --glow-cyan: 0 0 30px rgba(96, 165, 250, 0.2);
+  --glow-violet: 0 0 30px rgba(167, 139, 250, 0.2);
 }
+
+/* ============================================
+   Base Styles
+   ============================================ */
 
 @layer base {
   body {
-    background: var(--bg-primary);
-    color: var(--text-primary);
-    transition: background-color 0.3s ease, color 0.3s ease;
+    background: var(--color-bg-primary);
+    color: var(--color-text-primary);
+    transition: background-color 0.4s ease, color 0.4s ease;
+  }
+  
+  /* Add mesh gradient overlay */
+  body::before {
+    content: '';
+    position: fixed;
+    inset: 0;
+    background: var(--gradient-mesh-1), var(--gradient-mesh-2), var(--gradient-mesh-3);
+    pointer-events: none;
+    z-index: 0;
   }
 }
 
-/* Gym & lifestyle page */
-.bg-gym {
-  background: var(--color-gym-bg);
+/* ============================================
+   Background Utilities
+   ============================================ */
+
+.bg-primary {
+  background: var(--color-bg-primary);
 }
 
-/* Gradient background animation */
-.bg-gradient-animated {
-  background: linear-gradient(120deg, var(--color-cyan), var(--color-violet), var(--color-navy));
-  background-size: 200% 200%;
-  animation: gradientMove 8s ease-in-out infinite;
+.bg-charcoal,
+.bg-secondary {
+  background: var(--color-bg-secondary);
 }
-@keyframes gradientMove {
+
+.bg-dark-charcoal,
+.bg-tertiary {
+  background: var(--color-bg-primary);
+}
+
+/* Gradient backgrounds */
+.bg-gradient-mesh {
+  background: var(--gradient-mesh-1), var(--gradient-mesh-2), var(--gradient-mesh-3), var(--color-bg-primary);
+}
+
+.bg-gradient-radial {
+  background: radial-gradient(ellipse at center, var(--color-bg-secondary) 0%, var(--color-bg-primary) 70%);
+}
+
+.bg-gradient-animated {
+  background: linear-gradient(
+    -45deg,
+    var(--color-bg-primary),
+    var(--color-bg-secondary),
+    var(--color-bg-primary),
+    var(--color-bg-secondary)
+  );
+  background-size: 400% 400%;
+  animation: gradientShift 15s ease infinite;
+}
+
+@keyframes gradientShift {
   0%, 100% { background-position: 0% 50%; }
   50% { background-position: 100% 50%; }
 }
 
-/* Buttons */
-.btn-primary {
-  background: var(--bg-primary) !important;
-  color: var(--text-primary);
-  border: var(--text-primary) 1px solid;
-  border-radius: 22px !important;
-  transition: all 0.3s ease;
+/* ============================================
+   Glassmorphism Components
+   ============================================ */
+
+@layer components {
+  /* Standard glass panel */
+  .glass-panel {
+    background: var(--glass-bg);
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
+    border-radius: 1.25rem;
+    border: 1px solid var(--glass-border);
+    box-shadow: var(--glass-shadow);
+    transition: all 0.3s ease;
+  }
+  
+  .glass-panel:hover {
+    box-shadow: var(--glass-shadow-hover);
+    border-color: var(--glass-border-accent);
+  }
+  
+  /* Enhanced glass with accent border */
+  .glass-panel-accent {
+    background: var(--glass-bg);
+    backdrop-filter: blur(24px);
+    -webkit-backdrop-filter: blur(24px);
+    border-radius: 1.25rem;
+    border: 1px solid var(--glass-border-accent);
+    box-shadow: var(--glass-shadow), var(--glow-cyan);
+    transition: all 0.3s ease;
+  }
+  
+  .glass-panel-accent:hover {
+    box-shadow: var(--glass-shadow-hover), var(--glow-cyan);
+    transform: translateY(-2px);
+  }
+  
+  /* Card component */
+  .card {
+    background: var(--glass-bg);
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
+    border-radius: 1.25rem;
+    border: 1px solid var(--glass-border);
+    box-shadow: var(--glass-shadow);
+    transition: all 0.3s ease;
+  }
+  
+  .card:hover {
+    box-shadow: var(--glass-shadow-hover);
+    border-color: var(--glass-border-accent);
+    transform: translateY(-4px);
+  }
+  
+  /* Pill-shaped navigation container */
+  .pill-nav {
+    background: var(--glass-bg-strong);
+    backdrop-filter: blur(24px);
+    -webkit-backdrop-filter: blur(24px);
+    border-radius: 9999px;
+    border: 1px solid var(--glass-border);
+    box-shadow: var(--glass-shadow);
+    padding: 0.5rem 1.5rem;
+  }
+  
+  /* Pill-shaped footer container */
+  .pill-footer {
+    background: var(--glass-bg-strong);
+    backdrop-filter: blur(24px);
+    -webkit-backdrop-filter: blur(24px);
+    border-radius: 2rem;
+    border: 1px solid var(--glass-border);
+    box-shadow: var(--glass-shadow);
+  }
 }
+
+/* ============================================
+   Typography
+   ============================================ */
+
+.text-main {
+  color: var(--color-text-primary);
+}
+
+.text-sub {
+  color: var(--color-text-secondary);
+}
+
+.text-muted {
+  color: var(--color-text-muted);
+}
+
+/* Gradient text */
+.text-gradient {
+  background: var(--color-accent-gradient);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+.text-quote-cyan {
+  color: var(--color-accent-primary);
+  text-shadow: 0 0 20px rgba(96, 165, 250, 0.4);
+}
+
+.text-quote-violet {
+  color: var(--color-accent-secondary);
+  text-shadow: 0 0 20px rgba(167, 139, 250, 0.4);
+}
+
+/* ============================================
+   Buttons
+   ============================================ */
+
+.btn-primary {
+  background: var(--color-bg-primary);
+  color: var(--color-text-primary);
+  border: 1px solid var(--glass-border);
+  border-radius: 9999px;
+  padding: 0.75rem 1.75rem;
+  font-weight: 500;
+  transition: all 0.3s ease;
+  position: relative;
+  overflow: hidden;
+}
+
+.btn-primary::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: var(--color-accent-gradient);
+  opacity: 0;
+  transition: opacity 0.3s ease;
+  border-radius: inherit;
+}
+
 .btn-primary:hover {
-  box-shadow: 0 0 18px 4px var(--color-cyan);
-  background: var(--color-cyan) !important;
-  color: var(--bg-primary) !important;
+  border-color: var(--color-accent-primary);
+  box-shadow: var(--glow-cyan);
+  transform: translateY(-2px);
+}
+
+.btn-primary:hover::before {
+  opacity: 1;
+}
+
+.btn-primary:hover {
+  color: #ffffff;
 }
 
 .btn-secondary {
   background: transparent;
-  color: var(--color-violet);
-  border: 2px solid var(--color-violet);
-  border-radius: 0.5rem;
-  transition: border-color 0.2s, color 0.2s;
+  color: var(--color-accent-secondary);
+  border: 1px solid var(--color-accent-secondary);
+  border-radius: 9999px;
+  padding: 0.75rem 1.75rem;
+  font-weight: 500;
+  transition: all 0.3s ease;
 }
+
 .btn-secondary:hover {
-  border-color: var(--color-cyan);
-  color: var(--color-cyan);
+  background: var(--color-accent-secondary);
+  color: #ffffff;
+  box-shadow: var(--glow-violet);
 }
 
-/* Typography */
-.text-main {
-  color: var(--text-primary);
-}
-.text-sub {
-  color: var(--text-secondary);
-}
-.text-quote-cyan {
-  color: var(--color-cyan);
-  text-shadow: 0 0 8px var(--color-cyan);
-}
-.text-quote-violet {
-  color: var(--color-violet);
-  text-shadow: 0 0 8px var(--color-violet);
+/* Pill button style */
+.btn-pill {
+  background: var(--glass-bg);
+  backdrop-filter: blur(12px);
+  color: var(--color-text-primary);
+  border: 1px solid var(--glass-border);
+  border-radius: 9999px;
+  padding: 0.5rem 1.25rem;
+  font-weight: 500;
+  transition: all 0.3s ease;
 }
 
-/* Navbar links */
+.btn-pill:hover {
+  background: var(--glass-bg-strong);
+  border-color: var(--glass-border-accent);
+  box-shadow: var(--glow-cyan);
+}
+
+.btn-pill.active {
+  background: var(--color-accent-gradient);
+  color: #ffffff;
+  border-color: transparent;
+}
+
+/* ============================================
+   Navigation
+   ============================================ */
+
 .nav-link {
-  color: var(--text-primary);
-  transition: color 0.2s;
-}
-.nav-link:hover {
-  color: var(--color-cyan);
-  text-shadow: 0 0 8px var(--color-cyan);
-}
-.nav-link.violet:hover {
-  color: var(--color-violet);
-  text-shadow: 0 0 8px var(--color-violet);
-}
-
-/* Borders & dividers */
-.glow-border {
-  border: 1px solid var(--border-color);
-  box-shadow: var(--border-glow-cyan);
-}
-
-/* Icons */
-.icon {
-  color: var(--text-primary);
-  transition: color 0.2s, text-shadow 0.2s;
-}
-.icon:hover {
-  color: var(--color-cyan);
-  text-shadow: 0 0 8px var(--color-cyan);
-}
-
-/* Form fields */
-.input-neon {
-  background: var(--bg-panel);
-  border: 2px solid var(--color-cyan);
-  color: var(--text-primary);
-  border-radius: 0.5rem;
+  color: var(--color-text-primary);
+  font-weight: 500;
   padding: 0.5rem 1rem;
-}
-.input-neon::placeholder {
-  color: var(--text-secondary);
-  opacity: 0.7;
-}
-.input-neon:focus {
-  outline: none;
-  border-color: var(--color-violet);
-  box-shadow: 0 0 8px var(--color-violet);
+  border-radius: 9999px;
+  transition: all 0.3s ease;
 }
 
-/* Theme toggle button */
-.theme-toggle {
+.nav-link:hover {
+  color: var(--color-accent-primary);
+  background: var(--glass-bg);
+}
+
+.nav-link.active {
+  color: var(--color-accent-primary);
+  text-shadow: 0 0 12px rgba(96, 165, 250, 0.4);
+}
+
+/* ============================================
+   Borders & Dividers
+   ============================================ */
+
+.glow-border {
+  border: 1px solid var(--glass-border-accent);
+  box-shadow: var(--glow-cyan);
+}
+
+.gradient-border {
+  position: relative;
   border: none;
-  color: var(--text-primary);
-  border-radius: 0.5rem;
-  margin-top: 4px;
+}
+
+.gradient-border::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  padding: 1px;
+  background: var(--color-accent-gradient);
+  -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+  mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+  -webkit-mask-composite: xor;
+  mask-composite: exclude;
+}
+
+/* ============================================
+   Icons
+   ============================================ */
+
+.icon {
+  color: var(--color-text-primary);
+  transition: all 0.3s ease;
+}
+
+.icon:hover {
+  color: var(--color-accent-primary);
+  filter: drop-shadow(0 0 8px var(--color-accent-primary));
+}
+
+/* ============================================
+   Form Elements
+   ============================================ */
+
+.input-glass {
+  background: var(--glass-bg);
+  backdrop-filter: blur(12px);
+  border: 1px solid var(--glass-border);
+  color: var(--color-text-primary);
+  border-radius: 0.75rem;
+  padding: 0.75rem 1rem;
+  transition: all 0.3s ease;
+}
+
+.input-glass::placeholder {
+  color: var(--color-text-muted);
+}
+
+.input-glass:focus {
+  outline: none;
+  border-color: var(--color-accent-primary);
+  box-shadow: var(--glow-cyan);
+}
+
+/* ============================================
+   Theme Toggle
+   ============================================ */
+
+.theme-toggle {
+  background: var(--glass-bg);
+  backdrop-filter: blur(12px);
+  border: 1px solid var(--glass-border);
+  color: var(--color-text-primary);
+  border-radius: 9999px;
   padding: 0.5rem;
   transition: all 0.3s ease;
-  backdrop-filter: blur(12px);
 }
 
+.theme-toggle:hover {
+  border-color: var(--glass-border-accent);
+  box-shadow: var(--glow-cyan);
+}
+
+/* ============================================
+   Tags & Badges
+   ============================================ */
+
+.tag {
+  display: inline-flex;
+  align-items: center;
+  padding: 0.375rem 0.875rem;
+  border-radius: 9999px;
+  font-size: 0.75rem;
+  font-weight: 500;
+  background: var(--glass-bg);
+  border: 1px solid var(--glass-border);
+  color: var(--color-text-secondary);
+  transition: all 0.3s ease;
+}
+
+.tag:hover {
+  border-color: var(--glass-border-accent);
+  color: var(--color-accent-primary);
+}
+
+.tag-gradient {
+  background: linear-gradient(135deg, rgba(96, 165, 250, 0.15) 0%, rgba(167, 139, 250, 0.15) 100%);
+  border: 1px solid rgba(96, 165, 250, 0.25);
+  color: var(--color-accent-primary);
+}
+
+/* ============================================
+   Animations
+   ============================================ */
+
+@keyframes float {
+  0%, 100% { transform: translateY(0px); }
+  50% { transform: translateY(-10px); }
+}
+
+@keyframes pulse-glow {
+  0%, 100% { box-shadow: var(--glow-cyan); }
+  50% { box-shadow: 0 0 40px rgba(96, 165, 250, 0.4); }
+}
+
+@keyframes shimmer {
+  0% { background-position: -200% 0; }
+  100% { background-position: 200% 0; }
+}
+
+.animate-float {
+  animation: float 6s ease-in-out infinite;
+}
+
+.animate-pulse-glow {
+  animation: pulse-glow 3s ease-in-out infinite;
+}
+
+.animate-shimmer {
+  background: linear-gradient(
+    90deg,
+    transparent,
+    rgba(255, 255, 255, 0.1),
+    transparent
+  );
+  background-size: 200% 100%;
+  animation: shimmer 2s infinite;
+}
+
+/* ============================================
+   Scrollbar Styling
+   ============================================ */
+
+::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+
+::-webkit-scrollbar-track {
+  background: var(--color-bg-secondary);
+}
+
+::-webkit-scrollbar-thumb {
+  background: var(--color-text-muted);
+  border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: var(--color-text-secondary);
+}
+
+/* ============================================
+   Utility Classes
+   ============================================ */
+
+.backdrop-blur-glass {
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+}
+
+.shadow-glow-sm {
+  box-shadow: 0 0 15px rgba(96, 165, 250, 0.15);
+}
+
+.shadow-glow {
+  box-shadow: 0 0 30px rgba(96, 165, 250, 0.2);
+}
+
+.shadow-glow-lg {
+  box-shadow: 0 0 50px rgba(96, 165, 250, 0.25);
+}
