@@ -28,8 +28,8 @@ export const useTheme = () => {
       if (savedTheme) {
         isDarkState.value = savedTheme === 'dark'
       } else {
-        // Default to light mode for now
-        isDarkState.value = false
+        // Default to system preference
+        isDarkState.value = window.matchMedia('(prefers-color-scheme: dark)').matches
       }
       updateTheme()
     }
