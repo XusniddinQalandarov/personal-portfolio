@@ -1,5 +1,5 @@
 <template>
-  <div class="min-h-screen py-24 flex flex-col justify-center px-4 md:px-0">
+  <div class="min-h-screen py-24 px-4 md:px-0">
     <div class="max-w-6xl mx-auto w-full">
       
       <!-- Minimalist Header -->
@@ -142,11 +142,15 @@ const submitForm = async () => {
 };
 
 onMounted(() => {
-  const tl = gsap.timeline();
-  
-  tl.fromTo(headerEl.value, { y: 50, opacity: 0 }, { y: 0, opacity: 1, duration: 1, ease: "power3.out" })
-    .fromTo(formEl.value, { x: -30, opacity: 0 }, { x: 0, opacity: 1, duration: 1, ease: "power3.out" }, "-=0.5")
-    .fromTo(contactInfoEl.value, { x: 30, opacity: 0 }, { x: 0, opacity: 1, duration: 1, ease: "power3.out" }, "-=0.8");
+  if (process.client) {
+    nextTick(() => {
+      const tl = gsap.timeline();
+      
+      tl.fromTo(headerEl.value, { y: 50, opacity: 0 }, { y: 0, opacity: 1, duration: 1, ease: "power3.out" })
+        .fromTo(formEl.value, { x: -30, opacity: 0 }, { x: 0, opacity: 1, duration: 1, ease: "power3.out" }, "-=0.5")
+        .fromTo(contactInfoEl.value, { x: 30, opacity: 0 }, { x: 0, opacity: 1, duration: 1, ease: "power3.out" }, "-=0.8");
+    });
+  }
 });
 
 useSeoMeta({

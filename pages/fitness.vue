@@ -6,7 +6,7 @@
       <!-- Background Image with Parallax -->
       <div class="absolute inset-0 z-0 bg-black">
         <div ref="heroBg" class="absolute inset-0 bg-cover bg-center scale-110 md:opacity-80 opacity-0" 
-             style="background-image: url('/images/fitness_hero.png');"></div>
+             style="background-image: url('/images/gym1.jpg');"></div>
         <div class="absolute inset-0 bg-gradient-to-b from-black/50 via-black/20 to-black/80"></div>
       </div>
       
@@ -66,7 +66,7 @@
     <!-- Parallax Image Break -->
     <div class="h-[60vh] relative overflow-hidden my-24 bg-black">
       <div ref="parallaxImg" class="absolute inset-0 bg-cover bg-center bg-fixed opacity-60 md:opacity-80"
-           style="background-image: url('/images/fitness_run.png');"></div>
+           style="background-image: url('/images/gym2.webp');"></div>
       <div class="absolute inset-0 bg-black/40 flex items-center justify-center">
         <h2 class="text-5xl md:text-7xl font-black uppercase text-white tracking-tighter mix-blend-overlay">
           Endurance
