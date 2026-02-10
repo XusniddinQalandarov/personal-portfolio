@@ -7,7 +7,7 @@ export default defineEventHandler(async (event) => {
     config.public.supabaseKey as string
   )
   
-  const slug = getRouterParam(event, 'slug')
+  const slug = decodeURIComponent(getRouterParam(event, 'slug') || '')
   
   if (!slug) {
     throw createError({

@@ -843,6 +843,17 @@ const blogForm = ref({
 })
 const tagsString = ref('')
 
+// Auto-generate slug from title
+watch(() => blogForm.value.title, (newTitle) => {
+  if (!editingBlog.value && newTitle) {
+    blogForm.value.slug = newTitle
+      .toLowerCase()
+      .replace(/[^a-z0-9\s-]/g, '') // Remove non-alphanumeric chars
+      .replace(/\s+/g, '-')         // Replace spaces with -
+      .replace(/-+/g, '-')          // Collapse dashes
+  }
+})
+
 // Experience
 const showExperienceForm = ref(false)
 const editingExperience = ref(null)
@@ -1090,6 +1101,13 @@ const saveBlog = async () => {
       .split(',')
       .map(t => t.trim())
       .filter(t => t)
+
+    // Ensure slug is URL safe
+    blogForm.value.slug = blogForm.value.slug
+      .toLowerCase()
+      .replace(/[^a-z0-9\s-]/g, '')
+      .replace(/\s+/g, '-')
+      .replace(/-+/g, '-')
 
     if (editingBlog.value) {
       await authFetch(`/api/admin/blogs/${editingBlog.value.id}`, {
