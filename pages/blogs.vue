@@ -5,10 +5,10 @@
       <!-- Minimalist Header -->
       <div ref="headerEl" class="mb-24 text-center md:text-left border-b border-gray-200 dark:border-white/10 pb-12 opacity-0">
         <h1 class="text-6xl md:text-8xl font-black tracking-tighter text-main uppercase mb-6">
-          Insights
+          {{ $t('blogs.title') }}
         </h1>
         <p class="text-xl text-sub font-light max-w-2xl">
-          Thoughts on code, design, and the future of web development.
+          {{ $t('blogs.subtitle') }}
         </p>
       </div>
 
@@ -19,7 +19,7 @@
             v-model="searchQuery"
             @input="searchBlogs"
             type="text"
-            placeholder="SEARCH ARTICLES..."
+            :placeholder="$t('blogs.searchPlaceholder')"
             class="w-full bg-transparent border-b border-gray-300 dark:border-gray-700 py-3 text-lg text-main placeholder-sub focus:outline-none focus:border-blue-500 transition-colors uppercase tracking-widest"
           />
         </div>
@@ -45,7 +45,7 @@
       </div>
 
       <div v-else-if="!filteredBlogs.length" class="text-center py-20 text-sub uppercase tracking-widest">
-        No articles found
+        {{ $t('blogs.noArticles') }}
       </div>
 
       <div ref="listEl" v-else class="space-y-24">
@@ -77,15 +77,15 @@
               </div>
               
               <h2 class="text-3xl md:text-5xl font-bold text-main mb-6 group-hover:text-blue-500 transition-colors leading-tight">
-                {{ blog.title }}
+                {{ localField(blog, 'title') }}
               </h2>
               
               <p class="text-lg text-sub font-light leading-relaxed mb-8 line-clamp-3">
-                {{ blog.excerpt }}
+                {{ localField(blog, 'excerpt') }}
               </p>
               
               <div class="flex items-center text-main font-bold uppercase tracking-widest text-sm group-hover:translate-x-2 transition-transform">
-                Read Article
+                {{ $t('blogs.readArticle') }}
                 <i class="pi pi-arrow-right ml-3 text-blue-500"></i>
               </div>
             </div>
@@ -103,6 +103,9 @@ import { gsap } from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
 
 gsap.registerPlugin(ScrollTrigger);
+
+const { t, locale } = useI18n()
+const { localField } = useLocalizedContent()
 
 const loading = ref(true)
 const blogs = ref([])
@@ -148,11 +151,8 @@ onMounted(async () => {
 const loadBlogs = async () => {
   try {
     loading.value = true
-    // Mock data if API fails or for dev
-    // In real app, remove mock fallback if strict
     const { data } = await $fetch('/api/blogs').catch(() => ({ data: [] }))
     
-    // Fallback Mock Data if empty (just for demo visibility)
     if (!data || !data.length) {
       blogs.value = [
         {
@@ -214,7 +214,7 @@ const toggleTag = (tag) => {
 }
 
 const formatDate = (date) => {
-  return new Date(date).toLocaleDateString('en-US', {
+  return new Date(date).toLocaleDateString(locale.value === 'ru' ? 'ru-RU' : 'en-US', {
     month: 'long',
     day: 'numeric',
     year: 'numeric'
@@ -222,8 +222,8 @@ const formatDate = (date) => {
 }
 
 useSeoMeta({
-  title: 'Insights - Xusniddin Qalandarov',
-  description: 'Thoughts on code and design.'
+  title: () => t('blogs.seoTitle'),
+  description: () => t('blogs.seoDescription')
 })
 </script>
 

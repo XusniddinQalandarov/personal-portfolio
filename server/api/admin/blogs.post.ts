@@ -40,9 +40,12 @@ export default defineEventHandler(async (event) => {
       .insert([
         {
           title: body.title,
+          title_ru: body.title_ru || '',
           slug: slug,
           excerpt: body.excerpt || '',
+          excerpt_ru: body.excerpt_ru || '',
           content: body.content,
+          content_ru: body.content_ru || '',
           image_url: body.image_url || '',
           tags: body.tags || [],
           published: body.published || false,

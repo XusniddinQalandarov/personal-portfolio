@@ -5,10 +5,10 @@
       <!-- Minimalist Header -->
       <div ref="headerEl" class="mb-24 text-center md:text-left border-b border-gray-200 dark:border-white/10 pb-12 opacity-0">
         <h1 class="text-6xl md:text-8xl font-black tracking-tighter text-main uppercase mb-6 leading-none">
-          Selected<br>Works
+          {{ $t('projects.title1') }}<br>{{ $t('projects.title2') }}
         </h1>
         <p class="text-xl text-sub font-light max-w-2xl">
-          A showcase of technical precision and creative engineering.
+          {{ $t('projects.subtitle') }}
         </p>
       </div>
 
@@ -23,7 +23,7 @@
             ? 'bg-main text-charcoal border-main' 
             : 'bg-transparent text-sub border-gray-300 dark:border-white/20 hover:border-main hover:text-main'"
         >
-          {{ tag }}
+          {{ tag === 'All' ? $t('projects.all') : tag }}
         </button>
       </div>
 
@@ -33,7 +33,7 @@
       </div>
 
       <div v-else-if="!filteredProjects.length" class="text-center py-32 text-sub uppercase tracking-widest">
-        No projects found
+        {{ $t('projects.noProjects') }}
       </div>
 
       <div ref="listEl" v-else class="space-y-32">
@@ -55,7 +55,7 @@
               />
               <div class="absolute inset-0 bg-black/0 group-hover:bg-black/20 transition-colors duration-300 flex items-center justify-center opacity-0 group-hover:opacity-100">
                 <span class="px-6 py-3 bg-white text-black font-bold uppercase tracking-widest text-sm rounded-full transform translate-y-4 group-hover:translate-y-0 transition-transform duration-300">
-                  View Case Study
+                  {{ $t('projects.viewCaseStudy') }}
                 </span>
               </div>
             </div>
@@ -67,11 +67,11 @@
               </div>
               
               <h2 class="text-4xl md:text-5xl font-bold text-main mb-6 leading-tight group-hover:text-blue-500 transition-colors cursor-pointer" @click="openProjectModal(project)">
-                {{ project.title }}
+                {{ localField(project, 'title') }}
               </h2>
               
               <p class="text-lg text-sub font-light leading-relaxed mb-8 line-clamp-3">
-                {{ project.description }}
+                {{ localField(project, 'description') }}
               </p>
 
               <!-- Tech Stack -->
@@ -84,10 +84,10 @@
               <!-- Links -->
               <div class="flex items-center gap-6">
                  <a v-if="project.demo_url" :href="project.demo_url" target="_blank" class="text-main font-bold uppercase tracking-widest text-sm hover:text-blue-500 transition-colors flex items-center gap-2">
-                   Live Demo <i class="pi pi-arrow-up-right"></i>
+                   {{ $t('projects.liveDemo') }} <i class="pi pi-arrow-up-right"></i>
                  </a>
                  <a v-if="project.github_url" :href="project.github_url" target="_blank" class="text-sub font-bold uppercase tracking-widest text-sm hover:text-white transition-colors flex items-center gap-2">
-                   GitHub <i class="pi pi-github"></i>
+                   {{ $t('projects.github') }} <i class="pi pi-github"></i>
                  </a>
               </div>
             </div>
@@ -113,6 +113,9 @@ import { gsap } from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
 
 gsap.registerPlugin(ScrollTrigger);
+
+const { t } = useI18n()
+const { localField } = useLocalizedContent()
 
 const projects = ref([]);
 const loading = ref(true);
@@ -185,8 +188,8 @@ const initAnimations = () => {
 };
 
 useSeoMeta({
-  title: 'Projects - Xusniddin Qalandarov',
-  description: 'Selected technical works.'
+  title: () => t('projects.seoTitle'),
+  description: () => t('projects.seoDescription')
 })
 </script>
 

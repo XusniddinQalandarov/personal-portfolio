@@ -34,9 +34,11 @@ export default defineEventHandler(async (event) => {
       .insert([
         {
           degree: body.degree,
+          degree_ru: body.degree_ru || '',
           school: body.school,
           year: body.year,
           description: body.description || '',
+          description_ru: body.description_ru || '',
           order_index: body.order_index || 0,
           created_at: new Date().toISOString(),
           updated_at: new Date().toISOString()

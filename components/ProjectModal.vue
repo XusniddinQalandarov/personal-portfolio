@@ -37,7 +37,7 @@
             <div class="flex items-center gap-2 text-sm font-mono text-blue-400 uppercase tracking-widest mb-2">
               {{ project.category }}
             </div>
-            <h2 class="text-3xl md:text-5xl font-bold leading-tight">{{ project.title }}</h2>
+            <h2 class="text-3xl md:text-5xl font-bold leading-tight">{{ localField(project, 'title') }}</h2>
           </div>
         </div>
 
@@ -54,10 +54,10 @@
             
             <div class="flex items-center gap-4">
                <a v-if="project.demo_url" :href="project.demo_url" target="_blank" class="flex items-center gap-2 text-sm font-bold uppercase tracking-widest text-main hover:text-blue-500 transition-colors">
-                 Live Demo <i class="pi pi-arrow-up-right"></i>
+                 {{ $t('projectModal.liveDemo') }} <i class="pi pi-arrow-up-right"></i>
                </a>
                <a v-if="project.github_url" :href="project.github_url" target="_blank" class="flex items-center gap-2 text-sm font-bold uppercase tracking-widest text-sub hover:text-main transition-colors">
-                 Code <i class="pi pi-github"></i>
+                 {{ $t('projectModal.code') }} <i class="pi pi-github"></i>
                </a>
             </div>
           </div>
@@ -65,24 +65,24 @@
           <!-- Description -->
           <div class="grid md:grid-cols-3 gap-10">
             <div class="md:col-span-2 text-lg text-sub font-light leading-relaxed whitespace-pre-line">
-              {{ project.description }}
+              {{ localField(project, 'description') }}
               
-              <div v-if="project.long_description" class="mt-4">
-                 {{ project.long_description }}
+              <div v-if="localField(project, 'long_description')" class="mt-4">
+                 {{ localField(project, 'long_description') }}
               </div>
             </div>
             
             <div class="space-y-6">
               <div v-if="project.client">
-                <h3 class="text-xs font-bold text-sub uppercase tracking-widest mb-1">Client</h3>
+                <h3 class="text-xs font-bold text-sub uppercase tracking-widest mb-1">{{ $t('projectModal.client') }}</h3>
                 <p class="text-main">{{ project.client }}</p>
               </div>
               <div v-if="project.year">
-                <h3 class="text-xs font-bold text-sub uppercase tracking-widest mb-1">Year</h3>
+                <h3 class="text-xs font-bold text-sub uppercase tracking-widest mb-1">{{ $t('projectModal.year') }}</h3>
                 <p class="text-main">{{ project.year }}</p>
               </div>
               <div v-if="project.role">
-                <h3 class="text-xs font-bold text-sub uppercase tracking-widest mb-1">Role</h3>
+                <h3 class="text-xs font-bold text-sub uppercase tracking-widest mb-1">{{ $t('projectModal.role') }}</h3>
                 <p class="text-main">{{ project.role }}</p>
               </div>
             </div>
@@ -96,6 +96,8 @@
 </template>
 
 <script setup>
+const { localField } = useLocalizedContent()
+
 const props = defineProps({
   isOpen: Boolean,
   project: Object

@@ -1,101 +1,107 @@
 <template>
-  <div class="min-h-screen py-20">
+  <div class="min-h-screen py-20 px-4 md:px-0">
     <!-- Login Screen -->
-    <div v-if="!isAuthenticated" class="max-w-md mx-auto px-4">
-      <div class="glass-panel p-8">
+    <div v-if="!isAuthenticated" class="max-w-md mx-auto mt-24">
+      <div class="glass-panel p-10 rounded-2xl">
         <div class="text-center mb-8">
-          <h1 class="text-3xl text-white font-bold mb-2">Admin Login</h1>
-          <p class="text-[#BDC1CAFF]">Enter your password to access the admin panel</p>
+          <div class="w-16 h-16 mx-auto mb-4 rounded-2xl bg-gradient-to-br from-blue-500 to-purple-600 flex items-center justify-center shadow-lg">
+            <i class="pi pi-lock text-2xl text-white"></i>
+          </div>
+          <h1 class="text-3xl text-main font-bold mb-2">{{ $t('admin.loginTitle') }}</h1>
+          <p class="text-sub">{{ $t('admin.loginSubtitle') }}</p>
         </div>
 
-        <form @submit.prevent="handleLogin" class="space-y-4">
+        <form @submit.prevent="handleLogin" class="space-y-6">
           <div>
-            <label class="block text-sm font-medium text-white mb-2">Password</label>
+            <label class="block text-sm font-medium text-main mb-2">{{ $t('admin.password') }}</label>
             <input
               v-model="password"
               type="password"
-              placeholder="Enter admin password"
-              class="w-full px-4 py-3 bg-transparent text-white rounded-lg border border-white/20 focus:border-blue-400 focus:outline-none transition-colors"
+              :placeholder="$t('admin.passwordPlaceholder')"
+              class="admin-input"
               required
             />
           </div>
 
-          <div v-if="loginError" class="text-red-500 text-sm">
+          <div v-if="loginError" class="text-red-500 text-sm bg-red-500/10 p-3 rounded-lg border border-red-500/20">
             {{ loginError }}
           </div>
 
-          <button type="submit" class="w-full btn-primary px-6 py-3">
-            Login
+          <button type="submit" class="w-full admin-btn-primary py-3">
+            {{ $t('admin.login') }}
           </button>
         </form>
       </div>
     </div>
 
     <!-- Admin Dashboard -->
-    <div v-else class="max-w-6xl mx-auto px-4">
+    <div v-else class="max-w-6xl mx-auto">
       <!-- Header -->
-      <div class="text-center mb-12 md:mb-16">
-        <div class="flex flex-col sm:flex-row justify-between items-center gap-4 mb-6">
-          <h1 class="text-2xl sm:text-3xl md:text-4xl lg:text-5xl text-white font-bold">Admin Dashboard</h1>
-          <button @click="handleLogout" class="px-4 py-2 bg-red-500 text-white rounded-lg hover:bg-red-600 transition-colors whitespace-nowrap">
-            Logout
+      <div class="mb-12 md:mb-16">
+        <div class="flex flex-col sm:flex-row justify-between items-center gap-4 mb-4">
+          <div>
+            <h1 class="text-3xl md:text-5xl text-main font-black tracking-tight">{{ $t('admin.dashboardTitle') }}</h1>
+            <p class="text-sub mt-2">{{ $t('admin.dashboardSubtitle') }}</p>
+          </div>
+          <button @click="handleLogout" class="px-5 py-2.5 rounded-xl border border-red-500/30 text-red-500 hover:bg-red-500/10 transition-all text-sm font-medium">
+            <i class="pi pi-sign-out mr-2"></i>{{ $t('admin.logout') }}
           </button>
         </div>
-        <p class="text-base md:text-lg lg:text-xl text-[#BDC1CAFF] max-w-2xl mx-auto">
-          Manage your portfolio content
-        </p>
       </div>
 
       <!-- Tabs -->
-      <div class="flex flex-wrap gap-2 md:gap-4 mb-6 md:mb-8">
+      <div class="flex flex-wrap gap-2 md:gap-3 mb-8">
         <button
           v-for="tab in tabs"
-          :key="tab"
-          @click="activeTab = tab"
+          :key="tab.key"
+          @click="activeTab = tab.key"
           :class="[
-            'px-4 md:px-6 py-2 rounded-lg font-semibold transition-colors text-sm md:text-base',
-            activeTab === tab
-              ? 'bg-blue-400 text-black'
-              : 'bg-[#1E2128FF] text-white hover:bg-[#323743FF]'
+            'px-5 py-2.5 rounded-xl font-medium transition-all text-sm',
+            activeTab === tab.key
+              ? 'bg-gradient-to-r from-blue-500 to-purple-600 text-white shadow-lg shadow-blue-500/25'
+              : 'glass-panel text-sub hover:text-main hover:border-blue-500/30'
           ]"
         >
-          {{ tab }}
+          <i :class="tab.icon" class="mr-2"></i>{{ tab.label }}
         </button>
       </div>
 
-      <!-- Projects Management -->
-      <div v-if="activeTab === 'Projects'" class="bg-[#1E2128FF] p-4 md:p-6 rounded-lg">
-        <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 mb-6">
-          <h2 class="text-xl md:text-2xl text-white font-semibold">Manage Projects</h2>
-          <button @click="showProjectForm = true" class="btn-primary px-4 py-2 whitespace-nowrap">
-            Add New Project
+      <!-- ==================== PROJECTS TAB ==================== -->
+      <div v-if="activeTab === 'Projects'" class="glass-panel p-6 md:p-8 rounded-2xl">
+        <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 mb-8">
+          <h2 class="text-xl md:text-2xl text-main font-bold">{{ $t('admin.manageProjects') }}</h2>
+          <button @click="showProjectForm = true" class="admin-btn-primary">
+            <i class="pi pi-plus mr-2"></i>{{ $t('admin.addNewProject') }}
           </button>
         </div>
 
         <!-- Project Form -->
-        <div v-if="showProjectForm" class="bg-[#323743FF] p-6 rounded-lg mb-6">
-          <h3 class="text-xl text-white font-semibold mb-4">
-            {{ editingProject ? 'Edit Project' : 'New Project' }}
+        <div v-if="showProjectForm" class="glass-panel p-6 rounded-xl mb-8 border border-blue-500/20">
+          <h3 class="text-lg text-main font-bold mb-6 flex items-center gap-2">
+            <i class="pi pi-pencil text-blue-500"></i>
+            {{ editingProject ? $t('admin.editProject') : $t('admin.newProject') }}
           </h3>
           
-          <form @submit.prevent="saveProject" class="space-y-4">
+          <form @submit.prevent="saveProject" class="space-y-5">
+            <!-- Language tabs for translatable fields -->
+            <div class="flex gap-2 mb-4">
+              <button type="button" @click="formLang = 'en'" :class="['px-4 py-1.5 rounded-lg text-sm font-medium transition-all', formLang === 'en' ? 'bg-blue-500 text-white' : 'glass-panel text-sub']">
+                🇬🇧 {{ $t('admin.langEn') }}
+              </button>
+              <button type="button" @click="formLang = 'ru'" :class="['px-4 py-1.5 rounded-lg text-sm font-medium transition-all', formLang === 'ru' ? 'bg-purple-500 text-white' : 'glass-panel text-sub']">
+                🇷🇺 {{ $t('admin.langRu') }}
+              </button>
+            </div>
+
             <div class="grid md:grid-cols-2 gap-4">
               <div>
-                <label class="block text-sm font-medium text-white mb-2">Title *</label>
-                <input
-                  v-model="projectForm.title"
-                  type="text"
-                  required
-                  class="w-full px-4 py-2 rounded-lg bg-[#1E2128FF] text-white"
-                  placeholder="Project name"
-                >
+                <label class="admin-label">{{ $t('admin.title') }} ({{ formLang.toUpperCase() }}) *</label>
+                <input v-if="formLang === 'en'" v-model="projectForm.title" type="text" required class="admin-input" placeholder="Project name">
+                <input v-else v-model="projectForm.title_ru" type="text" class="admin-input" placeholder="Название проекта">
               </div>
               <div>
-                <label class="block text-sm font-medium text-white mb-2">Category</label>
-                <select
-                  v-model="projectForm.category"
-                  class="w-full px-4 py-2 rounded-lg bg-[#1E2128FF] text-white"
-                >
+                <label class="admin-label">{{ $t('admin.category') }}</label>
+                <select v-model="projectForm.category" class="admin-input">
                   <option value="Frontend">Frontend</option>
                   <option value="Backend">Backend</option>
                   <option value="Full Stack">Full Stack</option>
@@ -104,79 +110,51 @@
             </div>
 
             <div>
-              <label class="block text-sm font-medium text-white mb-2">Short Description *</label>
-              <textarea
-                v-model="projectForm.description"
-                rows="2"
-                required
-                class="w-full px-4 py-2 rounded-lg bg-[#1E2128FF] text-white"
-                placeholder="Brief description"
-              ></textarea>
+              <label class="admin-label">{{ $t('admin.shortDescription') }} ({{ formLang.toUpperCase() }}) *</label>
+              <textarea v-if="formLang === 'en'" v-model="projectForm.description" rows="2" required class="admin-input" placeholder="Brief description"></textarea>
+              <textarea v-else v-model="projectForm.description_ru" rows="2" class="admin-input" placeholder="Краткое описание"></textarea>
             </div>
 
             <div>
-              <label class="block text-sm font-medium text-white mb-2">Long Description</label>
-              <textarea
-                v-model="projectForm.long_description"
-                rows="4"
-                class="w-full px-4 py-2 rounded-lg bg-[#1E2128FF] text-white"
-                placeholder="Detailed description"
-              ></textarea>
+              <label class="admin-label">{{ $t('admin.longDescription') }} ({{ formLang.toUpperCase() }})</label>
+              <textarea v-if="formLang === 'en'" v-model="projectForm.long_description" rows="4" class="admin-input" placeholder="Detailed description"></textarea>
+              <textarea v-else v-model="projectForm.long_description_ru" rows="4" class="admin-input" placeholder="Подробное описание"></textarea>
             </div>
 
             <div class="grid md:grid-cols-2 gap-4">
               <div>
-                <label class="block text-sm font-medium text-white mb-2">GitHub URL</label>
-                <input
-                  v-model="projectForm.github_url"
-                  type="url"
-                  class="w-full px-4 py-2 rounded-lg bg-[#1E2128FF] text-white"
-                  placeholder="https://github.com/..."
-                >
+                <label class="admin-label">{{ $t('admin.githubUrl') }}</label>
+                <input v-model="projectForm.github_url" type="url" class="admin-input" placeholder="https://github.com/...">
               </div>
               <div>
-                <label class="block text-sm font-medium text-white mb-2">Demo URL</label>
-                <input
-                  v-model="projectForm.demo_url"
-                  type="url"
-                  class="w-full px-4 py-2 rounded-lg bg-[#1E2128FF] text-white"
-                  placeholder="https://demo.com"
-                >
+                <label class="admin-label">{{ $t('admin.demoUrl') }}</label>
+                <input v-model="projectForm.demo_url" type="url" class="admin-input" placeholder="https://demo.com">
               </div>
             </div>
 
             <div>
-              <label class="block text-sm font-medium text-white mb-2">Technologies (comma-separated)</label>
-              <input
-                v-model="technologiesString"
-                type="text"
-                class="w-full px-4 py-2 rounded-lg bg-[#1E2128FF] text-white"
-                placeholder="Vue.js, Nuxt.js, Tailwind CSS"
-              >
+              <label class="admin-label">{{ $t('admin.technologies') }}</label>
+              <input v-model="technologiesString" type="text" class="admin-input" placeholder="Vue.js, Nuxt.js, Tailwind CSS">
             </div>
 
             <!-- Image Upload -->
             <div>
-              <label class="block text-sm font-medium text-white mb-2">Project Image</label>
-              <div class="space-y-2">
+              <label class="admin-label">{{ $t('admin.projectImage') }}</label>
+              <div class="space-y-3">
                 <input
                   ref="projectImageInput"
                   type="file"
                   accept="image/*"
                   @change="handleProjectImageUpload"
-                  class="w-full px-4 py-2 rounded-lg bg-[#1E2128FF] text-white file:mr-4 file:py-2 file:px-4 file:rounded-lg file:border-0 file:text-sm file:font-medium file:bg-blue-600 file:text-white hover:file:bg-blue-700"
+                  class="admin-input file:mr-4 file:py-2 file:px-4 file:rounded-lg file:border-0 file:text-sm file:font-medium file:bg-blue-500 file:text-white hover:file:bg-blue-600 file:cursor-pointer"
                 >
-                <div v-if="imageUploadStatus" class="text-sm" :class="imageUploadStatus.success ? 'text-green-500' : 'text-red-500'">
+                <div v-if="imageUploadStatus" class="text-sm" :class="imageUploadStatus.success ? 'text-green-400' : 'text-red-400'">
                   {{ imageUploadStatus.message }}
                 </div>
-                <div v-if="projectForm.image_url" class="mt-2">
-                  <img :src="projectForm.image_url" alt="Project preview" class="w-32 h-20 object-cover rounded-lg">
-                  <button 
-                    type="button" 
-                    @click="removeProjectImage"
-                    class="ml-2 text-red-500 text-sm hover:text-red-700"
-                  >
-                    Remove
+                <div v-if="projectForm.image_url" class="flex items-center gap-3">
+                  <img :src="projectForm.image_url" alt="Preview" class="w-32 h-20 object-cover rounded-lg border border-white/10">
+                  <button type="button" @click="removeProjectImage" class="text-red-400 text-sm hover:text-red-300 flex items-center gap-1">
+                    <i class="pi pi-trash"></i> {{ $t('admin.remove') }}
                   </button>
                 </div>
               </div>
@@ -184,544 +162,420 @@
 
             <div class="grid md:grid-cols-3 gap-4">
               <div>
-                <label class="block text-sm font-medium text-white mb-2">Status</label>
-                <select
-                  v-model="projectForm.status"
-                  class="w-full px-4 py-2 rounded-lg bg-[#1E2128FF] text-white"
-                >
-                  <option value="Completed">Completed</option>
-                  <option value="In Progress">In Progress</option>
-                  <option value="Planned">Planned</option>
+                <label class="admin-label">{{ $t('admin.status') }}</label>
+                <select v-model="projectForm.status" class="admin-input">
+                  <option value="Completed">{{ $t('admin.completed') }}</option>
+                  <option value="In Progress">{{ $t('admin.inProgress') }}</option>
+                  <option value="Planned">{{ $t('admin.planned') }}</option>
                 </select>
               </div>
-              <div class="flex items-center">
-                <label class="flex items-center cursor-pointer">
-                  <input
-                    v-model="projectForm.featured"
-                    type="checkbox"
-                    class="mr-2"
-                  >
-                  <span class="text-white">Featured</span>
+              <div class="flex items-center pt-6">
+                <label class="flex items-center cursor-pointer gap-2">
+                  <input v-model="projectForm.featured" type="checkbox" class="w-4 h-4 rounded accent-blue-500">
+                  <span class="text-main text-sm">{{ $t('admin.featured') }}</span>
                 </label>
               </div>
             </div>
 
-            <div class="flex gap-4">
-              <button type="submit" class="btn-primary px-6 py-2">
-                {{ editingProject ? 'Update' : 'Create' }}
+            <div class="flex gap-3 pt-2">
+              <button type="submit" class="admin-btn-primary">
+                {{ editingProject ? $t('admin.update') : $t('admin.create') }}
               </button>
-              <button 
-                type="button" 
-                @click="cancelProjectForm"
-                class="px-6 py-2 bg-gray-600 text-white rounded-lg hover:bg-gray-700"
-              >
-                Cancel
+              <button type="button" @click="cancelProjectForm" class="admin-btn-secondary">
+                {{ $t('admin.cancel') }}
               </button>
             </div>
           </form>
         </div>
 
         <!-- Projects List -->
-        <div class="space-y-4">
+        <div class="space-y-3">
           <div
             v-for="project in projects"
             :key="project.id"
-            class="bg-[#323743FF] p-4 rounded-lg flex justify-between items-start"
+            class="glass-panel p-4 rounded-xl flex flex-col sm:flex-row justify-between items-start gap-4 hover:border-blue-500/20 transition-all"
           >
-            <div class="flex-1">
-              <h3 class="text-lg text-white font-semibold">{{ project.title }}</h3>
-              <p class="text-sub text-sm">{{ project.description }}</p>
-              <div class="flex flex-wrap gap-2 mt-2">
-                <span
-                  v-for="tech in project.technologies"
-                  :key="tech"
-                  class="px-2 py-1 bg-[#1E2128FF] text-white rounded text-xs"
-                >
+            <div class="flex-1 min-w-0">
+              <div class="flex items-center gap-2 mb-1">
+                <h3 class="text-main font-semibold truncate">{{ project.title }}</h3>
+                <span v-if="project.featured" class="text-xs bg-yellow-500/20 text-yellow-500 px-2 py-0.5 rounded-full">⭐</span>
+              </div>
+              <p class="text-sub text-sm line-clamp-1">{{ project.description }}</p>
+              <div class="flex flex-wrap gap-1.5 mt-2">
+                <span v-for="tech in project.technologies" :key="tech" class="px-2 py-0.5 bg-blue-500/10 text-blue-400 rounded text-xs">
                   {{ tech }}
                 </span>
               </div>
             </div>
-            <div class="flex gap-2 ml-4">
-              <button
-                @click="editProject(project)"
-                class="px-3 py-1 bg-blue-600 text-white rounded hover:bg-blue-700"
-              >
-                Edit
+            <div class="flex gap-2 shrink-0">
+              <button @click="editProject(project)" class="admin-btn-icon text-blue-400 hover:bg-blue-500/10" :title="$t('admin.edit')">
+                <i class="pi pi-pencil"></i>
               </button>
-              <button
-                @click="deleteProject(project.id)"
-                class="px-3 py-1 bg-red-600 text-white rounded hover:bg-red-700"
-              >
-                Delete
+              <button @click="deleteProject(project.id)" class="admin-btn-icon text-red-400 hover:bg-red-500/10" :title="$t('admin.delete')">
+                <i class="pi pi-trash"></i>
               </button>
             </div>
           </div>
         </div>
       </div>
 
-      <!-- Contact Messages -->
-      <div v-if="activeTab === 'Messages'" class="bg-[#1E2128FF] p-6 rounded-lg">
-        <h2 class="text-2xl text-white font-semibold mb-6">Contact Messages</h2>
-        
-        <div class="space-y-4">
-          <div
-            v-for="message in messages"
-            :key="message.id"
-            class="bg-[#323743FF] p-4 rounded-lg"
-          >
-            <div class="flex justify-between items-start mb-2">
-              <div>
-                <h3 class="text-lg text-white font-semibold">{{ message.name }}</h3>
-                <p class="text-sub text-sm">{{ message.email }}</p>
-              </div>
-              <span
-                :class="[
-                  'px-3 py-1 rounded text-xs',
-                  message.read ? 'bg-gray-600 text-gray-300' : 'bg-blue-400 text-black'
-                ]"
-              >
-                {{ message.read ? 'Read' : 'New' }}
-              </span>
-            </div>
-            <p class="text-white font-medium mb-2">{{ message.subject }}</p>
-            <p class="text-sub">{{ message.message }}</p>
-            <p class="text-gray-500 text-xs mt-2">
-              {{ new Date(message.created_at).toLocaleString() }}
-            </p>
-            <button
-              v-if="!message.read"
-              @click="markAsRead(message.id)"
-              class="mt-2 px-3 py-1 bg-blue-400 text-black rounded hover:bg-blue-500 text-sm"
-            >
-              Mark as Read
-            </button>
-          </div>
-        </div>
-      </div>
-
-      <!-- Blogs Management -->
-      <div v-if="activeTab === 'Blogs'" class="bg-[#1E2128FF] p-6 rounded-lg">
-        <div class="flex justify-between items-center mb-6">
-          <h2 class="text-2xl text-white font-semibold">Manage Blogs</h2>
-          <button @click="showBlogForm = true" class="btn-primary px-4 py-2">
-            Add New Blog
+      <!-- ==================== BLOGS TAB ==================== -->
+      <div v-if="activeTab === 'Blogs'" class="glass-panel p-6 md:p-8 rounded-2xl">
+        <div class="flex justify-between items-center mb-8">
+          <h2 class="text-xl md:text-2xl text-main font-bold">{{ $t('admin.manageBlogs') }}</h2>
+          <button @click="showBlogForm = true" class="admin-btn-primary">
+            <i class="pi pi-plus mr-2"></i>{{ $t('admin.addNewBlog') }}
           </button>
         </div>
 
         <!-- Blog Form -->
-        <div v-if="showBlogForm" class="bg-[#323743FF] p-6 rounded-lg mb-6">
-          <h3 class="text-xl text-white font-semibold mb-4">
-            {{ editingBlog ? 'Edit Blog' : 'New Blog' }}
+        <div v-if="showBlogForm" class="glass-panel p-6 rounded-xl mb-8 border border-purple-500/20">
+          <h3 class="text-lg text-main font-bold mb-6 flex items-center gap-2">
+            <i class="pi pi-file-edit text-purple-500"></i>
+            {{ editingBlog ? $t('admin.editBlog') : $t('admin.newBlog') }}
           </h3>
           
-          <form @submit.prevent="saveBlog" class="space-y-4">
+          <form @submit.prevent="saveBlog" class="space-y-5">
+            <!-- Language tabs -->
+            <div class="flex gap-2 mb-4">
+              <button type="button" @click="formLang = 'en'" :class="['px-4 py-1.5 rounded-lg text-sm font-medium transition-all', formLang === 'en' ? 'bg-blue-500 text-white' : 'glass-panel text-sub']">
+                🇬🇧 {{ $t('admin.langEn') }}
+              </button>
+              <button type="button" @click="formLang = 'ru'" :class="['px-4 py-1.5 rounded-lg text-sm font-medium transition-all', formLang === 'ru' ? 'bg-purple-500 text-white' : 'glass-panel text-sub']">
+                🇷🇺 {{ $t('admin.langRu') }}
+              </button>
+            </div>
+
             <div class="grid md:grid-cols-2 gap-4">
               <div>
-                <label class="block text-sm font-medium text-white mb-2">Title *</label>
-                <input
-                  v-model="blogForm.title"
-                  type="text"
-                  required
-                  class="w-full px-4 py-2 bg-[#1E2128FF] text-white rounded-lg"
-                />
+                <label class="admin-label">{{ $t('admin.title') }} ({{ formLang.toUpperCase() }}) *</label>
+                <input v-if="formLang === 'en'" v-model="blogForm.title" type="text" required class="admin-input" />
+                <input v-else v-model="blogForm.title_ru" type="text" class="admin-input" placeholder="Заголовок" />
               </div>
               <div>
-                <label class="block text-sm font-medium text-white mb-2">Slug *</label>
-                <input
-                  v-model="blogForm.slug"
-                  type="text"
-                  placeholder="Auto-generated from title"
-                  class="w-full px-4 py-2 bg-[#1E2128FF] text-white rounded-lg"
-                />
+                <label class="admin-label">{{ $t('admin.slug') }} *</label>
+                <input v-model="blogForm.slug" type="text" placeholder="Auto-generated from title" class="admin-input" />
               </div>
             </div>
 
             <div>
-              <label class="block text-sm font-medium text-white mb-2">Excerpt</label>
-              <textarea
-                v-model="blogForm.excerpt"
-                rows="2"
-                class="w-full px-4 py-2 bg-[#1E2128FF] text-white rounded-lg"
-              ></textarea>
+              <label class="admin-label">{{ $t('admin.excerpt') }} ({{ formLang.toUpperCase() }})</label>
+              <textarea v-if="formLang === 'en'" v-model="blogForm.excerpt" rows="2" class="admin-input"></textarea>
+              <textarea v-else v-model="blogForm.excerpt_ru" rows="2" class="admin-input" placeholder="Отрывок"></textarea>
             </div>
 
             <div>
-              <label class="block text-sm font-medium text-white mb-2">Content *</label>
-              <textarea
-                v-model="blogForm.content"
-                rows="10"
-                required
-                placeholder="Supports Markdown"
-                class="w-full px-4 py-2 bg-[#1E2128FF] text-white rounded-lg font-mono"
-              ></textarea>
+              <label class="admin-label">{{ $t('admin.content') }} ({{ formLang.toUpperCase() }}) *</label>
+              <textarea v-if="formLang === 'en'" v-model="blogForm.content" rows="10" required placeholder="Supports Markdown" class="admin-input font-mono"></textarea>
+              <textarea v-else v-model="blogForm.content_ru" rows="10" class="admin-input font-mono" placeholder="Поддерживает Markdown"></textarea>
             </div>
 
             <div>
-              <label class="block text-sm font-medium text-white mb-2">Image</label>
-              
-              <!-- Image Upload Option -->
+              <label class="admin-label">{{ $t('admin.image') }}</label>
               <div class="mb-3">
-                <label class="inline-flex items-center px-4 py-2 bg-blue-400 text-black rounded-lg cursor-pointer hover:bg-blue-500 transition-colors">
-                  <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z" />
-                  </svg>
-                  Upload Image
-                  <input
-                    type="file"
-                    accept="image/jpeg,image/jpg,image/png,image/gif,image/webp"
-                    @change="handleBlogImageUpload"
-                    class="hidden"
-                  />
+                <label class="inline-flex items-center px-4 py-2 bg-gradient-to-r from-blue-500 to-purple-600 text-white rounded-lg cursor-pointer hover:opacity-90 transition-opacity text-sm font-medium">
+                  <i class="pi pi-image mr-2"></i>{{ $t('admin.uploadImage') }}
+                  <input type="file" accept="image/jpeg,image/jpg,image/png,image/gif,image/webp" @change="handleBlogImageUpload" class="hidden" />
                 </label>
-                <span v-if="uploadingImage" class="ml-3 text-blue-400">Uploading...</span>
-                <span v-if="uploadError" class="ml-3 text-red-500">{{ uploadError }}</span>
+                <span v-if="uploadingImage" class="ml-3 text-blue-400 text-sm">{{ $t('admin.uploading') }}</span>
+                <span v-if="uploadError" class="ml-3 text-red-400 text-sm">{{ uploadError }}</span>
               </div>
-
-              <!-- Current Image Preview -->
-              <div v-if="blogForm.image_url" class="mb-3">
-                <img :src="blogForm.image_url" alt="Preview" class="h-32 w-auto rounded-lg object-cover" />
-                <button
-                  type="button"
-                  @click="blogForm.image_url = ''"
-                  class="mt-2 text-sm text-red-400 hover:text-red-300"
-                >
-                  Remove Image
+              <div v-if="blogForm.image_url" class="mb-3 flex items-center gap-3">
+                <img :src="blogForm.image_url" alt="Preview" class="h-24 w-auto rounded-lg object-cover border border-white/10" />
+                <button type="button" @click="blogForm.image_url = ''" class="text-sm text-red-400 hover:text-red-300 flex items-center gap-1">
+                  <i class="pi pi-trash"></i> {{ $t('admin.removeImage') }}
                 </button>
               </div>
-
-              <!-- Or URL Input -->
               <div>
-                <label class="block text-xs text-gray-400 mb-1">Or enter image URL:</label>
-                <input
-                  v-model="blogForm.image_url"
-                  type="url"
-                  placeholder="https://..."
-                  class="w-full px-4 py-2 bg-[#1E2128FF] text-white rounded-lg"
-                />
+                <label class="block text-xs text-sub mb-1">{{ $t('admin.orEnterUrl') }}</label>
+                <input v-model="blogForm.image_url" type="url" placeholder="https://..." class="admin-input" />
               </div>
             </div>
 
-            <div>
-              <label class="block text-sm font-medium text-white mb-2">Tags (comma-separated)</label>
-              <input
-                v-model="tagsString"
-                type="text"
-                placeholder="Vue, Nuxt, Web Dev"
-                class="w-full px-4 py-2 bg-[#1E2128FF] text-white rounded-lg"
-              />
+            <div class="grid md:grid-cols-2 gap-4">
+              <div>
+                <label class="admin-label">{{ $t('admin.tags') }}</label>
+                <input v-model="tagsString" type="text" class="admin-input" placeholder="AI, Web Dev, Tutorial" />
+              </div>
+              <div class="flex items-center pt-6">
+                <label class="flex items-center cursor-pointer gap-2">
+                  <input v-model="blogForm.published" type="checkbox" class="w-4 h-4 rounded accent-blue-500">
+                  <span class="text-main text-sm">{{ $t('admin.published') }}</span>
+                </label>
+              </div>
             </div>
 
-            <div>
-              <label class="flex items-center text-white">
-                <input
-                  v-model="blogForm.published"
-                  type="checkbox"
-                  class="mr-2"
-                />
-                Published
-              </label>
-            </div>
-
-            <div class="flex gap-4">
-              <button type="submit" class="btn-primary px-6 py-2">
-                {{ editingBlog ? 'Update' : 'Create' }} Blog
+            <div class="flex gap-3 pt-2">
+              <button type="submit" class="admin-btn-primary">
+                {{ editingBlog ? $t('admin.update') : $t('admin.create') }}
               </button>
-              <button type="button" @click="cancelBlogForm" class="px-6 py-2 bg-gray-600 text-white rounded-lg">
-                Cancel
+              <button type="button" @click="cancelBlogForm" class="admin-btn-secondary">
+                {{ $t('admin.cancel') }}
               </button>
             </div>
           </form>
         </div>
 
-        <!-- Blog List -->
-        <div class="space-y-4">
+        <!-- Blogs List -->
+        <div class="space-y-3">
           <div
             v-for="blog in blogs"
             :key="blog.id"
-            class="bg-[#323743FF] p-4 rounded-lg"
+            class="glass-panel p-4 rounded-xl flex flex-col sm:flex-row justify-between items-start gap-4 hover:border-purple-500/20 transition-all"
           >
-            <div class="flex justify-between items-start">
-              <div class="flex-1">
-                <div class="flex items-center gap-2 mb-2">
-                  <h3 class="text-lg text-white font-semibold">{{ blog.title }}</h3>
-                  <span
-                    :class="[
-                      'px-2 py-1 rounded text-xs',
-                      blog.published ? 'bg-green-600 text-white' : 'bg-gray-600 text-gray-300'
-                    ]"
-                  >
-                    {{ blog.published ? 'Published' : 'Draft' }}
+            <div class="flex gap-4 flex-1 min-w-0">
+              <img v-if="blog.image_url" :src="blog.image_url" alt="" class="w-16 h-16 object-cover rounded-lg shrink-0 border border-white/10">
+              <div class="min-w-0">
+                <div class="flex items-center gap-2 mb-1">
+                  <h3 class="text-main font-semibold truncate">{{ blog.title }}</h3>
+                  <span :class="[blog.published ? 'bg-green-500/20 text-green-400' : 'bg-yellow-500/20 text-yellow-400', 'text-xs px-2 py-0.5 rounded-full']">
+                    {{ blog.published ? $t('admin.published') : $t('admin.draft') }}
                   </span>
                 </div>
-                <p class="text-sub text-sm mb-2">{{ blog.excerpt || 'No excerpt' }}</p>
-                <div class="flex gap-2 flex-wrap mb-2">
-                  <span
-                    v-for="tag in blog.tags"
-                    :key="tag"
-                    class="px-2 py-1 bg-blue-400/20 text-blue-400 rounded text-xs"
-                  >
-                    {{ tag }}
-                  </span>
+                <p class="text-sub text-sm line-clamp-1">{{ blog.excerpt || $t('admin.noExcerpt') }}</p>
+                <div class="flex items-center gap-3 mt-1 text-xs text-sub">
+                  <span>{{ $t('admin.created') }}: {{ new Date(blog.created_at).toLocaleDateString() }}</span>
+                  <span v-if="blog.views">{{ $t('admin.views') }}: {{ blog.views }}</span>
                 </div>
-                <p class="text-gray-500 text-xs">
-                  Created: {{ new Date(blog.created_at).toLocaleDateString() }} | 
-                  Views: {{ blog.views || 0 }}
-                </p>
               </div>
-              <div class="flex gap-2 ml-4">
-                <button
-                  @click="editBlog(blog)"
-                  class="px-3 py-1 bg-blue-600 text-white rounded hover:bg-blue-700"
-                >
-                  Edit
-                </button>
-                <button
-                  @click="deleteBlog(blog.id)"
-                  class="px-3 py-1 bg-red-600 text-white rounded hover:bg-red-700"
-                >
-                  Delete
-                </button>
-              </div>
+            </div>
+            <div class="flex gap-2 shrink-0">
+              <button @click="editBlog(blog)" class="admin-btn-icon text-blue-400 hover:bg-blue-500/10">
+                <i class="pi pi-pencil"></i>
+              </button>
+              <button @click="deleteBlog(blog.id)" class="admin-btn-icon text-red-400 hover:bg-red-500/10">
+                <i class="pi pi-trash"></i>
+              </button>
             </div>
           </div>
         </div>
       </div>
 
-      <!-- Experience Management -->
-      <div v-if="activeTab === 'Experience'" class="bg-[#1E2128FF] p-6 rounded-lg">
-        <div class="flex justify-between items-center mb-6">
-          <h2 class="text-2xl text-white font-semibold">Manage Experience</h2>
-          <button @click="showExperienceForm = true" class="btn-primary px-4 py-2">
-            Add New Experience
+      <!-- ==================== EXPERIENCE TAB ==================== -->
+      <div v-if="activeTab === 'Experience'" class="glass-panel p-6 md:p-8 rounded-2xl">
+        <div class="flex justify-between items-center mb-8">
+          <h2 class="text-xl md:text-2xl text-main font-bold">{{ $t('admin.manageExperience') }}</h2>
+          <button @click="showExperienceForm = true" class="admin-btn-primary">
+            <i class="pi pi-plus mr-2"></i>{{ $t('admin.addNewExperience') }}
           </button>
         </div>
 
         <!-- Experience Form -->
-        <div v-if="showExperienceForm" class="bg-[#323743FF] p-6 rounded-lg mb-6">
-          <h3 class="text-xl text-white font-semibold mb-4">
-            {{ editingExperience ? 'Edit Experience' : 'New Experience' }}
+        <div v-if="showExperienceForm" class="glass-panel p-6 rounded-xl mb-8 border border-green-500/20">
+          <h3 class="text-lg text-main font-bold mb-6 flex items-center gap-2">
+            <i class="pi pi-briefcase text-green-500"></i>
+            {{ editingExperience ? $t('admin.editExperience') : $t('admin.newExperience') }}
           </h3>
           
-          <form @submit.prevent="saveExperience" class="space-y-4">
+          <form @submit.prevent="saveExperience" class="space-y-5">
+            <!-- Language tabs -->
+            <div class="flex gap-2 mb-4">
+              <button type="button" @click="formLang = 'en'" :class="['px-4 py-1.5 rounded-lg text-sm font-medium transition-all', formLang === 'en' ? 'bg-blue-500 text-white' : 'glass-panel text-sub']">
+                🇬🇧 {{ $t('admin.langEn') }}
+              </button>
+              <button type="button" @click="formLang = 'ru'" :class="['px-4 py-1.5 rounded-lg text-sm font-medium transition-all', formLang === 'ru' ? 'bg-purple-500 text-white' : 'glass-panel text-sub']">
+                🇷🇺 {{ $t('admin.langRu') }}
+              </button>
+            </div>
+
             <div class="grid md:grid-cols-2 gap-4">
               <div>
-                <label class="block text-sm font-medium text-white mb-2">Job Title *</label>
-                <input
-                  v-model="experienceForm.title"
-                  type="text"
-                  required
-                  class="w-full px-4 py-2 bg-[#1E2128FF] text-white rounded-lg"
-                />
+                <label class="admin-label">{{ $t('admin.jobTitle') }} ({{ formLang.toUpperCase() }}) *</label>
+                <input v-if="formLang === 'en'" v-model="experienceForm.title" type="text" required class="admin-input" placeholder="Frontend Developer">
+                <input v-else v-model="experienceForm.title_ru" type="text" class="admin-input" placeholder="Фронтенд Разработчик">
               </div>
               <div>
-                <label class="block text-sm font-medium text-white mb-2">Company *</label>
-                <input
-                  v-model="experienceForm.company"
-                  type="text"
-                  required
-                  class="w-full px-4 py-2 bg-[#1E2128FF] text-white rounded-lg"
-                />
+                <label class="admin-label">{{ $t('admin.company') }} *</label>
+                <input v-model="experienceForm.company" type="text" required class="admin-input" placeholder="Company name">
               </div>
             </div>
 
-            <div class="grid md:grid-cols-3 gap-4">
+            <div class="grid md:grid-cols-2 gap-4">
               <div>
-                <label class="block text-sm font-medium text-white mb-2">Period *</label>
-                <input
-                  v-model="experienceForm.period"
-                  type="text"
-                  placeholder="2020 - 2023"
-                  required
-                  class="w-full px-4 py-2 bg-[#1E2128FF] text-white rounded-lg"
-                />
+                <label class="admin-label">{{ $t('admin.period') }} *</label>
+                <input v-model="experienceForm.period" type="text" required class="admin-input" placeholder="Jan 2024 - Present">
               </div>
               <div>
-                <label class="block text-sm font-medium text-white mb-2">Order</label>
-                <input
-                  v-model.number="experienceForm.order_index"
-                  type="number"
-                  class="w-full px-4 py-2 bg-[#1E2128FF] text-white rounded-lg"
-                />
-              </div>
-              <div>
-                <label class="flex items-center text-white mt-7">
-                  <input
-                    v-model="experienceForm.current"
-                    type="checkbox"
-                    class="mr-2"
-                  />
-                  Current Position
-                </label>
+                <label class="admin-label">{{ $t('admin.order') }}</label>
+                <input v-model.number="experienceForm.order_index" type="number" class="admin-input">
               </div>
             </div>
 
             <div>
-              <label class="block text-sm font-medium text-white mb-2">Description</label>
-              <textarea
-                v-model="experienceForm.description"
-                rows="4"
-                class="w-full px-4 py-2 bg-[#1E2128FF] text-white rounded-lg"
-              ></textarea>
+              <label class="admin-label">{{ $t('admin.description') }} ({{ formLang.toUpperCase() }})</label>
+              <textarea v-if="formLang === 'en'" v-model="experienceForm.description" rows="3" class="admin-input" placeholder="Job responsibilities..."></textarea>
+              <textarea v-else v-model="experienceForm.description_ru" rows="3" class="admin-input" placeholder="Должностные обязанности..."></textarea>
             </div>
 
-            <div class="flex gap-4">
-              <button type="submit" class="btn-primary px-6 py-2">
-                {{ editingExperience ? 'Update' : 'Create' }} Experience
+            <label class="flex items-center cursor-pointer gap-2">
+              <input v-model="experienceForm.current" type="checkbox" class="w-4 h-4 rounded accent-blue-500">
+              <span class="text-main text-sm">{{ $t('admin.currentPosition') }}</span>
+            </label>
+
+            <div class="flex gap-3 pt-2">
+              <button type="submit" class="admin-btn-primary">
+                {{ editingExperience ? $t('admin.update') : $t('admin.create') }}
               </button>
-              <button type="button" @click="cancelExperienceForm" class="px-6 py-2 bg-gray-600 text-white rounded-lg">
-                Cancel
+              <button type="button" @click="cancelExperienceForm" class="admin-btn-secondary">
+                {{ $t('admin.cancel') }}
               </button>
             </div>
           </form>
         </div>
 
         <!-- Experience List -->
-        <div class="space-y-4">
+        <div class="space-y-3">
           <div
             v-for="exp in experience"
             :key="exp.id"
-            class="bg-[#323743FF] p-4 rounded-lg"
+            class="glass-panel p-4 rounded-xl flex flex-col sm:flex-row justify-between items-start gap-4 hover:border-green-500/20 transition-all"
           >
-            <div class="flex justify-between items-start">
-              <div class="flex-1">
-                <div class="flex items-center gap-2 mb-2">
-                  <h3 class="text-lg text-white font-semibold">{{ exp.title }}</h3>
-                  <span
-                    v-if="exp.current"
-                    class="px-2 py-1 bg-green-600 text-white rounded text-xs"
-                  >
-                    Current
-                  </span>
-                </div>
-                <p class="text-blue-400 text-sm mb-2">{{ exp.company }}</p>
-                <p class="text-sub text-sm mb-2">{{ exp.period }}</p>
-                <p class="text-sub text-sm">{{ exp.description }}</p>
+            <div class="flex-1 min-w-0">
+              <div class="flex items-center gap-2 mb-1">
+                <h3 class="text-main font-semibold">{{ exp.title }}</h3>
+                <span v-if="exp.current" class="text-xs bg-green-500/20 text-green-400 px-2 py-0.5 rounded-full">{{ $t('admin.current') }}</span>
               </div>
-              <div class="flex gap-2 ml-4">
-                <button
-                  @click="editExperience(exp)"
-                  class="px-3 py-1 bg-blue-600 text-white rounded hover:bg-blue-700"
-                >
-                  Edit
-                </button>
-                <button
-                  @click="deleteExperience(exp.id)"
-                  class="px-3 py-1 bg-red-600 text-white rounded hover:bg-red-700"
-                >
-                  Delete
-                </button>
-              </div>
+              <p class="text-sub text-sm">{{ exp.company }} · {{ exp.period }}</p>
+            </div>
+            <div class="flex gap-2 shrink-0">
+              <button @click="editExperience(exp)" class="admin-btn-icon text-blue-400 hover:bg-blue-500/10">
+                <i class="pi pi-pencil"></i>
+              </button>
+              <button @click="deleteExperience(exp.id)" class="admin-btn-icon text-red-400 hover:bg-red-500/10">
+                <i class="pi pi-trash"></i>
+              </button>
             </div>
           </div>
         </div>
       </div>
 
-      <!-- Education Management -->
-      <div v-if="activeTab === 'Education'" class="bg-[#1E2128FF] p-6 rounded-lg">
-        <div class="flex justify-between items-center mb-6">
-          <h2 class="text-2xl text-white font-semibold">Manage Education</h2>
-          <button @click="showEducationForm = true" class="btn-primary px-4 py-2">
-            Add New Education
+      <!-- ==================== EDUCATION TAB ==================== -->
+      <div v-if="activeTab === 'Education'" class="glass-panel p-6 md:p-8 rounded-2xl">
+        <div class="flex justify-between items-center mb-8">
+          <h2 class="text-xl md:text-2xl text-main font-bold">{{ $t('admin.manageEducation') }}</h2>
+          <button @click="showEducationForm = true" class="admin-btn-primary">
+            <i class="pi pi-plus mr-2"></i>{{ $t('admin.addNewEducation') }}
           </button>
         </div>
 
         <!-- Education Form -->
-        <div v-if="showEducationForm" class="bg-[#323743FF] p-6 rounded-lg mb-6">
-          <h3 class="text-xl text-white font-semibold mb-4">
-            {{ editingEducation ? 'Edit Education' : 'New Education' }}
+        <div v-if="showEducationForm" class="glass-panel p-6 rounded-xl mb-8 border border-amber-500/20">
+          <h3 class="text-lg text-main font-bold mb-6 flex items-center gap-2">
+            <i class="pi pi-graduation-cap text-amber-500"></i>
+            {{ editingEducation ? $t('admin.editEducation') : $t('admin.newEducation') }}
           </h3>
           
-          <form @submit.prevent="saveEducation" class="space-y-4">
+          <form @submit.prevent="saveEducation" class="space-y-5">
+            <!-- Language tabs -->
+            <div class="flex gap-2 mb-4">
+              <button type="button" @click="formLang = 'en'" :class="['px-4 py-1.5 rounded-lg text-sm font-medium transition-all', formLang === 'en' ? 'bg-blue-500 text-white' : 'glass-panel text-sub']">
+                🇬🇧 {{ $t('admin.langEn') }}
+              </button>
+              <button type="button" @click="formLang = 'ru'" :class="['px-4 py-1.5 rounded-lg text-sm font-medium transition-all', formLang === 'ru' ? 'bg-purple-500 text-white' : 'glass-panel text-sub']">
+                🇷🇺 {{ $t('admin.langRu') }}
+              </button>
+            </div>
+
             <div class="grid md:grid-cols-2 gap-4">
               <div>
-                <label class="block text-sm font-medium text-white mb-2">Degree *</label>
-                <input
-                  v-model="educationForm.degree"
-                  type="text"
-                  required
-                  class="w-full px-4 py-2 bg-[#1E2128FF] text-white rounded-lg"
-                />
+                <label class="admin-label">{{ $t('admin.degree') }} ({{ formLang.toUpperCase() }}) *</label>
+                <input v-if="formLang === 'en'" v-model="educationForm.degree" type="text" required class="admin-input" placeholder="B.Sc. Computer Science">
+                <input v-else v-model="educationForm.degree_ru" type="text" class="admin-input" placeholder="Бакалавр Информатики">
               </div>
               <div>
-                <label class="block text-sm font-medium text-white mb-2">School *</label>
-                <input
-                  v-model="educationForm.school"
-                  type="text"
-                  required
-                  class="w-full px-4 py-2 bg-[#1E2128FF] text-white rounded-lg"
-                />
+                <label class="admin-label">{{ $t('admin.school') }} *</label>
+                <input v-model="educationForm.school" type="text" required class="admin-input" placeholder="University name">
               </div>
             </div>
 
             <div class="grid md:grid-cols-2 gap-4">
               <div>
-                <label class="block text-sm font-medium text-white mb-2">Year *</label>
-                <input
-                  v-model="educationForm.year"
-                  type="text"
-                  placeholder="2018 - 2022"
-                  required
-                  class="w-full px-4 py-2 bg-[#1E2128FF] text-white rounded-lg"
-                />
+                <label class="admin-label">{{ $t('admin.year') }} *</label>
+                <input v-model="educationForm.year" type="text" required class="admin-input" placeholder="2022 - 2026">
               </div>
               <div>
-                <label class="block text-sm font-medium text-white mb-2">Order</label>
-                <input
-                  v-model.number="educationForm.order_index"
-                  type="number"
-                  class="w-full px-4 py-2 bg-[#1E2128FF] text-white rounded-lg"
-                />
+                <label class="admin-label">{{ $t('admin.order') }}</label>
+                <input v-model.number="educationForm.order_index" type="number" class="admin-input">
               </div>
             </div>
 
             <div>
-              <label class="block text-sm font-medium text-white mb-2">Description</label>
-              <textarea
-                v-model="educationForm.description"
-                rows="3"
-                class="w-full px-4 py-2 bg-[#1E2128FF] text-white rounded-lg"
-              ></textarea>
+              <label class="admin-label">{{ $t('admin.description') }} ({{ formLang.toUpperCase() }})</label>
+              <textarea v-if="formLang === 'en'" v-model="educationForm.description" rows="3" class="admin-input" placeholder="Relevant coursework, achievements..."></textarea>
+              <textarea v-else v-model="educationForm.description_ru" rows="3" class="admin-input" placeholder="Курсы, достижения..."></textarea>
             </div>
 
-            <div class="flex gap-4">
-              <button type="submit" class="btn-primary px-6 py-2">
-                {{ editingEducation ? 'Update' : 'Create' }} Education
+            <div class="flex gap-3 pt-2">
+              <button type="submit" class="admin-btn-primary">
+                {{ editingEducation ? $t('admin.update') : $t('admin.create') }}
               </button>
-              <button type="button" @click="cancelEducationForm" class="px-6 py-2 bg-gray-600 text-white rounded-lg">
-                Cancel
+              <button type="button" @click="cancelEducationForm" class="admin-btn-secondary">
+                {{ $t('admin.cancel') }}
               </button>
             </div>
           </form>
         </div>
 
         <!-- Education List -->
-        <div class="space-y-4">
+        <div class="space-y-3">
           <div
             v-for="edu in education"
             :key="edu.id"
-            class="bg-[#323743FF] p-4 rounded-lg"
+            class="glass-panel p-4 rounded-xl flex flex-col sm:flex-row justify-between items-start gap-4 hover:border-amber-500/20 transition-all"
           >
-            <div class="flex justify-between items-start">
-              <div class="flex-1">
-                <h3 class="text-lg text-white font-semibold mb-2">{{ edu.degree }}</h3>
-                <p class="text-blue-400 text-sm mb-2">{{ edu.school }}</p>
-                <p class="text-sub text-sm mb-2">{{ edu.year }}</p>
-                <p class="text-sub text-sm">{{ edu.description }}</p>
+            <div class="flex-1 min-w-0">
+              <h3 class="text-main font-semibold">{{ edu.degree }}</h3>
+              <p class="text-sub text-sm">{{ edu.school }} · {{ edu.year }}</p>
+            </div>
+            <div class="flex gap-2 shrink-0">
+              <button @click="editEducation(edu)" class="admin-btn-icon text-blue-400 hover:bg-blue-500/10">
+                <i class="pi pi-pencil"></i>
+              </button>
+              <button @click="deleteEducation(edu.id)" class="admin-btn-icon text-red-400 hover:bg-red-500/10">
+                <i class="pi pi-trash"></i>
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- ==================== MESSAGES TAB ==================== -->
+      <div v-if="activeTab === 'Messages'" class="glass-panel p-6 md:p-8 rounded-2xl">
+        <h2 class="text-xl md:text-2xl text-main font-bold mb-8">{{ $t('admin.contactMessages') }}</h2>
+        
+        <div class="space-y-3">
+          <div
+            v-for="message in messages"
+            :key="message.id"
+            class="glass-panel p-5 rounded-xl hover:border-blue-500/20 transition-all"
+          >
+            <div class="flex justify-between items-start mb-3">
+              <div>
+                <h3 class="text-main font-semibold">{{ message.name }}</h3>
+                <p class="text-sub text-sm">{{ message.email }}</p>
               </div>
-              <div class="flex gap-2 ml-4">
-                <button
-                  @click="editEducation(edu)"
-                  class="px-3 py-1 bg-blue-600 text-white rounded hover:bg-blue-700"
-                >
-                  Edit
-                </button>
-                <button
-                  @click="deleteEducation(edu.id)"
-                  class="px-3 py-1 bg-red-600 text-white rounded hover:bg-red-700"
-                >
-                  Delete
-                </button>
-              </div>
+              <span
+                :class="[
+                  'px-3 py-1 rounded-full text-xs font-medium',
+                  message.read ? 'bg-gray-500/20 text-sub' : 'bg-blue-500/20 text-blue-400'
+                ]"
+              >
+                {{ message.read ? $t('admin.read') : $t('admin.new') }}
+              </span>
+            </div>
+            <p v-if="message.subject" class="text-main font-medium mb-2">{{ message.subject }}</p>
+            <p class="text-sub text-sm leading-relaxed">{{ message.message }}</p>
+            <div class="flex justify-between items-center mt-3 pt-3 border-t border-white/5">
+              <p class="text-sub text-xs">
+                {{ new Date(message.created_at).toLocaleString() }}
+              </p>
+              <button
+                v-if="!message.read"
+                @click="markAsRead(message.id)"
+                class="text-sm text-blue-400 hover:text-blue-300 flex items-center gap-1"
+              >
+                <i class="pi pi-check"></i> {{ $t('admin.markAsRead') }}
+              </button>
             </div>
           </div>
         </div>
@@ -731,68 +585,48 @@
 </template>
 
 <script setup>
-// Authentication
+// Auth state
 const isAuthenticated = ref(false)
 const password = ref('')
 const loginError = ref('')
 const authToken = ref('')
 
-// Check if already authenticated on mount
-onMounted(() => {
-  const savedToken = localStorage.getItem('adminToken')
-  if (savedToken) {
-    authToken.value = savedToken
-    isAuthenticated.value = true
-    // Set default header for all requests
-    setAuthHeader(savedToken)
-  }
-})
-
-const setAuthHeader = (token) => {
-  // This will be used in all admin API calls
-  authToken.value = token
-}
+// Form language switcher
+const formLang = ref('en')
 
 const handleLogin = async () => {
   try {
-    loginError.value = ''
-    
-    // Call the login endpoint to verify password
-    const result = await $fetch('/api/auth/login', {
+    const response = await $fetch('/api/auth/login', {
       method: 'POST',
-      body: {
-        password: password.value
-      }
+      body: { password: password.value }
     })
-    
-    // If successful, save token and authenticate
-    const token = result.token
-    localStorage.setItem('adminToken', token)
-    authToken.value = token
-    isAuthenticated.value = true
-    setAuthHeader(token)
-    
-    // Load all data after successful login
-    await loadProjects()
-    await loadBlogs()
-    await loadExperience()
-    await loadEducation()
-    await loadMessages()
-    
+
+    if (response.success) {
+      isAuthenticated.value = true
+      authToken.value = response.token
+      loginError.value = ''
+      
+      // Load data
+      await loadProjects()
+      await loadBlogs()
+      await loadExperience()
+      await loadEducation()
+      await loadMessages()
+    } else {
+      loginError.value = response.message || 'Invalid password'
+    }
   } catch (error) {
-    console.error('Login failed:', error)
     loginError.value = 'Invalid password. Please try again.'
   }
 }
 
 const handleLogout = () => {
-  localStorage.removeItem('adminToken')
-  authToken.value = ''
   isAuthenticated.value = false
+  authToken.value = ''
   password.value = ''
 }
 
-// Helper function to make authenticated requests
+// Authenticated fetch helper
 const authFetch = (url, options = {}) => {
   return $fetch(url, {
     ...options,
@@ -805,7 +639,13 @@ const authFetch = (url, options = {}) => {
 
 // Active tab
 const activeTab = ref('Projects')
-const tabs = ['Projects', 'Blogs', 'Experience', 'Education', 'Messages']
+const tabs = [
+  { key: 'Projects', label: 'Projects', icon: 'pi pi-folder' },
+  { key: 'Blogs', label: 'Blogs', icon: 'pi pi-file-edit' },
+  { key: 'Experience', label: 'Experience', icon: 'pi pi-briefcase' },
+  { key: 'Education', label: 'Education', icon: 'pi pi-graduation-cap' },
+  { key: 'Messages', label: 'Messages', icon: 'pi pi-envelope' }
+]
 const showProjectForm = ref(false)
 const editingProject = ref(null)
 
@@ -813,8 +653,11 @@ const editingProject = ref(null)
 const projects = ref([])
 const projectForm = ref({
   title: '',
+  title_ru: '',
   description: '',
+  description_ru: '',
   long_description: '',
+  long_description_ru: '',
   image_url: '',
   category: 'Frontend',
   github_url: '',
@@ -834,9 +677,12 @@ const editingBlog = ref(null)
 const blogs = ref([])
 const blogForm = ref({
   title: '',
+  title_ru: '',
   slug: '',
   excerpt: '',
+  excerpt_ru: '',
   content: '',
+  content_ru: '',
   image_url: '',
   tags: [],
   published: false
@@ -848,9 +694,9 @@ watch(() => blogForm.value.title, (newTitle) => {
   if (!editingBlog.value && newTitle) {
     blogForm.value.slug = newTitle
       .toLowerCase()
-      .replace(/[^a-z0-9\s-]/g, '') // Remove non-alphanumeric chars
-      .replace(/\s+/g, '-')         // Replace spaces with -
-      .replace(/-+/g, '-')          // Collapse dashes
+      .replace(/[^a-z0-9\s-]/g, '')
+      .replace(/\s+/g, '-')
+      .replace(/-+/g, '-')
   }
 })
 
@@ -860,9 +706,11 @@ const editingExperience = ref(null)
 const experience = ref([])
 const experienceForm = ref({
   title: '',
+  title_ru: '',
   company: '',
   period: '',
   description: '',
+  description_ru: '',
   current: false,
   order_index: 0
 })
@@ -873,9 +721,11 @@ const editingEducation = ref(null)
 const education = ref([])
 const educationForm = ref({
   degree: '',
+  degree_ru: '',
   school: '',
   year: '',
   description: '',
+  description_ru: '',
   order_index: 0
 })
 
@@ -884,7 +734,6 @@ const messages = ref([])
 
 // Load data on mount
 onMounted(async () => {
-  // Wait a bit for auth to be set
   await nextTick()
   
   if (isAuthenticated.value) {
@@ -916,20 +765,17 @@ const loadMessages = async () => {
 
 const saveProject = async () => {
   try {
-    // Parse technologies
     projectForm.value.technologies = technologiesString.value
       .split(',')
       .map(t => t.trim())
       .filter(t => t)
 
     if (editingProject.value) {
-      // Update existing project
       await authFetch(`/api/admin/projects/${editingProject.value.id}`, {
         method: 'PUT',
         body: projectForm.value
       })
     } else {
-      // Create new project
       await authFetch('/api/admin/projects', {
         method: 'POST',
         body: projectForm.value
@@ -947,9 +793,10 @@ const saveProject = async () => {
 
 const editProject = (project) => {
   editingProject.value = project
-  projectForm.value = { ...project }
+  projectForm.value = { ...project, title_ru: project.title_ru || '', description_ru: project.description_ru || '', long_description_ru: project.long_description_ru || '' }
   technologiesString.value = project.technologies?.join(', ') || ''
   showProjectForm.value = true
+  formLang.value = 'en'
 }
 
 const deleteProject = async (id) => {
@@ -972,8 +819,11 @@ const cancelProjectForm = () => {
   editingProject.value = null
   projectForm.value = {
     title: '',
+    title_ru: '',
     description: '',
+    description_ru: '',
     long_description: '',
+    long_description_ru: '',
     image_url: '',
     category: 'Frontend',
     github_url: '',
@@ -984,6 +834,7 @@ const cancelProjectForm = () => {
   }
   technologiesString.value = ''
   imageUploadStatus.value = null
+  formLang.value = 'en'
 }
 
 // Image upload functions
@@ -1056,23 +907,19 @@ const handleBlogImageUpload = async (event) => {
   uploadError.value = ''
 
   try {
-    // Validate file type
     const allowedTypes = ['image/jpeg', 'image/jpg', 'image/png', 'image/gif', 'image/webp']
     if (!allowedTypes.includes(file.type)) {
       throw new Error('Invalid file type. Only JPEG, PNG, GIF, and WebP images are allowed')
     }
 
-    // Validate file size (5MB max)
     const maxSize = 5 * 1024 * 1024
     if (file.size > maxSize) {
       throw new Error('File too large. Maximum size is 5MB')
     }
 
-    // Create form data
     const formData = new FormData()
     formData.append('file', file)
 
-    // Upload to API
     const response = await $fetch('/api/upload-image', {
       method: 'POST',
       body: formData
@@ -1089,20 +936,17 @@ const handleBlogImageUpload = async (event) => {
     uploadError.value = error.message || 'Failed to upload image'
   } finally {
     uploadingImage.value = false
-    // Reset the file input
     event.target.value = ''
   }
 }
 
 const saveBlog = async () => {
   try {
-    // Parse tags
     blogForm.value.tags = tagsString.value
       .split(',')
       .map(t => t.trim())
       .filter(t => t)
 
-    // Ensure slug is URL safe
     blogForm.value.slug = blogForm.value.slug
       .toLowerCase()
       .replace(/[^a-z0-9\s-]/g, '')
@@ -1132,9 +976,10 @@ const saveBlog = async () => {
 
 const editBlog = (blog) => {
   editingBlog.value = blog
-  blogForm.value = { ...blog }
+  blogForm.value = { ...blog, title_ru: blog.title_ru || '', excerpt_ru: blog.excerpt_ru || '', content_ru: blog.content_ru || '' }
   tagsString.value = blog.tags?.join(', ') || ''
   showBlogForm.value = true
+  formLang.value = 'en'
 }
 
 const deleteBlog = async (id) => {
@@ -1157,14 +1002,18 @@ const cancelBlogForm = () => {
   editingBlog.value = null
   blogForm.value = {
     title: '',
+    title_ru: '',
     slug: '',
     excerpt: '',
+    excerpt_ru: '',
     content: '',
+    content_ru: '',
     image_url: '',
     tags: [],
     published: false
   }
   tagsString.value = ''
+  formLang.value = 'en'
 }
 
 // ===== EXPERIENCE CRUD =====
@@ -1202,8 +1051,9 @@ const saveExperience = async () => {
 
 const editExperience = (exp) => {
   editingExperience.value = exp
-  experienceForm.value = { ...exp }
+  experienceForm.value = { ...exp, title_ru: exp.title_ru || '', description_ru: exp.description_ru || '' }
   showExperienceForm.value = true
+  formLang.value = 'en'
 }
 
 const deleteExperience = async (id) => {
@@ -1226,12 +1076,15 @@ const cancelExperienceForm = () => {
   editingExperience.value = null
   experienceForm.value = {
     title: '',
+    title_ru: '',
     company: '',
     period: '',
     description: '',
+    description_ru: '',
     current: false,
     order_index: 0
   }
+  formLang.value = 'en'
 }
 
 // ===== EDUCATION CRUD =====
@@ -1269,8 +1122,9 @@ const saveEducation = async () => {
 
 const editEducation = (edu) => {
   editingEducation.value = edu
-  educationForm.value = { ...edu }
+  educationForm.value = { ...edu, degree_ru: edu.degree_ru || '', description_ru: edu.description_ru || '' }
   showEducationForm.value = true
+  formLang.value = 'en'
 }
 
 const deleteEducation = async (id) => {
@@ -1293,11 +1147,14 @@ const cancelEducationForm = () => {
   editingEducation.value = null
   educationForm.value = {
     degree: '',
+    degree_ru: '',
     school: '',
     year: '',
     description: '',
+    description_ru: '',
     order_index: 0
   }
+  formLang.value = 'en'
 }
 
 // SEO Meta
@@ -1306,3 +1163,98 @@ useSeoMeta({
   robots: 'noindex, nofollow'
 })
 </script>
+
+<style scoped>
+/* Admin Design System - matches user-facing glassmorphism */
+.admin-input {
+  width: 100%;
+  padding: 0.625rem 1rem;
+  border-radius: 0.75rem;
+  background: var(--glass-bg, rgba(255, 255, 255, 0.05));
+  border: 1px solid var(--glass-border, rgba(255, 255, 255, 0.1));
+  color: var(--color-text-primary);
+  font-size: 0.875rem;
+  transition: all 0.2s ease;
+  backdrop-filter: blur(8px);
+}
+
+.admin-input:focus {
+  outline: none;
+  border-color: rgba(59, 130, 246, 0.5);
+  box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
+}
+
+.admin-input::placeholder {
+  color: var(--color-text-muted, rgba(255, 255, 255, 0.3));
+}
+
+.admin-label {
+  display: block;
+  font-size: 0.8rem;
+  font-weight: 600;
+  color: var(--color-text-secondary);
+  margin-bottom: 0.5rem;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+.admin-btn-primary {
+  display: inline-flex;
+  align-items: center;
+  padding: 0.5rem 1.25rem;
+  border-radius: 0.75rem;
+  background: linear-gradient(135deg, #3b82f6, #8b5cf6);
+  color: white;
+  font-size: 0.875rem;
+  font-weight: 600;
+  transition: all 0.2s ease;
+  border: none;
+  cursor: pointer;
+}
+
+.admin-btn-primary:hover {
+  opacity: 0.9;
+  box-shadow: 0 4px 15px rgba(59, 130, 246, 0.3);
+  transform: translateY(-1px);
+}
+
+.admin-btn-secondary {
+  display: inline-flex;
+  align-items: center;
+  padding: 0.5rem 1.25rem;
+  border-radius: 0.75rem;
+  background: transparent;
+  border: 1px solid var(--glass-border, rgba(255, 255, 255, 0.1));
+  color: var(--color-text-secondary);
+  font-size: 0.875rem;
+  font-weight: 500;
+  transition: all 0.2s ease;
+  cursor: pointer;
+}
+
+.admin-btn-secondary:hover {
+  border-color: var(--color-text-primary);
+  color: var(--color-text-primary);
+}
+
+.admin-btn-icon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 2.25rem;
+  height: 2.25rem;
+  border-radius: 0.5rem;
+  border: 1px solid var(--glass-border, rgba(255, 255, 255, 0.1));
+  background: transparent;
+  transition: all 0.2s ease;
+  cursor: pointer;
+}
+
+.line-clamp-1 {
+  display: -webkit-box;
+  -webkit-line-clamp: 1;
+  line-clamp: 1;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+</style>

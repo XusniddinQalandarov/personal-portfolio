@@ -34,9 +34,11 @@ export default defineEventHandler(async (event) => {
       .insert([
         {
           title: body.title,
+          title_ru: body.title_ru || '',
           company: body.company,
           period: body.period,
           description: body.description || '',
+          description_ru: body.description_ru || '',
           current: body.current || false,
           order_index: body.order_index || 0,
           created_at: new Date().toISOString(),

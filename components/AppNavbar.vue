@@ -13,20 +13,29 @@
           <div class="hidden md:flex items-center space-x-1">
             <NuxtLink 
               v-for="item in navigation" 
-              :key="item.name"
+              :key="item.key"
               :to="item.href"
               :class="[
                 'nav-link text-sm font-medium',
                 $route.path === item.href ? 'active' : ''
               ]"
             >
-              {{ item.name }}
+              {{ $t(item.key) }}
             </NuxtLink>
           </div>
         </div>
 
-        <!-- Theme Toggle & Mobile Menu Button -->
+        <!-- Language Toggle, Theme Toggle & Mobile Menu Button -->
         <div class="flex items-center space-x-2">
+          <!-- Language Toggle -->
+          <button
+            @click="toggleLocale"
+            class="theme-toggle text-sm font-bold"
+            aria-label="Toggle language"
+          >
+            {{ locale === 'en' ? 'RU' : 'EN' }}
+          </button>
+
           <!-- Theme Toggle Button -->
           <button
             @click="toggleTheme"
@@ -70,7 +79,7 @@
         <div class="flex flex-col space-y-2">
           <NuxtLink 
             v-for="item in navigation" 
-            :key="item.name"
+            :key="item.key"
             :to="item.href"
             @click="closeMobileMenu"
             :class="[
@@ -78,9 +87,18 @@
               $route.path === item.href ? 'active bg-white/10' : ''
             ]"
           >
-            {{ item.name }}
+            {{ $t(item.key) }}
           </NuxtLink>
           
+          <!-- Mobile Language Toggle -->
+          <button
+            @click="toggleLocale"
+            class="theme-toggle mx-2 flex items-center justify-center gap-2 py-2"
+          >
+            <i class="pi pi-globe"></i>
+            <span>{{ locale === 'en' ? 'Русский' : 'English' }}</span>
+          </button>
+
           <!-- Mobile Theme Toggle -->
           <button
             @click="toggleTheme"
@@ -88,7 +106,7 @@
           >
             <i v-if="isDark" class="pi pi-sun"></i>
             <i v-else class="pi pi-moon"></i>
-            <span>{{ isDark ? 'Light Mode' : 'Dark Mode' }}</span>
+            <span>{{ isDark ? $t('nav.lightMode') : $t('nav.darkMode') }}</span>
           </button>
         </div>
       </div>
@@ -103,15 +121,16 @@
 import { gsap } from 'gsap';
 
 const { isDark, toggleTheme, initTheme } = useTheme()
+const { locale, setLocale } = useI18n()
 
 const navigation = [
-  { name: 'Home', href: '/' },
-  { name: 'About', href: '/about' },
-  { name: 'Experience', href: '/experience' },
-  { name: 'Projects', href: '/projects' },
-  { name: 'Blogs', href: '/blogs' },
-  { name: 'Fitness', href: '/fitness' },
-  { name: 'Contact', href: '/contact' }
+  { key: 'nav.home', href: '/' },
+  { key: 'nav.about', href: '/about' },
+  { key: 'nav.experience', href: '/experience' },
+  { key: 'nav.projects', href: '/projects' },
+  { key: 'nav.blogs', href: '/blogs' },
+  { key: 'nav.fitness', href: '/fitness' },
+  { key: 'nav.contact', href: '/contact' }
 ];
 
 const isMobileMenuOpen = ref(false);
@@ -122,6 +141,10 @@ const toggleMobileMenu = () => {
 
 const closeMobileMenu = () => {
   isMobileMenuOpen.value = false;
+};
+
+const toggleLocale = () => {
+  setLocale(locale.value === 'en' ? 'ru' : 'en')
 };
 
 watch(() => useRoute().path, () => {

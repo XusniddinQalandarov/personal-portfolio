@@ -12,32 +12,32 @@
       <!-- Greeting / Tag -->
       <div ref="tagEl" class="mb-6 flex items-center gap-3 opacity-0">
         <span class="w-12 h-[1px] bg-blue-500"></span>
-        <span class="text-blue-500 font-mono text-sm uppercase tracking-widest">Full-Stack Developer</span>
+        <span class="text-blue-500 font-mono text-sm uppercase tracking-widest">{{ $t('home.tag') }}</span>
       </div>
 
       <!-- Main Headline -->
       <h1 ref="titleEl" class="text-5xl md:text-7xl lg:text-9xl font-black text-main leading-[0.9] tracking-tighter mb-8 uppercase opacity-0">
-        Building<br>
-        <span class="text-transparent bg-clip-text bg-gradient-to-r from-blue-500 to-purple-600">Digital</span><br>
-        Future.
+        {{ $t('home.headline1') }}<br>
+        <span class="text-transparent bg-clip-text bg-gradient-to-r from-blue-500 to-purple-600">{{ $t('home.headline2') }}</span><br>
+        {{ $t('home.headline3') }}
       </h1>
 
       <!-- Subtitle -->
       <p ref="subtitleEl" class="text-lg md:text-2xl text-sub max-w-2xl font-light leading-relaxed mb-12 opacity-0">
-        I engineer high-performance web applications and AI agents where design meets precision. Forging code with discipline.
+        {{ $t('home.subtitle') }}
       </p>
 
       <!-- Buttons -->
       <div ref="buttonsEl" class="flex flex-wrap items-center gap-6 opacity-0">
         <NuxtLink to="/projects" class="group relative px-8 py-4 bg-main text-charcoal font-bold text-lg rounded-full overflow-hidden hover:text-black transition-colors duration-300">
           <span class="relative z-10 flex items-center">
-            View Projects 
+            {{ $t('home.viewProjects') }}
             <i class="pi pi-arrow-right ml-3 group-hover:translate-x-1 transition-transform"></i>
           </span>
         </NuxtLink>
 
         <NuxtLink to="/contact" class="px-8 py-4 border border-main/20 text-main font-medium rounded-full hover:border-main transition-colors text-lg">
-          Contact Me
+          {{ $t('home.contactMe') }}
         </NuxtLink>
       </div>
 

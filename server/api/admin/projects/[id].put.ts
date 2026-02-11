@@ -34,8 +34,11 @@ export default defineEventHandler(async (event) => {
     }
 
     if (body.title !== undefined) updateData.title = body.title
+    if (body.title_ru !== undefined) updateData.title_ru = body.title_ru
     if (body.description !== undefined) updateData.description = body.description
+    if (body.description_ru !== undefined) updateData.description_ru = body.description_ru
     if (body.long_description !== undefined) updateData.long_description = body.long_description
+    if (body.long_description_ru !== undefined) updateData.long_description_ru = body.long_description_ru
     if (body.image_url !== undefined) updateData.image_url = body.image_url
     if (body.technologies !== undefined) updateData.technologies = body.technologies
     if (body.category !== undefined) updateData.category = body.category

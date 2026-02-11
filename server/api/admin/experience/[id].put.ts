@@ -21,9 +21,11 @@ export default defineEventHandler(async (event) => {
     
     const updateData: any = {}
     if (body.title !== undefined) updateData.title = body.title
+    if (body.title_ru !== undefined) updateData.title_ru = body.title_ru
     if (body.company !== undefined) updateData.company = body.company
     if (body.period !== undefined) updateData.period = body.period
     if (body.description !== undefined) updateData.description = body.description
+    if (body.description_ru !== undefined) updateData.description_ru = body.description_ru
     if (body.current !== undefined) updateData.current = body.current
     if (body.order_index !== undefined) updateData.order_index = body.order_index
     

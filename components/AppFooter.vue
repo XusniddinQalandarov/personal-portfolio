@@ -7,8 +7,7 @@
           <div class="md:col-span-1">
             <h3 class="text-xl font-bold text-gradient mb-4">Xusniddin Qalandarov</h3>
             <p class="text-sub text-sm leading-relaxed mb-6">
-              Passionate full-stack developer creating amazing digital experiences. 
-              Always excited to take on new challenges and collaborate on interesting projects.
+              {{ $t('footer.description') }}
             </p>
             <div class="flex space-x-4">
               <a 
@@ -47,20 +46,20 @@
 
           <!-- Quick Links -->
           <div>
-            <h3 class="text-lg font-semibold text-main mb-4">Quick Links</h3>
+            <h3 class="text-lg font-semibold text-main mb-4">{{ $t('footer.quickLinks') }}</h3>
             <ul class="space-y-3">
-              <li><NuxtLink to="/" class="footer-link">Home</NuxtLink></li>
-              <li><NuxtLink to="/about" class="footer-link">About</NuxtLink></li>
-              <li><NuxtLink to="/projects" class="footer-link">Projects</NuxtLink></li>
-              <li><NuxtLink to="/contact" class="footer-link">Contact</NuxtLink></li>
+              <li><NuxtLink to="/" class="footer-link">{{ $t('nav.home') }}</NuxtLink></li>
+              <li><NuxtLink to="/about" class="footer-link">{{ $t('nav.about') }}</NuxtLink></li>
+              <li><NuxtLink to="/projects" class="footer-link">{{ $t('nav.projects') }}</NuxtLink></li>
+              <li><NuxtLink to="/contact" class="footer-link">{{ $t('nav.contact') }}</NuxtLink></li>
             </ul>
           </div>
 
           <!-- Resources -->
           <div>
-            <h3 class="text-lg font-semibold text-main mb-4">Resources</h3>
+            <h3 class="text-lg font-semibold text-main mb-4">{{ $t('footer.resources') }}</h3>
             <ul class="space-y-3">
-              <li><a href="/resume.pdf" target="_blank" class="footer-link">Resume</a></li>
+              <li><a href="/resume.pdf" target="_blank" class="footer-link">{{ $t('footer.resume') }}</a></li>
               <li><a href="https://github.com/XusniddinQalandarov" target="_blank" class="footer-link">GitHub</a></li>
               <li><a href="https://linkedin.com/in/xusniddin-qalandarov/" target="_blank" class="footer-link">LinkedIn</a></li>
             </ul>
@@ -71,7 +70,7 @@
         <div class="mt-8 pt-8 border-t border-white/10">
           <div class="flex flex-col md:flex-row items-center justify-between gap-4">
             <p class="text-sub text-sm text-center md:text-left">
-              © {{ currentYear }} Xusniddin Qalandarov. Built with Nuxt & 💙
+              {{ $t('footer.copyright', { year: currentYear }) }}
             </p>
             
           </div>

@@ -21,9 +21,11 @@ export default defineEventHandler(async (event) => {
     
     const updateData: any = {}
     if (body.degree !== undefined) updateData.degree = body.degree
+    if (body.degree_ru !== undefined) updateData.degree_ru = body.degree_ru
     if (body.school !== undefined) updateData.school = body.school
     if (body.year !== undefined) updateData.year = body.year
     if (body.description !== undefined) updateData.description = body.description
+    if (body.description_ru !== undefined) updateData.description_ru = body.description_ru
     if (body.order_index !== undefined) updateData.order_index = body.order_index
     
     const { data, error } = await client

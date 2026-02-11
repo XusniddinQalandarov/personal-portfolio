@@ -1,116 +1,118 @@
 <template>
-  <div class="min-h-screen py-24 px-4 md:px-0">
-    <div class="max-w-6xl mx-auto w-full">
+  <div class="min-h-screen py-24 px-4 md:px-0 transition-colors duration-300">
+    <div class="max-w-4xl mx-auto">
       
       <!-- Minimalist Header -->
       <div ref="headerEl" class="mb-20 text-center md:text-left opacity-0">
-        <h1 class="text-6xl md:text-8xl font-black tracking-tighter text-main uppercase mb-6">
-          Get in Touch
+        <h1 class="text-6xl md:text-8xl font-black tracking-tighter text-main uppercase mb-6 leading-none">
+          {{ $t('contact.title') }}
         </h1>
-        <p class="text-xl text-sub font-light max-w-2xl">
-          Have a project in mind? Let's build something future-proof.
+        <div class="h-1 w-24 bg-blue-500 mt-6 mb-8 mx-auto md:mx-0"></div>
+        <p class="text-xl text-sub font-light max-w-xl">
+          {{ $t('contact.subtitle') }}
         </p>
       </div>
 
-      <div class="grid md:grid-cols-2 gap-20 md:gap-32">
-        
-        <!-- Contact Form (Minimalist) -->
-        <div ref="formEl" class="w-full opacity-0">
-          <form @submit.prevent="submitForm" class="space-y-12">
+      <div class="grid md:grid-cols-5 gap-16 md:gap-20">
+
+        <!-- Contact Form (Minimal) -->
+        <div ref="formEl" class="md:col-span-3 opacity-0">
+          <form @submit.prevent="sendMessage" class="space-y-10">
             
-            <div class="group relative">
+            <div class="relative">
               <input 
+                v-model="form.name" 
                 type="text" 
-                id="name" 
-                v-model="form.name"
                 required
-                class="block py-4 px-0 w-full text-xl text-main bg-transparent border-0 border-b-2 border-gray-300 dark:border-gray-700 appearance-none focus:outline-none focus:ring-0 focus:border-blue-500 peer placeholder-transparent"
-                placeholder=" "
+                :placeholder="$t('contact.yourName')"
+                class="w-full bg-transparent border-b-2 border-gray-300 dark:border-gray-700 py-4 text-lg text-main placeholder-transparent focus:outline-none focus:border-blue-500 transition-colors peer"
+                id="name"
               />
-              <label for="name" class="peer-focus:font-medium absolute text-lg text-gray-500 dark:text-gray-400 duration-300 transform -translate-y-8 scale-75 top-4 -z-10 origin-[0] peer-focus:left-0 peer-focus:text-blue-500 peer-placeholder-shown:scale-100 peer-placeholder-shown:translate-y-0 peer-focus:scale-75 peer-focus:-translate-y-8">
-                Your Name
+              <label for="name" class="absolute left-0 -top-3 text-sm text-sub font-mono uppercase tracking-widest peer-placeholder-shown:top-4 peer-placeholder-shown:text-base peer-focus:-top-3 peer-focus:text-sm transition-all pointer-events-none">
+                {{ $t('contact.yourName') }}
               </label>
             </div>
-
-            <div class="group relative">
+            
+            <div class="relative">
               <input 
+                v-model="form.email" 
                 type="email" 
-                id="email" 
-                v-model="form.email"
                 required
-                class="block py-4 px-0 w-full text-xl text-main bg-transparent border-0 border-b-2 border-gray-300 dark:border-gray-700 appearance-none focus:outline-none focus:ring-0 focus:border-blue-500 peer placeholder-transparent"
-                placeholder=" "
+                :placeholder="$t('contact.emailAddress')"
+                class="w-full bg-transparent border-b-2 border-gray-300 dark:border-gray-700 py-4 text-lg text-main placeholder-transparent focus:outline-none focus:border-blue-500 transition-colors peer"
+                id="email"
               />
-              <label for="email" class="peer-focus:font-medium absolute text-lg text-gray-500 dark:text-gray-400 duration-300 transform -translate-y-8 scale-75 top-4 -z-10 origin-[0] peer-focus:left-0 peer-focus:text-blue-500 peer-placeholder-shown:scale-100 peer-placeholder-shown:translate-y-0 peer-focus:scale-75 peer-focus:-translate-y-8">
-                Email Address
+              <label for="email" class="absolute left-0 -top-3 text-sm text-sub font-mono uppercase tracking-widest peer-placeholder-shown:top-4 peer-placeholder-shown:text-base peer-focus:-top-3 peer-focus:text-sm transition-all pointer-events-none">
+                {{ $t('contact.emailAddress') }}
+              </label>
+            </div>
+            
+            <div class="relative">
+              <textarea 
+                v-model="form.message" 
+                required
+                :placeholder="$t('contact.tellProject')"
+                rows="5"
+                class="w-full bg-transparent border-b-2 border-gray-300 dark:border-gray-700 py-4 text-lg text-main placeholder-transparent focus:outline-none focus:border-blue-500 transition-colors resize-none peer"
+                id="message"
+              ></textarea>
+              <label for="message" class="absolute left-0 -top-3 text-sm text-sub font-mono uppercase tracking-widest peer-placeholder-shown:top-4 peer-placeholder-shown:text-base peer-focus:-top-3 peer-focus:text-sm transition-all pointer-events-none">
+                {{ $t('contact.tellProject') }}
               </label>
             </div>
 
-            <div class="group relative">
-              <textarea 
-                id="message" 
-                v-model="form.message"
-                rows="4"
-                required
-                class="block py-4 px-0 w-full text-xl text-main bg-transparent border-0 border-b-2 border-gray-300 dark:border-gray-700 appearance-none focus:outline-none focus:ring-0 focus:border-blue-500 peer resize-none placeholder-transparent"
-                placeholder=" "
-              ></textarea>
-              <label for="message" class="peer-focus:font-medium absolute text-lg text-gray-500 dark:text-gray-400 duration-300 transform -translate-y-8 scale-75 top-4 -z-10 origin-[0] peer-focus:left-0 peer-focus:text-blue-500 peer-placeholder-shown:scale-100 peer-placeholder-shown:translate-y-0 peer-focus:scale-75 peer-focus:-translate-y-8">
-                Tell me about your project
-              </label>
+            <!-- Success Message -->
+            <div v-if="successMessage" class="py-3 px-4 bg-green-500/10 border border-green-500/30 rounded-lg text-green-500 text-sm">
+              {{ $t('contact.successMessage') }}
             </div>
 
             <button 
-              type="submit" 
-              :disabled="isSubmitting"
-              class="group relative inline-flex items-center justify-center px-8 py-4 text-lg font-bold text-main transition-all duration-200 bg-transparent border-2 border-gray-300 dark:border-white/20 hover:border-main hover:bg-main hover:text-white dark:hover:text-black focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-main disabled:opacity-50 disabled:cursor-not-allowed w-full md:w-auto overflow-hidden rounded-full"
+              type="submit"
+              :disabled="sending"
+              class="group w-full md:w-auto px-12 py-4 bg-main text-charcoal font-bold text-sm uppercase tracking-[0.2em] rounded-full hover:shadow-lg hover:shadow-blue-500/20 transition-all relative overflow-hidden disabled:opacity-50"
             >
-              <span v-if="!isSubmitting" class="relative z-10 flex items-center">
-                SEND MESSAGE 
-                <i class="pi pi-arrow-right ml-3 group-hover:translate-x-1 transition-transform"></i>
-              </span>
-              <span v-else class="relative z-10">SENDING...</span>
+              <span class="relative z-10">{{ sending ? $t('contact.sending') : $t('contact.sendMessage') }}</span>
             </button>
-
-            <!-- Status Message -->
-            <div v-if="submitMessage" class="mt-6 text-sm" :class="submitStatus === 'success' ? 'text-green-500' : 'text-red-500'">
-              {{ submitMessage }}
-            </div>
           </form>
         </div>
 
-        <!-- Contact Info & Socials -->
-        <div ref="contactInfoEl" class="flex flex-col justify-between h-full space-y-12 md:space-y-0 opacity-0">
+        <!-- Contact Info (Sidebar) -->
+        <div ref="infoEl" class="md:col-span-2 space-y-12 opacity-0">
+          
+          <!-- Direct Contact -->
           <div>
-            <h3 class="text-sm font-bold tracking-[0.2em] text-sub uppercase mb-8">Direct Contact</h3>
-            <a href="mailto:xusniddinqalandarov2004@gmail.com" class="text-2xl md:text-3xl font-light text-main hover:text-blue-500 transition-colors block mb-4 break-words">
-              xusniddinqalandarov2004<br>@gmail.com
-            </a>
+            <h3 class="text-xs font-bold text-sub uppercase tracking-[0.2em] mb-6">{{ $t('contact.directContact') }}</h3>
+            <div class="space-y-4">
+              <a href="mailto:xusniddinqalandarov2004@gmail.com" class="flex items-center gap-4 group">
+                <i class="pi pi-envelope text-lg text-sub group-hover:text-blue-500 transition-colors"></i>
+                <span class="text-sub group-hover:text-main transition-colors text-sm">xusniddinqalandarov2004@gmail.com</span>
+              </a>
+            </div>
           </div>
 
+          <!-- Socials -->
           <div>
-             <h3 class="text-sm font-bold tracking-[0.2em] text-sub uppercase mb-8">Socials</h3>
-             <ul class="space-y-4">
-               <li>
-                 <a href="https://github.com/Xusniddin-devv" target="_blank" class="group flex items-center text-xl text-sub hover:text-main transition-colors">
-                   <span class="w-8 h-[1px] bg-gray-400 dark:bg-gray-600 group-hover:bg-main mr-4 transition-colors"></span>
-                   GitHub
-                 </a>
-               </li>
-               <li>
-                 <a href="https://www.linkedin.com/in/xusniddin-qalandarov/" target="_blank" class="group flex items-center text-xl text-sub hover:text-main transition-colors">
-                   <span class="w-8 h-[1px] bg-gray-400 dark:bg-gray-600 group-hover:bg-main mr-4 transition-colors"></span>
-                   LinkedIn
-                 </a>
-               </li>
-               <li>
-                 <a href="https://x.com/Xusniddin_Q" target="_blank" class="group flex items-center text-xl text-sub hover:text-main transition-colors">
-                   <span class="w-8 h-[1px] bg-gray-400 dark:bg-gray-600 group-hover:bg-main mr-4 transition-colors"></span>
-                   X (Twitter)
-                 </a>
-               </li>
-             </ul>
+            <h3 class="text-xs font-bold text-sub uppercase tracking-[0.2em] mb-6">{{ $t('contact.socials') }}</h3>
+            <div class="space-y-4">
+              <a href="https://github.com/Xusniddin-devv" target="_blank" class="flex items-center gap-4 group">
+                <i class="pi pi-github text-lg text-sub group-hover:text-main transition-colors"></i>
+                <span class="text-sub group-hover:text-main transition-colors text-sm">GitHub</span>
+              </a>
+              <a href="https://www.linkedin.com/in/xusniddin-qalandarov/" target="_blank" class="flex items-center gap-4 group">
+                <i class="pi pi-linkedin text-lg text-sub group-hover:text-blue-500 transition-colors"></i>
+                <span class="text-sub group-hover:text-main transition-colors text-sm">LinkedIn</span>
+              </a>
+              <a href="https://x.com/Xusniddin_Q" target="_blank" class="flex items-center gap-4 group">
+                <i class="pi pi-twitter text-lg text-sub group-hover:text-blue-400 transition-colors"></i>
+                <span class="text-sub group-hover:text-main transition-colors text-sm">X (Twitter)</span>
+              </a>
+              <a href="https://t.me/invaluable_me" target="_blank" class="flex items-center gap-4 group">
+                <i class="pi pi-send text-lg text-sub group-hover:text-blue-500 transition-colors"></i>
+                <span class="text-sub group-hover:text-main transition-colors text-sm">Telegram</span>
+              </a>
+            </div>
           </div>
+
         </div>
 
       </div>
@@ -121,58 +123,60 @@
 <script setup>
 import { gsap } from 'gsap';
 
-const form = ref({ name: '', email: '', message: '' });
-const isSubmitting = ref(false);
-const submitMessage = ref('');
-const submitStatus = ref('');
+const { t } = useI18n()
 
-const headerEl = ref(null);
-const formEl = ref(null);
-const contactInfoEl = ref(null);
+const form = ref({
+  name: '',
+  email: '',
+  message: ''
+})
+const sending = ref(false)
+const successMessage = ref(false)
 
-const submitForm = async () => {
-  isSubmitting.value = true;
-  // Simulate API call
-  await new Promise(resolve => setTimeout(resolve, 1500));
-  
-  submitStatus.value = 'success';
-  submitMessage.value = 'Message sent successfully. I will be in touch.';
-  form.value = { name: '', email: '', message: '' };
-  isSubmitting.value = false;
-};
+const headerEl = ref(null)
+const formEl = ref(null)
+const infoEl = ref(null)
+
+const sendMessage = async () => {
+  sending.value = true
+  try {
+    await $fetch('/api/contact', {
+      method: 'POST',
+      body: form.value
+    })
+
+    successMessage.value = true
+    form.value = { name: '', email: '', message: '' }
+    
+    setTimeout(() => {
+      successMessage.value = false
+    }, 5000)
+  } catch (error) {
+    console.error('Failed to send message:', error)
+    alert('Failed to send message. Please try again.')
+  } finally {
+    sending.value = false
+  }
+}
 
 onMounted(() => {
   if (process.client) {
-    nextTick(() => {
-      const tl = gsap.timeline();
-      
-      tl.fromTo(headerEl.value, { y: 50, opacity: 0 }, { y: 0, opacity: 1, duration: 1, ease: "power3.out" })
-        .fromTo(formEl.value, { x: -30, opacity: 0 }, { x: 0, opacity: 1, duration: 1, ease: "power3.out" }, "-=0.5")
-        .fromTo(contactInfoEl.value, { x: 30, opacity: 0 }, { x: 0, opacity: 1, duration: 1, ease: "power3.out" }, "-=0.8");
-    });
+    const tl = gsap.timeline();
+    tl.fromTo(headerEl.value, { y: 50, opacity: 0 }, { y: 0, opacity: 1, duration: 1.2, ease: "power3.out"})
+      .fromTo(formEl.value, { y: 30, opacity: 0 }, { y: 0, opacity: 1, duration: 1, ease: "power3.out"}, "-=0.8")
+      .fromTo(infoEl.value, { y: 30, opacity: 0 }, { y: 0, opacity: 1, duration: 1, ease: "power3.out"}, "-=0.8");
   }
 });
 
 useSeoMeta({
-  title: 'Contact - Xusniddin Qalandarov',
-  description: 'Get in touch for collaborations.'
+  title: () => t('contact.seoTitle'),
+  description: () => t('contact.seoDescription')
 })
 </script>
 
 <style scoped>
-.text-main {
-  color: var(--color-text-primary);
-}
-.text-sub {
-  color: var(--color-text-secondary);
-}
-.bg-main {
-  background-color: var(--color-text-primary);
-}
-.hover\:text-main:hover {
-  color: var(--color-text-primary);
-}
-.hover\:bg-main:hover {
-  background-color: var(--color-text-primary);
-}
+.text-main { color: var(--color-text-primary); }
+.text-sub { color: var(--color-text-secondary); }
+.bg-main { background-color: var(--color-text-primary); }
+.text-charcoal { color: var(--color-bg-primary); }
 </style>

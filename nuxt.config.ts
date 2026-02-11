@@ -20,8 +20,25 @@ export default defineNuxtConfig({
   modules: [
     '@nuxtjs/supabase',
     '@nuxtjs/tailwindcss', 
-    '@nuxt/image'
+    '@nuxt/image',
+    '@nuxtjs/i18n'
   ],
+  
+  i18n: {
+    locales: [
+      { code: 'en', name: 'English', file: 'en.json' },
+      { code: 'ru', name: 'Русский', file: 'ru.json' }
+    ],
+    defaultLocale: 'en',
+    langDir: 'locales',
+    strategy: 'no_prefix',
+    detectBrowserLanguage: {
+      useCookie: true,
+      cookieKey: 'i18n_redirected',
+      redirectOn: 'root'
+    }
+  },
+
   supabase: {
     redirect: false, // Disable auto-redirect to /login
     types: false, // Disable automatic type generation

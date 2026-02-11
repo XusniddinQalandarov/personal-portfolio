@@ -13,10 +13,10 @@
       <!-- Minimalist Hero Content -->
       <div class="relative z-10 text-center px-4 max-w-5xl mx-auto">
         <h1 ref="heroTitle" class="text-6xl md:text-8xl lg:text-9xl font-black tracking-tighter mb-6 uppercase text-transparent bg-clip-text bg-gradient-to-br from-white via-gray-200 to-gray-400 drop-shadow-2xl opacity-0">
-          Iron & Code
+          {{ $t('fitness.heroTitle') }}
         </h1>
         <p ref="heroSubtitle" class="text-xl md:text-2xl font-light tracking-widest text-gray-200 uppercase mb-12 drop-shadow-md opacity-0">
-          Forging Resilience • Lifetime Natural • 81kg
+          {{ $t('fitness.heroSubtitle') }}
         </p>
         <div ref="heroIcon" class="animate-bounce">
           <i class="pi pi-arrow-down text-2xl text-white/50"></i>
@@ -27,14 +27,14 @@
     <!-- Editorial Philosophy Section -->
     <div class="py-32 px-6 md:px-12 max-w-5xl mx-auto relative z-10">
       <div ref="philosophyText" class="text-3xl md:text-5xl font-serif font-light leading-tight text-main text-center opacity-0">
-        "The gym is my compiler for the mind. Errors are caught under the bar, and optimization happens one rep at a time."
+        {{ $t('fitness.philosophy') }}
       </div>
     </div>
 
     <!-- Routine Section (No Cards) -->
     <div ref="routineSection" class="py-24 relative z-10">
       <div class="px-6 md:px-12 mb-16 max-w-7xl mx-auto">
-        <h2 class="text-sm font-bold tracking-[0.3em] uppercase text-blue-500 mb-4">The Routine</h2>
+        <h2 class="text-sm font-bold tracking-[0.3em] uppercase text-blue-500 mb-4">{{ $t('fitness.routineTitle') }}</h2>
         <div class="h-px w-full bg-gray-200 dark:bg-white/10"></div>
       </div>
 
@@ -69,7 +69,7 @@
            style="background-image: url('/images/gym2.webp');"></div>
       <div class="absolute inset-0 bg-black/40 flex items-center justify-center">
         <h2 class="text-5xl md:text-7xl font-black uppercase text-white tracking-tighter mix-blend-overlay">
-          Endurance
+          {{ $t('fitness.endurance') }}
         </h2>
       </div>
     </div>
@@ -80,7 +80,7 @@
         
         <!-- Stats Column -->
         <div>
-          <h2 class="text-sm font-bold tracking-[0.3em] uppercase text-purple-500 mb-12">Vital Statistics</h2>
+          <h2 class="text-sm font-bold tracking-[0.3em] uppercase text-purple-500 mb-12">{{ $t('fitness.vitalStats') }}</h2>
           <div class="space-y-16">
             <div v-for="stat in stats" :key="stat.label" class="stat-item group opacity-0">
               <div class="text-6xl md:text-7xl font-light text-main mb-2 tracking-tight group-hover:text-purple-500 transition-colors">{{ stat.value }}</div>
@@ -91,7 +91,7 @@
 
         <!-- PRs Column -->
         <div>
-          <h2 class="text-sm font-bold tracking-[0.3em] uppercase text-blue-500 mb-12">Personal Records</h2>
+          <h2 class="text-sm font-bold tracking-[0.3em] uppercase text-blue-500 mb-12">{{ $t('fitness.personalRecords') }}</h2>
           <div class="space-y-12">
             <div v-for="pr in prCategories" :key="pr.name" class="pr-category">
                <h3 class="text-2xl font-bold text-sub mb-6 flex items-center gap-3">
@@ -118,6 +118,8 @@ import { ScrollTrigger } from 'gsap/ScrollTrigger';
 
 gsap.registerPlugin(ScrollTrigger);
 
+const { locale } = useI18n()
+
 const heroTitle = ref(null);
 const heroSubtitle = ref(null);
 const heroBg = ref(null);
@@ -125,24 +127,36 @@ const philosophyText = ref(null);
 const routineSection = ref(null);
 const parallaxImg = ref(null);
 
-// Data
-const workoutSplit = [
+// Bilingual Data
+const workoutSplit = computed(() => locale.value === 'ru' ? [
+  { id: 1, name: "День Жима", focus: "Грудь, Плечи, Трицепс", exercises: ["Жим лёжа (5x5)", "Жим стоя", "Жим гантелей на наклонной", "Махи в стороны", "Разгибания на трицепс"] },
+  { id: 2, name: "День Тяги", focus: "Спина, Бицепс, Задние дельты", exercises: ["Становая тяга (3x5)", "Подтягивания (с весом)", "Тяга штанги в наклоне", "Разведения назад", "Молотковые сгибания"] },
+  { id: 3, name: "День Ног", focus: "Квадрицепсы, Бицепс бедра, Икры", exercises: ["Приседания (5x5)", "Румынская тяга", "Жим ногами", "Подъёмы на носки", "Выпады"] },
+  { id: 4, name: "Кардио и Пресс", focus: "Выносливость, Пресс", exercises: ["Бег 5 км", "Подъём ног в висе", "Планка", "Спринты", "Прыжки на тумбу"] }
+] : [
   { id: 1, name: "Push Day", focus: "Chest, Shoulders, Triceps", exercises: ["Bench Press (5x5)", "Overhead Press", "Incline Dumbbell Press", "Lateral Raises", "Tricep Extensions"] },
   { id: 2, name: "Pull Day", focus: "Back, Biceps, Rear Delts", exercises: ["Deadlifts (3x5)", "Pull-Ups (Weighted)", "Barbell Rows", "Face Pulls", "Hammer Curls"] },
   { id: 3, name: "Legs Day", focus: "Quads, Hamstrings, Calves", exercises: ["Squats (5x5)", "Romanian Deadlifts", "Leg Press", "Calf Raises", "Walking Lunges"] },
   { id: 4, name: "Cardio & Core", focus: "Endurance, Abs", exercises: ["5km Run", "Hanging Leg Raises", "Planks", "Sprints", "Box Jumps"] }
-];
+]);
 
-const stats = [
+const stats = computed(() => locale.value === 'ru' ? [
+  { label: "Масса тела", value: "81кг" },
+  { label: "Процент жира", value: "12-14%" },
+  { label: "Стаж тренировок", value: "2 Года" }
+] : [
   { label: "Body Weight", value: "81kg" },
   { label: "Body Fat", value: "12-14%" },
   { label: "Training Age", value: "2 Years" }
-];
+]);
 
-const prCategories = [
+const prCategories = computed(() => locale.value === 'ru' ? [
+  { name: "Большая тройка", icon: "pi pi-bolt", exercises: [{ name: "Присед", weight: 120 }, { name: "Жим", weight: 90 }, { name: "Тяга", weight: 140 }] },
+  { name: "Калистеника", icon: "pi pi-star", exercises: [{ name: "Подтягивания", weight: "+10" }, { name: "Брусья", weight: "+15" }] }
+] : [
   { name: "The Big Three", icon: "pi pi-bolt", exercises: [{ name: "Squat", weight: 120 }, { name: "Bench", weight: 90 }, { name: "Deadlift", weight: 140 }] },
   { name: "Calisthenics", icon: "pi pi-star", exercises: [{ name: "Pull-ups", weight: "+10" }, { name: "Dips", weight: "+15" }] }
-];
+]);
 
 onMounted(() => {
   // Hero Animation

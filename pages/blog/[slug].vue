@@ -8,10 +8,10 @@
 
     <!-- Error State -->
     <div v-else-if="error" class="max-w-4xl mx-auto px-4 text-center py-20">
-      <h1 class="text-3xl font-bold mb-4">Blog Not Found</h1>
-      <p class="text-sub mb-8">The blog post you're looking for doesn't exist.</p>
+      <h1 class="text-3xl font-bold mb-4">{{ $t('blogs.blogNotFound') }}</h1>
+      <p class="text-sub mb-8">{{ $t('blogs.blogNotFoundDesc') }}</p>
       <NuxtLink to="/blogs" class="inline-flex items-center gap-2 text-blue-500 font-bold uppercase tracking-widest hover:underline">
-        <i class="pi pi-arrow-left"></i> Back to Blogs
+        <i class="pi pi-arrow-left"></i> {{ $t('blogs.backToBlogs') }}
       </NuxtLink>
     </div>
 
@@ -23,7 +23,7 @@
         to="/blogs"
         class="inline-flex items-center gap-2 text-xs font-mono text-sub uppercase tracking-widest hover:text-main mb-12 transition-colors opacity-0 back-link"
       >
-        <i class="pi pi-arrow-left"></i> BACK TO INSIGHTS
+        <i class="pi pi-arrow-left"></i> {{ $t('blogs.backToInsights') }}
       </NuxtLink>
 
       <!-- Header -->
@@ -35,7 +35,7 @@
         </div>
 
         <h1 class="text-4xl md:text-6xl font-black tracking-tight text-main mb-8 leading-tight">
-          {{ blog.title }}
+          {{ localField(blog, 'title') }}
         </h1>
         
         <!-- Tags -->
@@ -68,7 +68,7 @@
         <div class="flex flex-col md:flex-row items-center justify-between gap-8">
           
           <div class="text-center md:text-left">
-            <h3 class="text-sm font-bold uppercase tracking-widest text-main mb-2">Share this article</h3>
+            <h3 class="text-sm font-bold uppercase tracking-widest text-main mb-2">{{ $t('blogs.shareArticle') }}</h3>
             <div class="flex gap-4">
               <a :href="shareUrls.twitter" target="_blank" class="text-sub hover:text-blue-400 transition-colors"><i class="pi pi-twitter text-xl"></i></a>
               <a :href="shareUrls.linkedin" target="_blank" class="text-sub hover:text-blue-700 transition-colors"><i class="pi pi-linkedin text-xl"></i></a>
@@ -79,7 +79,7 @@
           </div>
 
           <NuxtLink to="/blogs" class="btn-primary px-8 py-3 rounded-full border border-gray-200 dark:border-white/20 hover:border-main transition-colors text-sm font-bold uppercase tracking-widest">
-            Read More Articles
+            {{ $t('blogs.readMore') }}
           </NuxtLink>
 
         </div>
@@ -92,6 +92,8 @@
 <script setup>
 import { gsap } from 'gsap';
 const { isDark } = useTheme();
+const { locale } = useI18n()
+const { localField } = useLocalizedContent()
 const route = useRoute()
 const slug = route.params.slug
 
@@ -108,11 +110,9 @@ const loadBlog = async () => {
   try {
     loading.value = true
     error.value = false
-    // Mock for demo if needed, otherwise fetch
     const { data } = await $fetch(`/api/blog/${slug}`).catch(() => ({ data: null }))
     
     if (!data) {
-        // Fallback mock check
         if (slug === 'future-ai-agents') {
             blog.value = {
                 title: "The Future of AI Agents in Web Development",
@@ -121,10 +121,6 @@ const loadBlog = async () => {
                 tags: ["AI", "Future", "WebDev"],
                 image_url: "https://images.unsplash.com/photo-1677442136019-21780ecad995"
             }
-        } else {
-             // Try to use passed data or error
-             // For now assume API works
-             // error.value = true 
         }
     } else {
         blog.value = data
@@ -151,14 +147,16 @@ const initAnimations = () => {
 }
 
 const renderedContent = computed(() => {
-  if (!blog.value?.content) return ''
-  let html = blog.value.content
+  if (!blog.value) return ''
+  const content = localField(blog.value, 'content')
+  if (!content) return ''
+  let html = content
     .replace(/^### (.*$)/gim, '<h3>$1</h3>')
     .replace(/^## (.*$)/gim, '<h2>$1</h2>')
     .replace(/^# (.*$)/gim, '<h1>$1</h1>')
     .replace(/\*\*(.*?)\*\*/gim, '<strong>$1</strong>')
     .replace(/\*(.*?)\*/gim, '<em>$1</em>')
-    .replace(/> "(.*?)"/gim, '<blockquote>$1</blockquote>') // Blockquote
+    .replace(/> "(.*?)"/gim, '<blockquote>$1</blockquote>')
     .replace(/\n/gim, '<br>')
   return html
 })
@@ -182,7 +180,7 @@ const copyLink = async () => {
     } catch (e) { console.error(e) }
 }
 
-const formatDate = (date) => new Date(date).toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' })
+const formatDate = (date) => new Date(date).toLocaleDateString(locale.value === 'ru' ? 'ru-RU' : 'en-US', { year: 'numeric', month: 'long', day: 'numeric' })
 
 useSeoMeta({
   title: () => blog.value?.title,

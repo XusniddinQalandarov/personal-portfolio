@@ -5,10 +5,10 @@
       <!-- Minimalist Header -->
       <div ref="headerEl" class="mb-24 px-4 md:px-0 opacity-0">
         <h1 class="text-6xl md:text-8xl font-black tracking-tighter mb-8 text-main opacity-90">
-          EXPERIENCE
+          {{ $t('experience.title') }}
         </h1>
         <p class="text-xl md:text-2xl font-light text-sub max-w-2xl leading-relaxed">
-          A timeline of technical evolution. From high school algorithms to enterprise-scale applications and AI agents.
+          {{ $t('experience.subtitle') }}
         </p>
       </div>
 
@@ -37,13 +37,13 @@
 
             <!-- Title & Company -->
             <h2 class="text-3xl md:text-4xl font-bold text-main mb-1 group-hover:text-blue-500 transition-colors duration-300">
-              {{ experience.title }}
+              {{ localField(experience, 'title') }}
             </h2>
-            <h3 class="text-xl text-sub font-medium mb-6">{{ experience.company }}</h3>
+            <h3 class="text-xl text-sub font-medium mb-6">{{ localField(experience, 'company') }}</h3>
 
             <!-- Description -->
             <p class="text-lg text-sub font-light leading-relaxed mb-6">
-              {{ experience.description }}
+              {{ localField(experience, 'description') }}
             </p>
 
             <!-- Tech Stack (Minimal) -->
@@ -55,8 +55,8 @@
             </div>
 
             <!-- Achievements (Bulleted, Minimal) -->
-            <ul v-if="experience.achievements" class="space-y-2 border-l border-gray-300 dark:border-white/10 pl-6">
-              <li v-for="ach in experience.achievements" :key="ach" class="text-sub text-sm leading-relaxed">
+            <ul v-if="localAchievements(experience).length" class="space-y-2 border-l border-gray-300 dark:border-white/10 pl-6">
+              <li v-for="ach in localAchievements(experience)" :key="ach" class="text-sub text-sm leading-relaxed">
                 {{ ach }}
               </li>
             </ul>
@@ -67,14 +67,14 @@
 
       <!-- Education Section (List Style) -->
       <div class="mt-32 px-4 md:px-0">
-        <h2 class="text-4xl md:text-5xl font-black text-main mb-16 tracking-tight">EDUCATION</h2>
+        <h2 class="text-4xl md:text-5xl font-black text-main mb-16 tracking-tight">{{ $t('experience.educationTitle') }}</h2>
         <div class="grid gap-12 border-t border-gray-200 dark:border-white/10 pt-12">
-          <div v-for="edu in education" :key="edu.id" class="grid md:grid-cols-12 gap-6 group hover:bg-gray-100 dark:hover:bg-gray-800 p-6 rounded-lg transition-colors -mx-6">
+          <div v-for="edu in educationList" :key="edu.id" class="grid md:grid-cols-12 gap-6 group hover:bg-gray-100 dark:hover:bg-gray-800 p-6 rounded-lg transition-colors -mx-6">
             <div class="md:col-span-3 text-sub font-mono text-sm">{{ edu.year }}</div>
             <div class="md:col-span-9">
-              <h3 class="text-2xl font-bold text-main mb-2 group-hover:text-blue-500 transition-colors">{{ edu.degree }}</h3>
-              <div class="text-xl text-sub mb-4">{{ edu.school }}</div>
-              <p class="text-sub font-light">{{ edu.description }}</p>
+              <h3 class="text-2xl font-bold text-main mb-2 group-hover:text-blue-500 transition-colors">{{ localField(edu, 'degree') }}</h3>
+              <div class="text-xl text-sub mb-4">{{ localField(edu, 'school') }}</div>
+              <p class="text-sub font-light">{{ localField(edu, 'description') }}</p>
             </div>
           </div>
         </div>
@@ -90,92 +90,148 @@ import { ScrollTrigger } from 'gsap/ScrollTrigger';
 
 gsap.registerPlugin(ScrollTrigger);
 
-// Data
+const { t } = useI18n()
+const { localField, locale } = useLocalizedContent()
+
+// Helper for arrays (achievements)
+const localAchievements = (item) => {
+  if (locale.value === 'ru' && item.achievements_ru && item.achievements_ru.length) {
+    return item.achievements_ru
+  }
+  return item.achievements || []
+}
+
+// Data with bilingual support
 const experiences = ref([
   {
     id: 1,
     title: "Frontend Developer",
+    title_ru: "Фронтенд Разработчик",
     company: "UZINFOCOM",
+    company_ru: "УЗИНФОКОМ",
     period: "May 2025 - Present",
     description: "Building responsive SPAs and improving UX across multiple projects. Developing interactive data visualization solutions and modernizing university websites.",
+    description_ru: "Создание адаптивных SPA и улучшение UX в нескольких проектах. Разработка интерактивных решений для визуализации данных и модернизация университетских сайтов.",
     technologies: ["Angular 19", "Tailwind CSS", "ECharts", "RxJS"],
     achievements: [
       "Improved page load times by ~20%",
       "Built interactive SVG map of Uzbekistan",
       "Reduced manual reporting by 30%"
+    ],
+    achievements_ru: [
+      "Улучшил время загрузки страниц на ~20%",
+      "Создал интерактивную SVG-карту Узбекистана",
+      "Сократил ручную отчётность на 30%"
     ]
   },
   {
     id: 2,
     title: "Mobile Developer",
+    title_ru: "Мобильный Разработчик",
     company: "Startup",
+    company_ru: "Стартап",
     period: "June 2025 - Present",
     description: "Developing a React Native Expo mobile app for stadium booking. Integrated push notifications and OTA updates.",
+    description_ru: "Разработка мобильного приложения на React Native Expo для бронирования стадионов. Интеграция push-уведомлений и OTA-обновлений.",
     technologies: ["React Native", "Expo", "Firebase", "CodePush"],
     achievements: [
       "Integrated deep linking & OTA updates",
       "Optimized list rendering performance"
+    ],
+    achievements_ru: [
+      "Интегрировал deep linking и OTA-обновления",
+      "Оптимизировал производительность рендеринга списков"
     ]
   },
   {
     id: 3,
     title: "AI & Automation Developer",
+    title_ru: "Разработчик ИИ и Автоматизации",
     company: "Independent",
+    company_ru: "Независимый",
     period: "Dec 2024 - Present",
     description: "Developing intelligent automation tools and AI-powered applications for various clients.",
+    description_ru: "Разработка интеллектуальных инструментов автоматизации и приложений на основе ИИ для различных клиентов.",
     technologies: ["Node.js", "OpenAI API", "Python", "Angular"],
     achievements: [
       "Built Content Creator Bot with auto-posting",
       "Developed Notifier Bot sold to US logistics co."
+    ],
+    achievements_ru: [
+      "Создал бот для генерации контента с автопостингом",
+      "Разработал бот-уведомитель, проданный логистической компании в США"
     ]
   },
   {
     id: 4,
     title: "IELTS Instructor",
+    title_ru: "Преподаватель IELTS",
     company: "King's Academy",
+    company_ru: "King's Academy",
     period: "Oct 2023 - Oct 2024",
     description: "Teaching English and IELTS preparation to 100+ students.",
+    description_ru: "Преподавание английского языка и подготовка к IELTS для 100+ студентов.",
     technologies: ["Leadership", "Communication", "Planning"],
     achievements: [
       "+1.5 average band-score improvement",
       "85% pass rate for students"
+    ],
+    achievements_ru: [
+      "Средний рост балла на +1.5",
+      "85% студентов успешно сдали экзамен"
     ]
   },
   {
     id: 5,
     title: "Frontend Developer",
+    title_ru: "Фронтенд Разработчик",
     company: "Selected Projects",
+    company_ru: "Избранные проекты",
     period: "Dec 2024 - Apr 2025",
     description: "Developing various front-end applications including e-commerce platforms.",
+    description_ru: "Разработка различных фронтенд-приложений, включая платформы электронной коммерции.",
     technologies: ["Angular", "GraphQL", "RxJS", "Material"],
     achievements: [
       "Built secure e-commerce platform",
       "Cut initial payload by 25%"
+    ],
+    achievements_ru: [
+      "Создал защищённую платформу электронной коммерции",
+      "Сократил начальную загрузку на 25%"
     ]
   }
 ]);
 
-const education = ref([
+const educationList = ref([
   {
     id: 1,
     degree: "B.Sc. Computer Science",
+    degree_ru: "Бакалавр Информатики",
     school: "Presidential University, Tashkent",
+    school_ru: "Президентский Университет, Ташкент",
     year: "Expected 2026",
-    description: "Focus on Data Structures, Algorithms, and AI Agents."
+    description: "Focus on Data Structures, Algorithms, and AI Agents.",
+    description_ru: "Фокус на структурах данных, алгоритмах и ИИ-агентах."
   },
   {
     id: 2,
     degree: "High School Diploma",
+    degree_ru: "Аттестат о среднем образовании",
     school: "Khiva Presidential School",
+    school_ru: "Хивинская Президентская школа",
     year: "2022",
-    description: "GPA: 4.92/5.00 | IELTS: 7.5 | SAT: 1270"
+    description: "GPA: 4.92/5.00 | IELTS: 7.5 | SAT: 1270",
+    description_ru: "Средний балл: 4.92/5.00 | IELTS: 7.5 | SAT: 1270"
   },
   {
     id: 3,
     degree: "Frontend Certification",
+    degree_ru: "Сертификация по Фронтенд-разработке",
     school: "USTUDY",
+    school_ru: "USTUDY",
     year: "2025",
-    description: "Advanced modern web development practices."
+    description: "Advanced modern web development practices.",
+    description_ru: "Продвинутые практики современной веб-разработки."
   }
 ]);
 
@@ -209,8 +265,8 @@ onMounted(() => {
 });
 
 useSeoMeta({
-  title: 'Experience - Xusniddin Qalandarov',
-  description: 'My professional timeline and education.'
+  title: () => t('experience.seoTitle'),
+  description: () => t('experience.seoDescription')
 })
 </script>
 
