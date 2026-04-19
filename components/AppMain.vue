@@ -1,60 +1,57 @@
 <template>
-  <div class="h-screen w-full flex flex-col justify-center px-6 md:px-24 overflow-hidden relative">
+  <div class="h-screen w-full overflow-hidden relative flex items-center">
     
-    <!-- Background Gradient Mesh -->
-    <div class="absolute inset-0 z-0 opacity-30 dark:opacity-20 pointer-events-none">
-      <div class="absolute top-[-20%] right-[-10%] w-[60vw] h-[60vw] bg-blue-500/30 rounded-full blur-[100px] animate-float"></div>
-      <div class="absolute bottom-[-20%] left-[-10%] w-[50vw] h-[50vw] bg-purple-500/30 rounded-full blur-[100px] animate-float" style="animation-delay: 2s"></div>
+    <!-- Full-bleed background image, face positioned center-right -->
+    <div class="absolute inset-0 z-0">
+      <div 
+        ref="heroBg"
+        class="absolute inset-0 opacity-0"
+        style="
+          background-image: url('/images/hero3.webp');
+          background-size: cover;
+          background-position: center 45%;
+        "
+      ></div>
+      <!-- Strong dark gradient on the left for text, fades out by center -->
+      <div class="absolute inset-0" style="background: linear-gradient(to right, rgba(12,10,9,0.97) 0%, rgba(12,10,9,0.88) 30%, rgba(12,10,9,0.55) 52%, rgba(12,10,9,0.08) 72%, transparent 100%);"></div>
+      <!-- Subtle top/bottom vignette -->
+      <div class="absolute inset-0 bg-gradient-to-b from-black/40 via-transparent to-black/50"></div>
     </div>
 
-    <div class="relative z-10 max-w-7xl mx-auto w-full">
-      
-      <!-- Greeting / Tag -->
-      <div ref="tagEl" class="mb-6 flex items-center gap-3 opacity-0">
-        <span class="w-12 h-[1px] bg-blue-500"></span>
-        <span class="text-blue-500 font-mono text-sm uppercase tracking-widest">{{ $t('home.tag') }}</span>
-      </div>
+    <!-- Content pinned to the left ~40% -->
+    <div class="relative z-10 w-full px-8 md:px-20">
+      <div class="max-w-sm md:max-w-md lg:max-w-lg">
 
-      <!-- Main Headline -->
-      <h1 ref="titleEl" class="text-5xl md:text-7xl lg:text-9xl font-black text-main leading-[0.9] tracking-tighter mb-8 uppercase opacity-0">
-        {{ $t('home.headline1') }}<br>
-        <span class="text-transparent bg-clip-text bg-gradient-to-r from-blue-500 to-purple-600">{{ $t('home.headline2') }}</span><br>
-        {{ $t('home.headline3') }}
-      </h1>
+        <!-- Tag -->
+        <div ref="tagEl" class="mb-5 flex items-center gap-3 opacity-0">
+          <span class="w-8 h-px bg-accent-amber"></span>
+          <span class="text-accent-amber font-mono text-xs uppercase tracking-widest">{{ $t('home.tag') }}</span>
+        </div>
 
-      <!-- Subtitle -->
-      <p ref="subtitleEl" class="text-lg md:text-2xl text-sub max-w-2xl font-light leading-relaxed mb-12 opacity-0">
-        {{ $t('home.subtitle') }}
-      </p>
+        <!-- Headline — tighter sizing so it stays in left column -->
+        <h1 ref="titleEl" class="text-5xl md:text-7xl lg:text-8xl font-display font-black text-white leading-[0.9] tracking-tighter mb-6 uppercase opacity-0">
+          {{ $t('home.headline1') }}<br>
+          <span class="text-transparent bg-clip-text bg-gradient-to-r from-accent-amber to-accent-copper">{{ $t('home.headline2') }}</span><br>
+          {{ $t('home.headline3') }}
+        </h1>
 
-      <!-- Buttons -->
-      <div ref="buttonsEl" class="flex flex-wrap items-center gap-6 opacity-0">
-        <NuxtLink to="/projects" class="group relative px-8 py-4 bg-main text-charcoal font-bold text-lg rounded-full overflow-hidden hover:text-black transition-colors duration-300">
-          <span class="relative z-10 flex items-center">
+        <!-- Subtitle -->
+        <p ref="subtitleEl" class="text-base md:text-lg text-gray-300 font-light leading-relaxed mb-10 opacity-0">
+          {{ $t('home.subtitle') }}
+        </p>
+
+        <!-- Buttons -->
+        <div ref="buttonsEl" class="flex flex-wrap items-center gap-4 opacity-0">
+          <NuxtLink to="/projects" class="group px-6 py-3 bg-accent-amber text-dark-900 font-bold text-sm rounded-full hover:bg-accent-copper transition-colors duration-300 flex items-center">
             {{ $t('home.viewProjects') }}
-            <i class="pi pi-arrow-right ml-3 group-hover:translate-x-1 transition-transform"></i>
-          </span>
-        </NuxtLink>
+            <i class="pi pi-arrow-right ml-2 group-hover:translate-x-1 transition-transform text-sm"></i>
+          </NuxtLink>
+          <NuxtLink to="/contact" class="px-6 py-3 border border-white/30 text-white font-medium rounded-full hover:border-accent-amber hover:text-accent-amber transition-colors text-sm">
+            {{ $t('home.contactMe') }}
+          </NuxtLink>
+        </div>
 
-        <NuxtLink to="/contact" class="px-8 py-4 border border-main/20 text-main font-medium rounded-full hover:border-main transition-colors text-lg">
-          {{ $t('home.contactMe') }}
-        </NuxtLink>
       </div>
-
-    </div>
-
-    <!-- Scroll Indicator -->
-    <div class="absolute bottom-12 left-6 md:left-24 animate-bounce">
-      <i class="pi pi-arrow-down text-2xl text-sub"></i>
-    </div>
-
-    <!-- Floating Image (Right Side) -->
-    <div ref="imageEl" class="absolute top-1/2 right-[5%] -translate-y-1/2 hidden lg:block w-[400px] h-[500px] z-50 opacity-0">
-      <NuxtImg
-        src="/images/first.jpg"
-        alt="Profile"
-        class="w-full h-full object-cover rounded-[2rem] shadow-2xl transition-all duration-700 hover:scale-105 opacity-80 hover:opacity-100"
-      />
     </div>
 
   </div>
@@ -67,31 +64,14 @@ const tagEl = ref(null);
 const titleEl = ref(null);
 const subtitleEl = ref(null);
 const buttonsEl = ref(null);
-const imageEl = ref(null);
+const heroBg = ref(null);
 
 onMounted(() => {
   const tl = gsap.timeline();
-
-  tl.fromTo(tagEl.value, { x: -20, opacity: 0 }, { x: 0, opacity: 1, duration: 1, ease: "power3.out" })
-    .fromTo(titleEl.value, { y: 50, opacity: 0 }, { y: 0, opacity: 1, duration: 1.2, ease: "power3.out" }, "-=0.8")
-    .fromTo(subtitleEl.value, { y: 20, opacity: 0 }, { y: 0, opacity: 1, duration: 1, ease: "power3.out" }, "-=0.8")
-    .fromTo(buttonsEl.value, { y: 20, opacity: 0 }, { y: 0, opacity: 1, duration: 1, ease: "power3.out" }, "-=0.8")
-    .fromTo(imageEl.value, { x: 50, opacity: 0 }, { x: 0, opacity: 1, duration: 1.5, ease: "power3.out" }, "-=1");
+  tl.fromTo(heroBg.value, { scale: 1.08, opacity: 0 }, { scale: 1.02, opacity: 1, duration: 2, ease: "power2.out" })
+    .fromTo(tagEl.value, { x: -15, opacity: 0 }, { x: 0, opacity: 1, duration: 0.9, ease: "power3.out" }, "-=1.2")
+    .fromTo(titleEl.value, { y: 40, opacity: 0 }, { y: 0, opacity: 1, duration: 1.1, ease: "power3.out" }, "-=0.8")
+    .fromTo(subtitleEl.value, { y: 20, opacity: 0 }, { y: 0, opacity: 1, duration: 0.9, ease: "power3.out" }, "-=0.8")
+    .fromTo(buttonsEl.value, { y: 15, opacity: 0 }, { y: 0, opacity: 1, duration: 0.9, ease: "power3.out" }, "-=0.8");
 });
 </script>
-
-<style scoped>
-.bg-main {
-  /* Adapts to theme */
-  background: var(--color-text-primary);
-}
-.text-charcoal {
-  color: var(--color-bg-primary);
-}
-.border-main\/20 {
-  border-color: rgba(var(--color-text-primary-rgb), 0.2); 
-  /* Fallback if rgb var missing: */
-  border-color: currentColor;
-  opacity: 0.6;
-}
-</style>

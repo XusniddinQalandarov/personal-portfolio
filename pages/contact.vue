@@ -4,10 +4,10 @@
       
       <!-- Minimalist Header -->
       <div ref="headerEl" class="mb-20 text-center md:text-left opacity-0">
-        <h1 class="text-6xl md:text-8xl font-black tracking-tighter text-main uppercase mb-6 leading-none">
+        <h1 class="text-6xl md:text-8xl font-display font-black tracking-tighter text-main uppercase mb-6 leading-none">
           {{ $t('contact.title') }}
         </h1>
-        <div class="h-1 w-24 bg-blue-500 mt-6 mb-8 mx-auto md:mx-0"></div>
+        <div class="h-1 w-24 bg-accent-amber mt-6 mb-8 mx-auto md:mx-0"></div>
         <p class="text-xl text-sub font-light max-w-xl">
           {{ $t('contact.subtitle') }}
         </p>
@@ -25,7 +25,7 @@
                 type="text" 
                 required
                 :placeholder="$t('contact.yourName')"
-                class="w-full bg-transparent border-b-2 border-gray-300 dark:border-gray-700 py-4 text-lg text-main placeholder-transparent focus:outline-none focus:border-blue-500 transition-colors peer"
+                class="w-full bg-transparent border-b-2 border-gray-300 dark:border-gray-700 py-4 text-lg text-main placeholder-transparent focus:outline-none focus:border-accent-amber transition-colors peer"
                 id="name"
               />
               <label for="name" class="absolute left-0 -top-3 text-sm text-sub font-mono uppercase tracking-widest peer-placeholder-shown:top-4 peer-placeholder-shown:text-base peer-focus:-top-3 peer-focus:text-sm transition-all pointer-events-none">
@@ -39,7 +39,7 @@
                 type="email" 
                 required
                 :placeholder="$t('contact.emailAddress')"
-                class="w-full bg-transparent border-b-2 border-gray-300 dark:border-gray-700 py-4 text-lg text-main placeholder-transparent focus:outline-none focus:border-blue-500 transition-colors peer"
+                class="w-full bg-transparent border-b-2 border-gray-300 dark:border-gray-700 py-4 text-lg text-main placeholder-transparent focus:outline-none focus:border-accent-amber transition-colors peer"
                 id="email"
               />
               <label for="email" class="absolute left-0 -top-3 text-sm text-sub font-mono uppercase tracking-widest peer-placeholder-shown:top-4 peer-placeholder-shown:text-base peer-focus:-top-3 peer-focus:text-sm transition-all pointer-events-none">
@@ -53,7 +53,7 @@
                 required
                 :placeholder="$t('contact.tellProject')"
                 rows="5"
-                class="w-full bg-transparent border-b-2 border-gray-300 dark:border-gray-700 py-4 text-lg text-main placeholder-transparent focus:outline-none focus:border-blue-500 transition-colors resize-none peer"
+                class="w-full bg-transparent border-b-2 border-gray-300 dark:border-gray-700 py-4 text-lg text-main placeholder-transparent focus:outline-none focus:border-accent-amber transition-colors resize-none peer"
                 id="message"
               ></textarea>
               <label for="message" class="absolute left-0 -top-3 text-sm text-sub font-mono uppercase tracking-widest peer-placeholder-shown:top-4 peer-placeholder-shown:text-base peer-focus:-top-3 peer-focus:text-sm transition-all pointer-events-none">
@@ -69,7 +69,7 @@
             <button 
               type="submit"
               :disabled="sending"
-              class="group w-full md:w-auto px-12 py-4 bg-main text-charcoal font-bold text-sm uppercase tracking-[0.2em] rounded-full hover:shadow-lg hover:shadow-blue-500/20 transition-all relative overflow-hidden disabled:opacity-50"
+              class="group w-full md:w-auto px-12 py-4 bg-accent-amber text-dark-900 font-bold text-sm uppercase tracking-[0.2em] rounded-full hover:bg-accent-copper transition-all relative overflow-hidden disabled:opacity-50"
             >
               <span class="relative z-10">{{ sending ? $t('contact.sending') : $t('contact.sendMessage') }}</span>
             </button>
@@ -84,7 +84,7 @@
             <h3 class="text-xs font-bold text-sub uppercase tracking-[0.2em] mb-6">{{ $t('contact.directContact') }}</h3>
             <div class="space-y-4">
               <a href="mailto:xusniddinqalandarov2004@gmail.com" class="flex items-center gap-4 group">
-                <i class="pi pi-envelope text-lg text-sub group-hover:text-blue-500 transition-colors"></i>
+                <i class="pi pi-envelope text-lg text-sub group-hover:text-accent-amber transition-colors"></i>
                 <span class="text-sub group-hover:text-main transition-colors text-sm">xusniddinqalandarov2004@gmail.com</span>
               </a>
             </div>
@@ -99,15 +99,15 @@
                 <span class="text-sub group-hover:text-main transition-colors text-sm">GitHub</span>
               </a>
               <a href="https://www.linkedin.com/in/xusniddin-qalandarov/" target="_blank" class="flex items-center gap-4 group">
-                <i class="pi pi-linkedin text-lg text-sub group-hover:text-blue-500 transition-colors"></i>
+                <i class="pi pi-linkedin text-lg text-sub group-hover:text-accent-amber transition-colors"></i>
                 <span class="text-sub group-hover:text-main transition-colors text-sm">LinkedIn</span>
               </a>
               <a href="https://x.com/Xusniddin_Q" target="_blank" class="flex items-center gap-4 group">
-                <i class="pi pi-twitter text-lg text-sub group-hover:text-blue-400 transition-colors"></i>
+                <i class="pi pi-twitter text-lg text-sub group-hover:text-accent-amber transition-colors"></i>
                 <span class="text-sub group-hover:text-main transition-colors text-sm">X (Twitter)</span>
               </a>
               <a href="https://t.me/invaluable_me" target="_blank" class="flex items-center gap-4 group">
-                <i class="pi pi-send text-lg text-sub group-hover:text-blue-500 transition-colors"></i>
+                <i class="pi pi-send text-lg text-sub group-hover:text-accent-amber transition-colors"></i>
                 <span class="text-sub group-hover:text-main transition-colors text-sm">Telegram</span>
               </a>
             </div>
@@ -171,6 +171,10 @@ onMounted(() => {
 useSeoMeta({
   title: () => t('contact.seoTitle'),
   description: () => t('contact.seoDescription')
+})
+
+definePageMeta({
+  layout: 'no-footer'
 })
 </script>
 

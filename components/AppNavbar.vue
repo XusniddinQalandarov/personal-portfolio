@@ -1,11 +1,15 @@
 <template>
-  <!-- Floating Pill Navbar Container -->
-  <div class="fixed top-4 left-4 right-4 z-50">
-    <nav class="pill-nav max-w-5xl mx-auto">
-      <div class="flex items-center justify-between h-14 px-2">
-        <!-- Logo/Brand (optional - currently hidden) -->
-        <div class="hidden lg:flex items-center">
-          <NuxtLink to="/" class="text-lg font-bold text-gradient">XQ</NuxtLink>
+  <!-- Navbar: transparent at top, blurred glass on scroll -->
+  <div 
+    ref="navbarEl"
+    class="fixed top-0 left-0 right-0 z-50 transition-all duration-500"
+    :class="scrolled ? 'navbar-scrolled' : 'navbar-top'"
+  >
+    <nav class="max-w-7xl mx-auto px-6 md:px-12 py-5">
+      <div class="flex items-center justify-between">
+        <!-- Logo/Brand -->
+        <div class="flex items-center">
+          <NuxtLink to="/" class="text-lg font-display font-bold text-gradient tracking-tight">XQ</NuxtLink>
         </div>
 
         <!-- Desktop Navigation Centered -->
@@ -25,33 +29,16 @@
           </div>
         </div>
 
-        <!-- Language Toggle, Theme Toggle & Mobile Menu Button -->
-        <div class="flex items-center space-x-2">
-          <!-- Language Toggle -->
-          <button
-            @click="toggleLocale"
-            class="theme-toggle text-sm font-bold"
-            aria-label="Toggle language"
-          >
+        <!-- Right Controls -->
+        <div class="flex items-center space-x-3">
+          <button @click="toggleLocale" class="nav-btn text-sm font-bold" aria-label="Toggle language">
             {{ locale === 'en' ? 'RU' : 'EN' }}
           </button>
-
-          <!-- Theme Toggle Button -->
-          <button
-            @click="toggleTheme"
-            class="theme-toggle"
-            :aria-label="isDark ? 'Switch to light mode' : 'Switch to dark mode'"
-          >
+          <button @click="toggleTheme" class="nav-btn" :aria-label="isDark ? 'Switch to light mode' : 'Switch to dark mode'">
             <i v-if="isDark" class="pi pi-sun text-base"></i>
             <i v-else class="pi pi-moon text-base"></i>
           </button>
-
-          <!-- Mobile Menu Button -->
-          <button
-            @click.stop="toggleMobileMenu"
-            class="md:hidden theme-toggle"
-            aria-label="Toggle menu"
-          >
+          <button @click.stop="toggleMobileMenu" class="md:hidden nav-btn" aria-label="Toggle menu">
             <svg v-if="!isMobileMenuOpen" class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"></path>
             </svg>
@@ -63,47 +50,29 @@
       </div>
     </nav>
 
-    <!-- Mobile Navigation Dropdown -->
+    <!-- Mobile Dropdown -->
     <Transition
       enter-active-class="transition-all duration-300 ease-out"
-      enter-from-class="opacity-0 -translate-y-4 scale-95"
-      enter-to-class="opacity-100 translate-y-0 scale-100"
+      enter-from-class="opacity-0 -translate-y-4"
+      enter-to-class="opacity-100 translate-y-0"
       leave-active-class="transition-all duration-200 ease-in"
-      leave-from-class="opacity-100 translate-y-0 scale-100"
-      leave-to-class="opacity-0 -translate-y-4 scale-95"
+      leave-from-class="opacity-100 translate-y-0"
+      leave-to-class="opacity-0 -translate-y-4"
     >
-      <div 
-        v-if="isMobileMenuOpen" 
-        class="md:hidden mt-2 max-w-5xl mx-auto glass-panel p-4"
-      >
+      <div v-if="isMobileMenuOpen" class="md:hidden mx-4 mt-1 glass-panel p-4">
         <div class="flex flex-col space-y-2">
           <NuxtLink 
-            v-for="item in navigation" 
-            :key="item.key"
-            :to="item.href"
+            v-for="item in navigation" :key="item.key" :to="item.href"
             @click="closeMobileMenu"
-            :class="[
-              'nav-link font-medium px-4 py-2 rounded-full text-center',
-              $route.path === item.href ? 'active bg-white/10' : ''
-            ]"
+            :class="['nav-link font-medium px-4 py-2 rounded-full text-center', $route.path === item.href ? 'active' : '']"
           >
             {{ $t(item.key) }}
           </NuxtLink>
-          
-          <!-- Mobile Language Toggle -->
-          <button
-            @click="toggleLocale"
-            class="theme-toggle mx-2 flex items-center justify-center gap-2 py-2"
-          >
+          <button @click="toggleLocale" class="nav-btn flex items-center justify-center gap-2 py-2 w-full">
             <i class="pi pi-globe"></i>
             <span>{{ locale === 'en' ? 'Русский' : 'English' }}</span>
           </button>
-
-          <!-- Mobile Theme Toggle -->
-          <button
-            @click="toggleTheme"
-            class="theme-toggle mx-2 flex items-center justify-center gap-2 py-2"
-          >
+          <button @click="toggleTheme" class="nav-btn flex items-center justify-center gap-2 py-2 w-full">
             <i v-if="isDark" class="pi pi-sun"></i>
             <i v-else class="pi pi-moon"></i>
             <span>{{ isDark ? $t('nav.lightMode') : $t('nav.darkMode') }}</span>
@@ -113,13 +82,11 @@
     </Transition>
   </div>
 
-  <!-- Spacer to prevent content from hiding behind fixed navbar -->
-  <div class="h-24"></div>
+  <!-- Spacer -->
+  <div class="h-20"></div>
 </template>
 
 <script setup>
-import { gsap } from 'gsap';
-
 const { isDark, toggleTheme, initTheme } = useTheme()
 const { locale, setLocale } = useI18n()
 
@@ -134,47 +101,78 @@ const navigation = [
 ];
 
 const isMobileMenuOpen = ref(false);
+const scrolled = ref(false);
+const navbarEl = ref(null);
 
-const toggleMobileMenu = () => {
-  isMobileMenuOpen.value = !isMobileMenuOpen.value;
-};
+const toggleMobileMenu = () => { isMobileMenuOpen.value = !isMobileMenuOpen.value; };
+const closeMobileMenu = () => { isMobileMenuOpen.value = false; };
+const toggleLocale = () => { setLocale(locale.value === 'en' ? 'ru' : 'en') };
 
-const closeMobileMenu = () => {
-  isMobileMenuOpen.value = false;
-};
+watch(() => useRoute().path, () => { closeMobileMenu(); });
 
-const toggleLocale = () => {
-  setLocale(locale.value === 'en' ? 'ru' : 'en')
-};
-
-watch(() => useRoute().path, () => {
-  closeMobileMenu();
-});
-
-// Initialize theme on mount
 onMounted(() => {
   initTheme()
-  
-  // Add a small delay to ensure DOM is ready
-  nextTick(() => {
-    initTheme()
-  })
-  
+  nextTick(() => { initTheme() })
+
+  // Scroll listener for blur effect
+  const handleScroll = () => {
+    scrolled.value = window.scrollY > 40;
+  };
+  window.addEventListener('scroll', handleScroll, { passive: true });
+
   const handleClickOutside = (event) => {
     if (isMobileMenuOpen.value && !event.target.closest('nav') && !event.target.closest('.glass-panel')) {
       closeMobileMenu();
     }
   };
   document.addEventListener('click', handleClickOutside);
-  
+
   onUnmounted(() => {
+    window.removeEventListener('scroll', handleScroll);
     document.removeEventListener('click', handleClickOutside);
   });
 });
 </script>
 
 <style scoped>
-/* Ensure nav links have proper hover state */
+/* Fully transparent at the top of page */
+.navbar-top {
+  background: transparent;
+  border-bottom: 1px solid transparent;
+}
+
+/* Blurred glass when scrolled */
+.navbar-scrolled {
+  background: rgba(12, 10, 9, 0.75);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+  box-shadow: 0 4px 30px rgba(0, 0, 0, 0.3);
+}
+
+/* In light mode, use a warm white blur */
+:root:not([data-theme="dark"]) .navbar-scrolled {
+  background: rgba(250, 250, 249, 0.82);
+  border-bottom: 1px solid rgba(28, 25, 23, 0.06);
+  box-shadow: 0 4px 30px rgba(0, 0, 0, 0.08);
+}
+
+/* Nav toggle buttons — fully transparent */
+.nav-btn {
+  background: transparent;
+  border: none;
+  color: var(--color-text-primary);
+  border-radius: 9999px;
+  padding: 0.4rem 0.6rem;
+  transition: color 0.3s ease;
+  cursor: pointer;
+}
+
+.nav-btn:hover {
+  color: var(--color-accent-primary);
+}
+
+/* Nav links */
 .nav-link {
   position: relative;
 }

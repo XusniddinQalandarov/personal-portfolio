@@ -3,8 +3,8 @@
     :class="[
       'card group cursor-pointer border transition-all duration-300 transform hover:-translate-y-2 hover:shadow-2xl',
       isDark 
-        ? 'bg-gradient-to-br from-[#1E2128FF] to-[#2A2D35FF] border-gray-700/50 hover:border-blue-500/50 hover:shadow-blue-500/10' 
-        : 'bg-gradient-to-br from-white to-gray-50 border-gray-200 hover:border-blue-400/70 hover:shadow-blue-400/20 shadow-lg'
+        ? 'bg-gradient-to-br from-[#1E2128FF] to-[#2A2D35FF] border-gray-700/50 hover:border-accent-amber/50 hover:shadow-accent-amber/10' 
+        : 'bg-gradient-to-br from-white to-gray-50 border-gray-200 hover:border-accent-amber/70 hover:shadow-accent-amber/20 shadow-lg'
     ]" 
     @click="openProject"
   >
@@ -86,7 +86,7 @@
       <div class="flex items-start justify-between mb-2">
         <h3 
           :class="[
-            'text-xl font-semibold group-hover:text-blue-600 transition-colors',
+            'text-xl font-display font-semibold group-hover:text-accent-amber transition-colors',
             isDark ? 'text-white' : 'text-gray-900'
           ]"
         >
@@ -117,8 +117,8 @@
           :class="[
             'px-3 py-1.5 rounded-full text-xs font-medium border transition-colors',
             isDark 
-              ? 'bg-gradient-to-r from-blue-500/20 to-purple-500/20 text-blue-300 border-blue-500/30 hover:bg-blue-500/30'
-              : 'bg-gradient-to-r from-blue-100 to-purple-100 text-blue-700 border-blue-200 hover:bg-blue-200'
+              ? 'bg-gradient-to-r from-accent-amber/20 to-accent-copper/20 text-accent-amber border-accent-amber/30 hover:bg-accent-amber/30'
+              : 'bg-gradient-to-r from-amber-100 to-orange-100 text-amber-800 border-amber-200 hover:bg-amber-200'
           ]"
         >
           {{ tech }}
@@ -131,8 +131,8 @@
           :class="[
             'inline-flex items-center px-3 py-1.5 rounded-full text-xs font-semibold border',
             isDark 
-              ? 'bg-gradient-to-r from-indigo-500/20 to-purple-500/20 text-indigo-300 border-indigo-500/30'
-              : 'bg-gradient-to-r from-indigo-100 to-purple-100 text-indigo-700 border-indigo-200'
+              ? 'bg-gradient-to-r from-accent-amber/20 to-accent-copper/20 text-accent-amber border-accent-amber/30'
+              : 'bg-gradient-to-r from-amber-100 to-orange-100 text-amber-800 border-amber-200'
           ]"
         >
           <svg class="w-3 h-3 mr-1.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -147,7 +147,7 @@
         <div 
           :class="[
             'text-sm font-medium opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-center gap-2',
-            isDark ? 'text-blue-400' : 'text-blue-600'
+            isDark ? 'text-accent-amber' : 'text-amber-700'
           ]"
         >
           <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -165,7 +165,7 @@
             target="_blank"
             :class="[
               'font-medium text-sm flex items-center gap-1 transition-colors',
-              isDark ? 'text-blue-400 hover:text-blue-300' : 'text-blue-600 hover:text-blue-700'
+              isDark ? 'text-accent-amber hover:text-accent-copper' : 'text-amber-700 hover:text-amber-800'
             ]"
             @click.stop
           >
@@ -248,7 +248,7 @@ const handleImageError = (event) => {
   left: 0;
   right: 0;
   bottom: 0;
-  background: linear-gradient(135deg, rgba(59, 130, 246, 0.1), rgba(147, 51, 234, 0.1));
+  background: linear-gradient(135deg, rgba(212, 165, 116, 0.08), rgba(201, 169, 110, 0.08));
   opacity: 0;
   transition: opacity 0.3s ease;
   pointer-events: none;
@@ -260,8 +260,8 @@ const handleImageError = (event) => {
 
 .card:hover {
   box-shadow: 
-    0 20px 60px rgba(59, 130, 246, 0.15),
-    0 8px 25px rgba(59, 130, 246, 0.1),
+    0 20px 60px rgba(212, 165, 116, 0.12),
+    0 8px 25px rgba(212, 165, 116, 0.08),
     inset 0 1px 0 rgba(255, 255, 255, 0.1);
 }
 
@@ -281,11 +281,11 @@ const handleImageError = (event) => {
 }
 
 ::-webkit-scrollbar-thumb {
-  background: rgba(59, 130, 246, 0.5);
+  background: rgba(212, 165, 116, 0.5);
   border-radius: 3px;
 }
 
 ::-webkit-scrollbar-thumb:hover {
-  background: rgba(59, 130, 246, 0.7);
+  background: rgba(212, 165, 116, 0.7);
 }
 </style>

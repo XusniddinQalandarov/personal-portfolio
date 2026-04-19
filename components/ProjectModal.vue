@@ -34,10 +34,10 @@
           <div class="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-transparent"></div>
           
           <div class="absolute bottom-6 left-6 md:bottom-10 md:left-10 text-white">
-            <div class="flex items-center gap-2 text-sm font-mono text-blue-400 uppercase tracking-widest mb-2">
+            <div class="flex items-center gap-2 text-sm font-mono text-accent-amber uppercase tracking-widest mb-2">
               {{ project.category }}
             </div>
-            <h2 class="text-3xl md:text-5xl font-bold leading-tight">{{ localField(project, 'title') }}</h2>
+            <h2 class="text-3xl md:text-5xl font-display font-bold leading-tight">{{ localField(project, 'title') }}</h2>
           </div>
         </div>
 
@@ -53,7 +53,7 @@
             </div>
             
             <div class="flex items-center gap-4">
-               <a v-if="project.demo_url" :href="project.demo_url" target="_blank" class="flex items-center gap-2 text-sm font-bold uppercase tracking-widest text-main hover:text-blue-500 transition-colors">
+               <a v-if="project.demo_url" :href="project.demo_url" target="_blank" class="flex items-center gap-2 text-sm font-bold uppercase tracking-widest text-main hover:text-accent-amber transition-colors">
                  {{ $t('projectModal.liveDemo') }} <i class="pi pi-arrow-up-right"></i>
                </a>
                <a v-if="project.github_url" :href="project.github_url" target="_blank" class="flex items-center gap-2 text-sm font-bold uppercase tracking-widest text-sub hover:text-main transition-colors">

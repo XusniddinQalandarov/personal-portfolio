@@ -4,7 +4,7 @@
       
       <!-- Minimalist Header -->
       <div ref="headerEl" class="mb-24 text-center md:text-left border-b border-gray-200 dark:border-white/10 pb-12 opacity-0">
-        <h1 class="text-6xl md:text-8xl font-black tracking-tighter text-main uppercase mb-6 leading-none">
+        <h1 class="text-6xl md:text-8xl font-display font-black tracking-tighter text-main uppercase mb-6 leading-none">
           {{ $t('projects.title1') }}<br>{{ $t('projects.title2') }}
         </h1>
         <p class="text-xl text-sub font-light max-w-2xl">
@@ -21,7 +21,7 @@
           class="px-6 py-2 rounded-full border text-sm uppercase tracking-widest transition-all duration-300"
           :class="selectedFilter === tag 
             ? 'bg-main text-charcoal border-main' 
-            : 'bg-transparent text-sub border-gray-300 dark:border-white/20 hover:border-main hover:text-main'"
+            : 'bg-transparent text-sub border-gray-300 dark:border-white/20 hover:border-accent-amber hover:text-accent-amber'"
         >
           {{ tag === 'All' ? $t('projects.all') : tag }}
         </button>
@@ -62,11 +62,11 @@
 
             <!-- Project Details -->
             <div class="w-full md:w-2/5 flex flex-col justify-center h-full pt-4">
-              <div class="text-xs font-mono text-blue-500 uppercase tracking-widest mb-4">
+              <div class="text-xs font-mono text-accent-amber uppercase tracking-widest mb-4">
                 0{{ index + 1 }} — {{ project.category }}
               </div>
               
-              <h2 class="text-4xl md:text-5xl font-bold text-main mb-6 leading-tight group-hover:text-blue-500 transition-colors cursor-pointer" @click="openProjectModal(project)">
+              <h2 class="text-4xl md:text-5xl font-display font-bold text-main mb-6 leading-tight group-hover:text-accent-amber transition-colors cursor-pointer" @click="openProjectModal(project)">
                 {{ localField(project, 'title') }}
               </h2>
               
@@ -83,10 +83,10 @@
 
               <!-- Links -->
               <div class="flex items-center gap-6">
-                 <a v-if="project.demo_url" :href="project.demo_url" target="_blank" class="text-main font-bold uppercase tracking-widest text-sm hover:text-blue-500 transition-colors flex items-center gap-2">
+                 <a v-if="project.demo_url" :href="project.demo_url" target="_blank" class="text-main font-bold uppercase tracking-widest text-sm hover:text-accent-amber transition-colors flex items-center gap-2">
                    {{ $t('projects.liveDemo') }} <i class="pi pi-arrow-up-right"></i>
                  </a>
-                 <a v-if="project.github_url" :href="project.github_url" target="_blank" class="text-sub font-bold uppercase tracking-widest text-sm hover:text-white transition-colors flex items-center gap-2">
+                 <a v-if="project.github_url" :href="project.github_url" target="_blank" class="text-sub font-bold uppercase tracking-widest text-sm hover:text-main transition-colors flex items-center gap-2">
                    {{ $t('projects.github') }} <i class="pi pi-github"></i>
                  </a>
               </div>

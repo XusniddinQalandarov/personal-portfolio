@@ -4,7 +4,7 @@
       
       <!-- Minimalist Header -->
       <div ref="headerEl" class="mb-24 px-4 md:px-0 opacity-0">
-        <h1 class="text-6xl md:text-8xl font-black tracking-tighter mb-8 text-main opacity-90">
+        <h1 class="text-6xl md:text-8xl font-display font-black tracking-tighter mb-8 text-main opacity-90">
           {{ $t('experience.title') }}
         </h1>
         <p class="text-xl md:text-2xl font-light text-sub max-w-2xl leading-relaxed">
@@ -22,7 +22,7 @@
              :class="index % 2 === 0 ? 'md:flex-row-reverse' : ''">
           
           <!-- Timeline Dot -->
-          <div class="absolute left-[-4.5px] md:left-1/2 md:-ml-[5px] top-2 w-2.5 h-2.5 bg-blue-500 rounded-full z-10 shadow-[0_0_10px_rgba(59,130,246,0.5)]"></div>
+          <div class="absolute left-[-4.5px] md:left-1/2 md:-ml-[5px] top-2 w-2.5 h-2.5 bg-accent-amber rounded-full z-10 shadow-[0_0_10px_rgba(212,165,116,0.5)]"></div>
 
           <!-- Spacer for Desktop -->
           <div class="hidden md:block md:w-1/2"></div>
@@ -31,12 +31,12 @@
           <div class="md:w-1/2 pl-8 md:px-12 relative">
             
             <!-- Period -->
-            <span class="inline-block text-sm font-mono text-blue-500 mb-2 tracking-widest uppercase opacity-80">
+            <span class="inline-block text-sm font-mono text-accent-amber mb-2 tracking-widest uppercase opacity-80">
               {{ experience.period }}
             </span>
 
             <!-- Title & Company -->
-            <h2 class="text-3xl md:text-4xl font-bold text-main mb-1 group-hover:text-blue-500 transition-colors duration-300">
+            <h2 class="text-3xl md:text-4xl font-display font-bold text-main mb-1 group-hover:text-accent-amber transition-colors duration-300">
               {{ localField(experience, 'title') }}
             </h2>
             <h3 class="text-xl text-sub font-medium mb-6">{{ localField(experience, 'company') }}</h3>
@@ -67,12 +67,12 @@
 
       <!-- Education Section (List Style) -->
       <div class="mt-32 px-4 md:px-0">
-        <h2 class="text-4xl md:text-5xl font-black text-main mb-16 tracking-tight">{{ $t('experience.educationTitle') }}</h2>
+        <h2 class="text-4xl md:text-5xl font-display font-black text-main mb-16 tracking-tight">{{ $t('experience.educationTitle') }}</h2>
         <div class="grid gap-12 border-t border-gray-200 dark:border-white/10 pt-12">
           <div v-for="edu in educationList" :key="edu.id" class="grid md:grid-cols-12 gap-6 group hover:bg-gray-100 dark:hover:bg-gray-800 p-6 rounded-lg transition-colors -mx-6">
             <div class="md:col-span-3 text-sub font-mono text-sm">{{ edu.year }}</div>
             <div class="md:col-span-9">
-              <h3 class="text-2xl font-bold text-main mb-2 group-hover:text-blue-500 transition-colors">{{ localField(edu, 'degree') }}</h3>
+              <h3 class="text-2xl font-display font-bold text-main mb-2 group-hover:text-accent-amber transition-colors">{{ localField(edu, 'degree') }}</h3>
               <div class="text-xl text-sub mb-4">{{ localField(edu, 'school') }}</div>
               <p class="text-sub font-light">{{ localField(edu, 'description') }}</p>
             </div>

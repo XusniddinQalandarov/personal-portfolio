@@ -1,5 +1,5 @@
 <template>
-  <div class="min-h-screen text-main relative overflow-hidden selection:bg-blue-500 selection:text-white transition-colors duration-500">
+  <div class="min-h-screen text-main relative overflow-hidden selection:bg-accent-amber selection:text-white transition-colors duration-500">
     
     <!-- Cinematic Hero Section (Always Dark/Immersive) -->
     <div ref="heroSection" class="relative h-screen flex items-center justify-center overflow-hidden">
@@ -10,17 +10,19 @@
         <div class="absolute inset-0 bg-gradient-to-b from-black/50 via-black/20 to-black/80"></div>
       </div>
       
-      <!-- Minimalist Hero Content -->
+      <!-- Hero Content with Rounded Profile Photo -->
       <div class="relative z-10 text-center px-4 max-w-5xl mx-auto">
-        <h1 ref="heroTitle" class="text-6xl md:text-8xl lg:text-9xl font-black tracking-tighter mb-6 uppercase text-transparent bg-clip-text bg-gradient-to-br from-white via-gray-200 to-gray-400 drop-shadow-2xl opacity-0">
+        <!-- Rounded Profile Photo -->
+        <div ref="profileImg" class="mx-auto mb-8 w-32 h-32 md:w-40 md:h-40 rounded-full overflow-hidden border-4 border-accent-amber/50 shadow-2xl opacity-0">
+          <img src="/images/gym.jpg" alt="Xusniddin at the gym" class="w-full h-full object-cover" />
+        </div>
+
+        <h1 ref="heroTitle" class="text-6xl md:text-8xl lg:text-9xl font-display font-black tracking-tighter mb-6 uppercase text-transparent bg-clip-text bg-gradient-to-br from-white via-gray-200 to-gray-400 drop-shadow-2xl opacity-0">
           {{ $t('fitness.heroTitle') }}
         </h1>
         <p ref="heroSubtitle" class="text-xl md:text-2xl font-light tracking-widest text-gray-200 uppercase mb-12 drop-shadow-md opacity-0">
           {{ $t('fitness.heroSubtitle') }}
         </p>
-        <div ref="heroIcon" class="animate-bounce">
-          <i class="pi pi-arrow-down text-2xl text-white/50"></i>
-        </div>
       </div>
     </div>
 
@@ -34,28 +36,28 @@
     <!-- Routine Section (No Cards) -->
     <div ref="routineSection" class="py-24 relative z-10">
       <div class="px-6 md:px-12 mb-16 max-w-7xl mx-auto">
-        <h2 class="text-sm font-bold tracking-[0.3em] uppercase text-blue-500 mb-4">{{ $t('fitness.routineTitle') }}</h2>
+        <h2 class="text-sm font-bold tracking-[0.3em] uppercase text-accent-amber mb-4">{{ $t('fitness.routineTitle') }}</h2>
         <div class="h-px w-full bg-gray-200 dark:bg-white/10"></div>
       </div>
 
-      <!-- Horizontal Scroll Concept or Vertical Editorial List -->
+      <!-- Vertical Editorial List -->
       <div class="flex flex-col gap-32 px-6 md:px-20 max-w-7xl mx-auto">
         <div v-for="(day, index) in workoutSplit" :key="day.id" 
              class="workout-row flex flex-col md:flex-row gap-8 md:gap-20 items-start group opacity-0">
           <!-- Day Indicator -->
           <div class="md:w-1/4 pt-2">
-            <span class="text-6xl md:text-8xl font-black text-gray-200 dark:text-white/5 group-hover:text-blue-500/10 transition-colors duration-500 block -mb-4">
+            <span class="text-6xl md:text-8xl font-display font-black text-gray-200 dark:text-white/5 group-hover:text-accent-amber/10 transition-colors duration-500 block -mb-4">
               0{{ index + 1 }}
             </span>
-            <h3 class="text-3xl font-bold uppercase tracking-tight text-main">{{ day.name }}</h3>
-            <p class="text-blue-500 font-mono text-sm mt-2">{{ day.focus }}</p>
+            <h3 class="text-3xl font-display font-bold uppercase tracking-tight text-main">{{ day.name }}</h3>
+            <p class="text-accent-amber font-mono text-sm mt-2">{{ day.focus }}</p>
           </div>
 
           <!-- Exercises List (Minimalist) -->
           <ul class="md:w-3/4 space-y-4 pt-4 border-l border-gray-200 dark:border-white/10 pl-8">
             <li v-for="exercise in day.exercises" :key="exercise" 
                 class="text-xl md:text-2xl font-light text-sub group-hover:text-main transition-colors duration-300 flex items-center">
-              <span class="w-1.5 h-1.5 bg-blue-500 rounded-full mr-4 opacity-0 group-hover:opacity-100 transition-opacity"></span>
+              <span class="w-1.5 h-1.5 bg-accent-amber rounded-full mr-4 opacity-0 group-hover:opacity-100 transition-opacity"></span>
               {{ exercise }}
             </li>
           </ul>
@@ -68,7 +70,7 @@
       <div ref="parallaxImg" class="absolute inset-0 bg-cover bg-center bg-fixed opacity-60 md:opacity-80"
            style="background-image: url('/images/gym2.webp');"></div>
       <div class="absolute inset-0 bg-black/40 flex items-center justify-center">
-        <h2 class="text-5xl md:text-7xl font-black uppercase text-white tracking-tighter mix-blend-overlay">
+        <h2 class="text-5xl md:text-7xl font-display font-black uppercase text-white tracking-tighter mix-blend-overlay">
           {{ $t('fitness.endurance') }}
         </h2>
       </div>
@@ -80,10 +82,10 @@
         
         <!-- Stats Column -->
         <div>
-          <h2 class="text-sm font-bold tracking-[0.3em] uppercase text-purple-500 mb-12">{{ $t('fitness.vitalStats') }}</h2>
+          <h2 class="text-sm font-bold tracking-[0.3em] uppercase text-accent-copper mb-12">{{ $t('fitness.vitalStats') }}</h2>
           <div class="space-y-16">
             <div v-for="stat in stats" :key="stat.label" class="stat-item group opacity-0">
-              <div class="text-6xl md:text-7xl font-light text-main mb-2 tracking-tight group-hover:text-purple-500 transition-colors">{{ stat.value }}</div>
+              <div class="text-6xl md:text-7xl font-display font-light text-main mb-2 tracking-tight group-hover:text-accent-amber transition-colors">{{ stat.value }}</div>
               <div class="text-sm font-mono text-sub uppercase tracking-widest">{{ stat.label }}</div>
             </div>
           </div>
@@ -91,11 +93,11 @@
 
         <!-- PRs Column -->
         <div>
-          <h2 class="text-sm font-bold tracking-[0.3em] uppercase text-blue-500 mb-12">{{ $t('fitness.personalRecords') }}</h2>
+          <h2 class="text-sm font-bold tracking-[0.3em] uppercase text-accent-amber mb-12">{{ $t('fitness.personalRecords') }}</h2>
           <div class="space-y-12">
             <div v-for="pr in prCategories" :key="pr.name" class="pr-category">
-               <h3 class="text-2xl font-bold text-sub mb-6 flex items-center gap-3">
-                 <i :class="pr.icon" class="text-blue-500 text-lg"></i> {{ pr.name }}
+               <h3 class="text-2xl font-display font-bold text-sub mb-6 flex items-center gap-3">
+                 <i :class="pr.icon" class="text-accent-amber text-lg"></i> {{ pr.name }}
                </h3>
                <div class="space-y-4">
                  <div v-for="ex in pr.exercises" :key="ex.name" class="flex items-end justify-between border-b border-gray-200 dark:border-white/10 pb-2 group">
@@ -123,6 +125,7 @@ const { locale } = useI18n()
 const heroTitle = ref(null);
 const heroSubtitle = ref(null);
 const heroBg = ref(null);
+const profileImg = ref(null);
 const philosophyText = ref(null);
 const routineSection = ref(null);
 const parallaxImg = ref(null);
@@ -163,7 +166,8 @@ onMounted(() => {
   const tl = gsap.timeline();
   
   tl.fromTo(heroBg.value, { scale: 1.2, opacity: 0 }, { scale: 1.1, opacity: 0.6, duration: 2, ease: "power2.out" })
-    .fromTo(heroTitle.value, { y: 100, opacity: 0 }, { y: 0, opacity: 1, duration: 1.5, ease: "power3.out" }, "-=1.5")
+    .fromTo(profileImg.value, { scale: 0.8, opacity: 0 }, { scale: 1, opacity: 1, duration: 1, ease: "back.out(1.5)" }, "-=1.5")
+    .fromTo(heroTitle.value, { y: 100, opacity: 0 }, { y: 0, opacity: 1, duration: 1.5, ease: "power3.out" }, "-=1")
     .fromTo(heroSubtitle.value, { y: 20, opacity: 0 }, { y: 0, opacity: 1, duration: 1, ease: "power3.out" }, "-=1");
 
   // Parallax Effect for Hero

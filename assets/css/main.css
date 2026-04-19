@@ -3,7 +3,6 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
-@tailwind utilities;
 
 /* Smooth Page Transitions */
 .page-enter-active,
@@ -24,13 +23,6 @@
 }
 
 /* Cinematic Slide */
-/* Slide Left (Forward Navigation: Enter Left-to-Right? No, Slide Left means content moves Left, new comes from Right) */
-/* The user asked: "routes from left to right and right to left, just like in slide moving" */
-/* Standard Push:
-   Forward: Current leaves too Left (-100%), New enters from Right (100%).
-   Backward: Current leaves to Right (100%), New enters from Left (-100%).
-*/
-
 .slide-left-enter-active,
 .slide-left-leave-active,
 .slide-right-enter-active,
@@ -47,8 +39,6 @@
     z-index: 10;
     background: var(--gradient-mesh-1), var(--gradient-mesh-2), var(--gradient-mesh-3), var(--color-bg-primary);
     background-color: var(--color-bg-primary);
-    /* Fallback */
-    /* Ensure background is solid during transition */
 }
 
 /* Slide Left (Forward) */
@@ -59,7 +49,6 @@
 
 .slide-left-leave-to {
     transform: translateX(-30%);
-    /* Parallax leave */
     opacity: 0;
     z-index: 0;
 }
@@ -72,7 +61,6 @@
 
 .slide-right-leave-to {
     transform: translateX(30%);
-    /* Parallax leave */
     opacity: 0;
     z-index: 0;
 }

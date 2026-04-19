@@ -4,7 +4,7 @@
       
       <!-- Minimalist Header -->
       <div ref="headerEl" class="mb-24 text-center md:text-left border-b border-gray-200 dark:border-white/10 pb-12 opacity-0">
-        <h1 class="text-6xl md:text-8xl font-black tracking-tighter text-main uppercase mb-6">
+        <h1 class="text-6xl md:text-8xl font-display font-black tracking-tighter text-main uppercase mb-6">
           {{ $t('blogs.title') }}
         </h1>
         <p class="text-xl text-sub font-light max-w-2xl">
@@ -20,7 +20,7 @@
             @input="searchBlogs"
             type="text"
             :placeholder="$t('blogs.searchPlaceholder')"
-            class="w-full bg-transparent border-b border-gray-300 dark:border-gray-700 py-3 text-lg text-main placeholder-sub focus:outline-none focus:border-blue-500 transition-colors uppercase tracking-widest"
+            class="w-full bg-transparent border-b border-gray-300 dark:border-gray-700 py-3 text-lg text-main placeholder-sub focus:outline-none focus:border-accent-amber transition-colors uppercase tracking-widest"
           />
         </div>
         
@@ -31,7 +31,7 @@
             @click="toggleTag(tag)"
             class="text-sm font-mono uppercase tracking-wider transition-colors"
             :class="selectedTag === tag 
-              ? 'text-blue-500 underline underline-offset-4' 
+              ? 'text-accent-amber underline underline-offset-4' 
               : 'text-sub hover:text-main'"
           >
             #{{ tag }}
@@ -70,13 +70,13 @@
 
             <!-- Content -->
             <div class="w-full md:w-7/12">
-              <div class="flex items-center gap-4 text-xs font-mono text-blue-500 uppercase tracking-widest mb-4">
+              <div class="flex items-center gap-4 text-xs font-mono text-accent-amber uppercase tracking-widest mb-4">
                 <span>{{ formatDate(blog.created_at) }}</span>
-                <span v-if="blog.tags && blog.tags.length" class="w-1 h-1 bg-blue-500 rounded-full"></span>
+                <span v-if="blog.tags && blog.tags.length" class="w-1 h-1 bg-accent-amber rounded-full"></span>
                 <span v-if="blog.tags && blog.tags.length">{{ blog.tags[0] }}</span>
               </div>
               
-              <h2 class="text-3xl md:text-5xl font-bold text-main mb-6 group-hover:text-blue-500 transition-colors leading-tight">
+              <h2 class="text-3xl md:text-5xl font-display font-bold text-main mb-6 group-hover:text-accent-amber transition-colors leading-tight">
                 {{ localField(blog, 'title') }}
               </h2>
               
@@ -86,7 +86,7 @@
               
               <div class="flex items-center text-main font-bold uppercase tracking-widest text-sm group-hover:translate-x-2 transition-transform">
                 {{ $t('blogs.readArticle') }}
-                <i class="pi pi-arrow-right ml-3 text-blue-500"></i>
+                <i class="pi pi-arrow-right ml-3 text-accent-amber"></i>
               </div>
             </div>
 

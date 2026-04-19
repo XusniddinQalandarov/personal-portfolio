@@ -12,30 +12,48 @@ module.exports = {
     extend: {
       colors: {
         primary: {
-          50: '#eff6ff',
-          100: '#dbeafe',
-          200: '#bfdbfe',
-          300: '#93c5fd',
-          400: '#60a5fa',
-          500: '#3b82f6',
-          600: '#2563eb',
-          700: '#1d4ed8',
-          800: '#1e40af',
-          900: '#1e3a8a',
+          50: '#fdfcfb',
+          100: '#f5f0eb',
+          200: '#ede8e3',
+          300: '#d4c4b0',
+          400: '#c9a96e',
+          500: '#b08d57',
+          600: '#8b7355',
+          700: '#6b5a42',
+          800: '#4a3f2e',
+          900: '#2a231a',
         },
         dark: {
-          900: '#0a0a0a',
-          800: '#121212',
-          700: '#1a1a1a',
-          600: '#262626',
+          900: '#0c0a09',
+          800: '#1c1917',
+          700: '#292524',
+          600: '#44403c',
         },
         accent: {
-          blue: '#60a5fa',
-          violet: '#a78bfa',
+          amber: '#d4a574',
+          copper: '#c9a96e',
+          bronze: '#8b7355',
+          gold: '#b08d57',
+        },
+        stone: {
+          warm: {
+            50: '#fafaf9',
+            100: '#f5f0eb',
+            200: '#ede8e3',
+            300: '#d6d0ca',
+            400: '#a8a29e',
+            500: '#78716c',
+            600: '#57534e',
+            700: '#44403c',
+            800: '#292524',
+            900: '#1c1917',
+            950: '#0c0a09',
+          }
         }
       },
       fontFamily: {
         sans: ['Inter', 'system-ui', 'sans-serif'],
+        display: ['Outfit', 'Inter', 'system-ui', 'sans-serif'],
       },
       backdropBlur: {
         xs: '2px',
@@ -55,8 +73,8 @@ module.exports = {
           '50%': { transform: 'translateY(-10px)' },
         },
         'pulse-glow': {
-          '0%, 100%': { boxShadow: '0 0 20px rgba(96, 165, 250, 0.2)' },
-          '50%': { boxShadow: '0 0 40px rgba(96, 165, 250, 0.4)' },
+          '0%, 100%': { boxShadow: '0 0 20px rgba(212, 165, 116, 0.15)' },
+          '50%': { boxShadow: '0 0 40px rgba(212, 165, 116, 0.3)' },
         },
       }
     },
