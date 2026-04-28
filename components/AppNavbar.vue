@@ -20,7 +20,7 @@
               :key="item.key"
               :to="item.href"
               :class="[
-                'nav-link text-sm font-medium',
+                'nav-link text-sm font-mono uppercase tracking-widest',
                 $route.path === item.href ? 'active' : ''
               ]"
             >
@@ -31,7 +31,7 @@
 
         <!-- Right Controls -->
         <div class="flex items-center space-x-3">
-          <button @click="toggleLocale" class="nav-btn text-sm font-bold" aria-label="Toggle language">
+          <button @click="toggleLocale" class="nav-btn text-sm font-mono font-medium uppercase tracking-widest" aria-label="Toggle language">
             {{ locale === 'en' ? 'RU' : 'EN' }}
           </button>
           <button @click="toggleTheme" class="nav-btn" :aria-label="isDark ? 'Switch to light mode' : 'Switch to dark mode'">
@@ -64,15 +64,15 @@
           <NuxtLink 
             v-for="item in navigation" :key="item.key" :to="item.href"
             @click="closeMobileMenu"
-            :class="['nav-link font-medium px-4 py-2 rounded-full text-center', $route.path === item.href ? 'active' : '']"
+            :class="['nav-link font-mono uppercase tracking-widest px-4 py-2 rounded-full text-center', $route.path === item.href ? 'active' : '']"
           >
             {{ $t(item.key) }}
           </NuxtLink>
-          <button @click="toggleLocale" class="nav-btn flex items-center justify-center gap-2 py-2 w-full">
+          <button @click="toggleLocale" class="nav-btn flex items-center justify-center gap-2 py-2 w-full font-mono uppercase tracking-widest">
             <i class="pi pi-globe"></i>
             <span>{{ locale === 'en' ? 'Русский' : 'English' }}</span>
           </button>
-          <button @click="toggleTheme" class="nav-btn flex items-center justify-center gap-2 py-2 w-full">
+          <button @click="toggleTheme" class="nav-btn flex items-center justify-center gap-2 py-2 w-full font-mono uppercase tracking-widest">
             <i v-if="isDark" class="pi pi-sun"></i>
             <i v-else class="pi pi-moon"></i>
             <span>{{ isDark ? $t('nav.lightMode') : $t('nav.darkMode') }}</span>
