@@ -3,7 +3,7 @@
    Premium dark/light with amber/copper accents
    ============================================ */
 
-@import url('https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800;900&family=Inter:wght@300;400;500;600;700;800;900&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=DM+Mono:wght@300;400;500&family=Sora:wght@300;400;500;600;700;800&display=swap');
 
 :root {
   /* Light mode variables (default) */
@@ -95,7 +95,7 @@
   body {
     background: var(--color-bg-primary);
     color: var(--color-text-primary);
-    font-family: 'Inter', system-ui, sans-serif;
+    font-family: 'Sora', system-ui, sans-serif;
     transition: background-color 0.4s ease, color 0.4s ease;
   }
   
@@ -110,7 +110,7 @@
   }
 
   h1, h2, h3, h4, h5, h6 {
-    font-family: 'Outfit', 'Inter', system-ui, sans-serif;
+    font-family: 'Instrument Serif', Georgia, serif;
   }
 }
 

@@ -91,11 +91,18 @@
 
 <script setup>
 import { gsap } from 'gsap';
+import { marked } from 'marked';
 const { isDark } = useTheme();
 const { locale } = useI18n()
 const { localField } = useLocalizedContent()
 const route = useRoute()
 const slug = route.params.slug
+
+marked.setOptions({
+  gfm: true,
+  breaks: true,
+  async: false,
+})
 
 const loading = ref(true)
 const error = ref(false)
@@ -150,15 +157,7 @@ const renderedContent = computed(() => {
   if (!blog.value) return ''
   const content = localField(blog.value, 'content')
   if (!content) return ''
-  let html = content
-    .replace(/^### (.*$)/gim, '<h3>$1</h3>')
-    .replace(/^## (.*$)/gim, '<h2>$1</h2>')
-    .replace(/^# (.*$)/gim, '<h1>$1</h1>')
-    .replace(/\*\*(.*?)\*\*/gim, '<strong>$1</strong>')
-    .replace(/\*(.*?)\*/gim, '<em>$1</em>')
-    .replace(/> "(.*?)"/gim, '<blockquote>$1</blockquote>')
-    .replace(/\n/gim, '<br>')
-  return html
+  return marked.parse(String(content))
 })
 
 const shareUrls = computed(() => {
@@ -199,6 +198,14 @@ useSeoMeta({
 }
 .blog-content h2 { font-size: 2rem; }
 .blog-content h3 { font-size: 1.5rem; }
+.blog-content ul,
+.blog-content ol {
+    margin: 1.5rem 0;
+    padding-left: 1.5rem;
+}
+.blog-content li {
+    margin-bottom: 0.6rem;
+}
 .blog-content p { margin-bottom: 1.5rem; }
 .blog-content strong { color: var(--color-text-primary); font-weight: 700; }
 .blog-content blockquote {
@@ -206,10 +213,30 @@ useSeoMeta({
     padding-left: 1.5rem;
     font-size: 1.5rem;
     font-style: italic;
+    font-family: 'Instrument Serif', Georgia, serif;
     color: var(--color-text-primary);
     margin: 3rem 0;
 }
 .blog-content a { color: #3b82f6; text-decoration: underline; }
+.blog-content table {
+    width: 100%;
+    border-collapse: collapse;
+    margin: 2rem 0;
+    display: block;
+    overflow-x: auto;
+}
+.blog-content th,
+.blog-content td {
+    border: 1px solid color-mix(in srgb, var(--color-text-secondary) 35%, transparent);
+    padding: 0.75rem 1rem;
+    text-align: left;
+    white-space: nowrap;
+}
+.blog-content th {
+    color: var(--color-text-primary);
+    font-weight: 700;
+    background-color: color-mix(in srgb, var(--color-text-primary) 8%, transparent);
+}
 .bg-primary { background-color: var(--color-bg-primary); }
 .text-main { color: var(--color-text-primary); }
 .text-sub { color: var(--color-text-secondary); }
