@@ -29,7 +29,7 @@ function onMove(e: PointerEvent) {
 .outline {
   font-family: 'Geist', system-ui, sans-serif;
   font-weight: 900;
-  font-size: clamp(72px, 14vw, 220px);
+  font-size: clamp(40px, 14vw, 220px);
   line-height: 0.88;
   letter-spacing: -0.06em;
   text-transform: uppercase;
