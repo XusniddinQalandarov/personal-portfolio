@@ -1,7 +1,7 @@
 <!-- Port of magicui/shimmer-button — conic shimmer sweep around the perimeter -->
 <template>
   <component
-    :is="to ? resolveLink() : 'button'"
+    :is="to ? resolveLink() : href ? 'a' : 'button'"
     :to="to"
     :href="href"
     class="shimmer-btn"

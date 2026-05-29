@@ -3,20 +3,20 @@
      Locale + theme toggles live here too. -->
 <template>
   <div class="meta-top">
-    <span class="live">{{ $t('aurora.live') }}</span>
     <span class="clock">{{ time }}</span>
     <button class="meta-btn" data-cursor-state="link" :data-cursor-label="locale === 'en' ? 'RU' : 'EN'" @click="toggleLocale">
       {{ locale === 'en' ? 'RU' : 'EN' }}
     </button>
     <button class="meta-btn" data-cursor-state="link" :data-cursor-label="isDark ? 'Light' : 'Dark'" @click="toggleTheme" :aria-label="isDark ? $t('nav.lightMode') : $t('nav.darkMode')">
-      <i v-if="isDark" class="pi pi-sun" />
-      <i v-else class="pi pi-moon" />
+      <Sun v-if="isDark" :size="13" :stroke-width="1.8" />
+      <Moon v-else :size="13" :stroke-width="1.8" />
     </button>
   </div>
 </template>
 
 <script setup lang="ts">
 import { ref, onMounted, onBeforeUnmount } from 'vue'
+import { Sun, Moon } from 'lucide-vue-next'
 import { useTheme } from '~/composables/useTheme'
 
 const { isDark, toggleTheme } = useTheme()

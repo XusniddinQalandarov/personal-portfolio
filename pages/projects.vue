@@ -2,7 +2,6 @@
   <section class="projects-page">
     <BackgroundBeams />
     <Meteors :number="11" />
-    <Spotlight />
 
     <article class="projects-inner">
       <AuroraPageHero
@@ -66,17 +65,12 @@
                 <div class="tags">
                   <span v-for="tech in (project.technologies || []).slice(0, 3)" :key="tech" class="tag">{{ tech }}</span>
                 </div>
-                <InteractiveHoverButton @click.stop="openProjectModal(project)">View</InteractiveHoverButton>
+                <button class="view-btn" @click.stop="openProjectModal(project)">View</button>
               </div>
             </MagicCard>
           </FocusCard>
         </FocusCards>
       </section>
-
-      <!-- ShimmerButton archive CTA -->
-      <div class="archive-cta">
-        <ShimmerButton to="/projects/archive">Browse Archive →</ShimmerButton>
-      </div>
 
       <ProjectModal
         v-if="selectedProject"
@@ -99,11 +93,7 @@ import BorderBeam from '~/components/aurora/surface/BorderBeam.vue'
 import FocusCards from '~/components/aurora/surface/FocusCards.vue'
 import FocusCard from '~/components/aurora/surface/FocusCard.vue'
 import BackgroundBeams from '~/components/aurora/surface/BackgroundBeams.vue'
-import Spotlight from '~/components/aurora/surface/Spotlight.vue'
 import Meteors from '~/components/aurora/surface/Meteors.vue'
-import InteractiveHoverButton from '~/components/aurora/primitives/InteractiveHoverButton.vue'
-import ShimmerButton from '~/components/aurora/primitives/ShimmerButton.vue'
-
 if (typeof window !== 'undefined') gsap.registerPlugin(ScrollTrigger)
 
 const { t } = useI18n()
@@ -278,10 +268,23 @@ useSeoMeta({
   border: 1px solid var(--glass-border);
 }
 
-/* Archive CTA */
-.archive-cta {
-  display: flex;
-  justify-content: center;
-  padding: 80px 0 0;
+.view-btn {
+  font-family: 'Geist Mono', monospace;
+  font-size: 11px;
+  font-weight: 500;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+  color: var(--text);
+  background: transparent;
+  border: 1px solid var(--glass-border);
+  padding: 10px 22px;
+  border-radius: 999px;
+  cursor: none;
+  transition: border-color 0.25s var(--ease-cinematic), color 0.25s var(--ease-cinematic);
 }
+.view-btn:hover {
+  border-color: var(--amber);
+  color: var(--amber);
+}
+
 </style>

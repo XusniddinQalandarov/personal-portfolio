@@ -1,5 +1,5 @@
 <template>
-  <div class="min-h-screen text-main relative overflow-hidden selection:bg-accent-amber selection:text-white transition-colors duration-500">
+  <div class="min-h-screen text-main relative selection:bg-accent-amber selection:text-white transition-colors duration-500">
     
     <!-- Cinematic Hero Section (Always Dark/Immersive) -->
     <div ref="heroSection" class="relative h-screen flex items-center justify-center overflow-hidden">
@@ -12,11 +12,6 @@
       
       <!-- Hero Content with Rounded Profile Photo -->
       <div class="relative z-10 text-center px-4 max-w-5xl mx-auto">
-        <!-- Rounded Profile Photo -->
-        <div ref="profileImg" class="mx-auto mb-8 w-32 h-32 md:w-40 md:h-40 rounded-full overflow-hidden border-4 border-accent-amber/50 shadow-2xl opacity-0">
-          <img src="/images/gym.jpg" alt="Xusniddin at the gym" class="w-full h-full object-cover" />
-        </div>
-
         <h1 ref="heroTitle" class="text-6xl md:text-8xl lg:text-9xl font-display font-black tracking-tighter mb-6 uppercase text-transparent bg-clip-text bg-gradient-to-br from-white via-gray-200 to-gray-400 drop-shadow-2xl opacity-0">
           {{ $t('fitness.heroTitle') }}
         </h1>
@@ -28,7 +23,7 @@
 
     <!-- Editorial Philosophy Section -->
     <div class="py-32 px-6 md:px-12 max-w-5xl mx-auto relative z-10">
-      <div ref="philosophyText" class="text-3xl md:text-5xl font-serif font-light leading-tight text-main text-center opacity-0">
+      <div ref="philosophyText" class="text-3xl md:text-5xl font-serif font-light leading-tight text-main text-center reveal-item">
         {{ $t('fitness.philosophy') }}
       </div>
     </div>
@@ -43,7 +38,7 @@
       <!-- Vertical Editorial List -->
       <div class="flex flex-col gap-32 px-6 md:px-20 max-w-7xl mx-auto">
         <div v-for="(day, index) in workoutSplit" :key="day.id" 
-             class="workout-row flex flex-col md:flex-row gap-8 md:gap-20 items-start group opacity-0">
+             class="workout-row reveal-item flex flex-col md:flex-row gap-8 md:gap-20 items-start group">
           <!-- Day Indicator -->
           <div class="md:w-1/4 pt-2">
             <span class="text-6xl md:text-8xl font-display font-black text-gray-200 dark:text-white/5 group-hover:text-accent-amber/10 transition-colors duration-500 block -mb-4">
@@ -84,7 +79,7 @@
         <div>
           <h2 class="text-sm font-bold tracking-[0.3em] uppercase text-accent-copper mb-12">{{ $t('fitness.vitalStats') }}</h2>
           <div class="space-y-16">
-            <div v-for="stat in stats" :key="stat.label" class="stat-item group opacity-0">
+            <div v-for="stat in stats" :key="stat.label" class="stat-item reveal-item group">
               <div class="text-6xl md:text-7xl font-display font-light text-main mb-2 tracking-tight group-hover:text-accent-amber transition-colors">{{ stat.value }}</div>
               <div class="text-sm font-mono text-sub uppercase tracking-widest">{{ stat.label }}</div>
             </div>
@@ -97,7 +92,7 @@
           <div class="space-y-12">
             <div v-for="pr in prCategories" :key="pr.name" class="pr-category">
                <h3 class="text-2xl font-display font-bold text-sub mb-6 flex items-center gap-3">
-                 <i :class="pr.icon" class="text-accent-amber text-lg"></i> {{ pr.name }}
+                 <span class="text-accent-amber text-lg">{{ pr.icon }}</span> {{ pr.name }}
                </h3>
                <div class="space-y-4">
                  <div v-for="ex in pr.exercises" :key="ex.name" class="flex items-end justify-between border-b border-gray-200 dark:border-white/10 pb-2 group">
@@ -119,14 +114,11 @@ definePageMeta({ layout: 'aurora' })
 import { gsap } from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
 
-gsap.registerPlugin(ScrollTrigger);
-
 const { locale } = useI18n()
 
 const heroTitle = ref(null);
 const heroSubtitle = ref(null);
 const heroBg = ref(null);
-const profileImg = ref(null);
 const philosophyText = ref(null);
 const routineSection = ref(null);
 const parallaxImg = ref(null);
@@ -155,91 +147,79 @@ const stats = computed(() => locale.value === 'ru' ? [
 ]);
 
 const prCategories = computed(() => locale.value === 'ru' ? [
-  { name: "Большая тройка", icon: "pi pi-bolt", exercises: [{ name: "Присед", weight: 120 }, { name: "Жим", weight: 90 }, { name: "Тяга", weight: 140 }] },
-  { name: "Калистеника", icon: "pi pi-star", exercises: [{ name: "Подтягивания", weight: "+10" }, { name: "Брусья", weight: "+15" }] }
+  { name: "Большая тройка", icon: "⚡", exercises: [{ name: "Присед", weight: 120 }, { name: "Жим", weight: 90 }, { name: "Тяга", weight: 140 }] },
+  { name: "Калистеника", icon: "★", exercises: [{ name: "Подтягивания", weight: "+10" }, { name: "Брусья", weight: "+15" }] }
 ] : [
-  { name: "The Big Three", icon: "pi pi-bolt", exercises: [{ name: "Squat", weight: 120 }, { name: "Bench", weight: 90 }, { name: "Deadlift", weight: 140 }] },
-  { name: "Calisthenics", icon: "pi pi-star", exercises: [{ name: "Pull-ups", weight: "+10" }, { name: "Dips", weight: "+15" }] }
+  { name: "The Big Three", icon: "⚡", exercises: [{ name: "Squat", weight: 120 }, { name: "Bench", weight: 90 }, { name: "Deadlift", weight: 140 }] },
+  { name: "Calisthenics", icon: "★", exercises: [{ name: "Pull-ups", weight: "+10" }, { name: "Dips", weight: "+15" }] }
 ]);
 
+let revealObserver = null
+
 onMounted(() => {
-  // Hero Animation
-  const tl = gsap.timeline();
-  
-  tl.fromTo(heroBg.value, { scale: 1.2, opacity: 0 }, { scale: 1.1, opacity: 0.6, duration: 2, ease: "power2.out" })
-    .fromTo(profileImg.value, { scale: 0.8, opacity: 0 }, { scale: 1, opacity: 1, duration: 1, ease: "back.out(1.5)" }, "-=1.5")
-    .fromTo(heroTitle.value, { y: 100, opacity: 0 }, { y: 0, opacity: 1, duration: 1.5, ease: "power3.out" }, "-=1")
-    .fromTo(heroSubtitle.value, { y: 20, opacity: 0 }, { y: 0, opacity: 1, duration: 1, ease: "power3.out" }, "-=1");
+  if (typeof window === 'undefined') return
 
-  // Parallax Effect for Hero
-  gsap.to(heroBg.value, {
-    yPercent: 30,
-    ease: "none",
-    scrollTrigger: {
-      trigger: heroBg.value,
-      start: "top top",
-      end: "bottom top",
-      scrub: true
-    }
-  });
+  nextTick(() => {
+    // ── Hero entrance (GSAP only, no ScrollTrigger) ──────────
+    const tl = gsap.timeline()
+    if (heroBg.value)
+      tl.fromTo(heroBg.value,  { scale: 1.2, opacity: 0 }, { scale: 1.1, opacity: 0.6, duration: 2, ease: 'power2.out' })
+    if (heroTitle.value)
+      tl.fromTo(heroTitle.value,  { y: 100, opacity: 0 }, { y: 0, opacity: 1, duration: 1.5, ease: 'power3.out' }, '-=1')
+    if (heroSubtitle.value)
+      tl.fromTo(heroSubtitle.value, { y: 20, opacity: 0 }, { y: 0, opacity: 1, duration: 1, ease: 'power3.out' }, '-=1')
 
-  // Philosophy Text Reveal
-  gsap.fromTo(philosophyText.value, 
-    { opacity: 0, y: 50 },
-    {
-      opacity: 1,
-      y: 0,
-      duration: 1.5,
-      ease: "power3.out",
-      scrollTrigger: {
-        trigger: philosophyText.value,
-        start: "top 80%",
-        toggleActions: "play none none reverse"
-      }
-    }
-  );
+    // ── Scroll reveals via IntersectionObserver ──────────────
+    revealObserver = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((entry) => {
+          if (entry.isIntersecting) {
+            entry.target.classList.add('is-visible')
+            revealObserver.unobserve(entry.target)
+          }
+        })
+      },
+      { threshold: 0.12 }
+    )
 
-  // Routine Items Stagger
-  const workoutRows = document.querySelectorAll('.workout-row');
-  workoutRows.forEach((row, i) => {
-    gsap.fromTo(row,
-      { opacity: 0, x: -50 },
-      {
-        opacity: 1,
-        x: 0,
-        duration: 1,
-        ease: "power3.out",
-        scrollTrigger: {
-          trigger: row,
-          start: "top 85%",
-          toggleActions: "play none none reverse"
-        }
-      }
-    );
-  });
+    document.querySelectorAll('.reveal-item').forEach(el => revealObserver.observe(el))
+  })
+})
 
-  // Stats Count Up
-  const statItems = document.querySelectorAll('.stat-item');
-  statItems.forEach((item) => {
-    gsap.fromTo(item,
-      { opacity: 0, y: 30 },
-      {
-        opacity: 1,
-        y: 0,
-        duration: 1,
-        scrollTrigger: {
-          trigger: item,
-          start: "top 90%",
-        }
-      }
-    );
-  });
-});
+onBeforeUnmount(() => {
+  if (revealObserver) revealObserver.disconnect()
+  gsap.killTweensOf([heroBg.value, heroTitle.value, heroSubtitle.value])
+})
 </script>
 
 <style scoped>
-/* Smooth scrolling for anchor links if needed */
-html {
-  scroll-behavior: smooth;
+/* Scroll reveal */
+.reveal-item {
+  opacity: 0;
+  transform: translateY(28px);
+  transition: opacity 0.7s cubic-bezier(0.16, 1, 0.3, 1),
+              transform 0.7s cubic-bezier(0.16, 1, 0.3, 1);
+}
+.workout-row.reveal-item {
+  transform: translateX(-40px);
+}
+.reveal-item.is-visible {
+  opacity: 1;
+  transform: translate(0, 0);
+}
+
+/* Stagger workout rows */
+.workout-row:nth-child(1) { transition-delay: 0s; }
+.workout-row:nth-child(2) { transition-delay: 0.1s; }
+.workout-row:nth-child(3) { transition-delay: 0.2s; }
+.workout-row:nth-child(4) { transition-delay: 0.3s; }
+
+/* Stagger stat items */
+.stat-item:nth-child(1) { transition-delay: 0s; }
+.stat-item:nth-child(2) { transition-delay: 0.12s; }
+.stat-item:nth-child(3) { transition-delay: 0.24s; }
+
+@media (prefers-reduced-motion: reduce) {
+  .reveal-item { transition: none; opacity: 1; transform: none; }
 }
 </style>
