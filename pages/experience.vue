@@ -21,22 +21,46 @@
 
     <section ref="timelineSection" class="reveal">
       <AuroraTimeline :data="experiences.map(e => ({ title: e.period, slot: `entry-${e.id}` }))">
-        <template v-for="e in experiences" :key="e.id" #[`entry-${e.id}`]>
-          <h2 class="ti-title">{{ localField(e, 'title') }}</h2>
-          <div class="ti-org">{{ localField(e, 'company') }}</div>
-          <p class="ti-desc">{{ localField(e, 'description') }}</p>
-          <div class="ti-tech">
-            <span v-for="tech in e.technologies" :key="tech" class="ti-tag">{{ tech }}</span>
-          </div>
-          <ul v-if="localAchievements(e).length" class="ti-bullets">
-            <li v-for="a in localAchievements(e)" :key="a">{{ a }}</li>
-          </ul>
+        <template v-for="(e, i) in experiences" :key="e.id" #[`entry-${e.id}`]>
+          <MagicCard mode="orb" class="ti-card">
+            <div v-if="i === 0" class="featured-entry-wrap">
+              <BorderBeam />
+              <h2 class="ti-title">{{ localField(e, 'title') }}</h2>
+              <div class="ti-org-row">
+                <AnimatedTooltip :items="companyTooltipItem(e)" />
+                <span class="ti-org">{{ localField(e, 'company') }}</span>
+              </div>
+              <p class="ti-desc">{{ localField(e, 'description') }}</p>
+              <div class="ti-tech">
+                <span v-for="tech in e.technologies" :key="tech" class="ti-tag">{{ tech }}</span>
+              </div>
+              <ul v-if="localAchievements(e).length" class="ti-bullets">
+                <li v-for="a in localAchievements(e)" :key="a">{{ a }}</li>
+              </ul>
+            </div>
+            <template v-else>
+              <h2 class="ti-title">{{ localField(e, 'title') }}</h2>
+              <div class="ti-org-row">
+                <AnimatedTooltip :items="companyTooltipItem(e)" />
+                <span class="ti-org">{{ localField(e, 'company') }}</span>
+              </div>
+              <p class="ti-desc">{{ localField(e, 'description') }}</p>
+              <div class="ti-tech">
+                <span v-for="tech in e.technologies" :key="tech" class="ti-tag">{{ tech }}</span>
+              </div>
+              <ul v-if="localAchievements(e).length" class="ti-bullets">
+                <li v-for="a in localAchievements(e)" :key="a">{{ a }}</li>
+              </ul>
+            </template>
+          </MagicCard>
         </template>
       </AuroraTimeline>
     </section>
 
     <section ref="eduSection" class="reveal edu-section">
-      <h2 class="edu-title">{{ $t('experience.educationTitle').toLowerCase() }}</h2>
+      <h2 class="edu-title">
+        <HyperText :text="$t('experience.educationTitle').toLowerCase()" :start-on-view="true" />
+      </h2>
       <AuroraBento :cols="1">
         <div v-for="edu in educationList" :key="edu.id" class="tile edu-item">
           <div class="edu-year">{{ edu.year }}</div>
@@ -55,6 +79,9 @@ import { gsap } from 'gsap'
 import AuroraPageHero from '~/components/aurora/layout/AuroraPageHero.vue'
 import AuroraTimeline from '~/components/aurora/layout/AuroraTimeline.vue'
 import AuroraBento from '~/components/aurora/surface/AuroraBento.vue'
+import MagicCard from '~/components/aurora/surface/MagicCard.vue'
+import BorderBeam from '~/components/aurora/surface/BorderBeam.vue'
+import AnimatedTooltip from '~/components/aurora/surface/AnimatedTooltip.vue'
 import NumberTicker from '~/components/aurora/type/NumberTicker.vue'
 import HyperText from '~/components/aurora/type/HyperText.vue'
 
@@ -67,6 +94,13 @@ const localAchievements = (item) => {
   if (locale.value === 'ru' && item.achievements_ru?.length) return item.achievements_ru
   return item.achievements || []
 }
+
+const companyTooltipItem = (e) => [{
+  id: e.id,
+  name: localField(e, 'company'),
+  designation: e.period,
+  image: 'https://api.dicebear.com/9.x/initials/svg?seed=' + encodeURIComponent(localField(e, 'company')),
+}]
 
 const experiences = ref([
   {
@@ -305,6 +339,26 @@ useSeoMeta({
   color: var(--muted);
 }
 
+/* Timeline entry MagicCard wrapper */
+.ti-card { padding: 0; }
+.ti-card :deep(.card-content) { padding: 0; }
+
+/* Featured entry with BorderBeam */
+.featured-entry-wrap {
+  position: relative;
+  border-radius: 14px;
+  overflow: hidden;
+  padding: 24px;
+}
+
+/* Company row with AnimatedTooltip */
+.ti-org-row {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 18px;
+}
+
 /* Timeline entry content styles (page-specific) */
 .ti-title {
   font-family: 'Geist', system-ui, sans-serif;
@@ -320,7 +374,6 @@ useSeoMeta({
   font-style: italic;
   font-size: 20px;
   color: var(--muted);
-  margin-bottom: 18px;
 }
 .ti-desc {
   font-family: 'Geist', system-ui, sans-serif;
