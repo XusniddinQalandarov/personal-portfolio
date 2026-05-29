@@ -1,80 +1,91 @@
 <template>
-  <article class="projects-page">
-    <AuroraPageHero
-      :eyebrow="$t('aurora.cursor.projects')"
-      :title="$t('projects.title1').toLowerCase()"
-      :title-accent="$t('projects.title2').toLowerCase()"
-      :subtitle="$t('projects.subtitle')"
-    />
+  <section class="projects-page">
+    <BackgroundBeams />
+    <Meteors :number="11" />
+    <Spotlight />
 
-    <!-- AnimatedTabs replaces filter pills -->
-    <section ref="filterEl" class="filter-row reveal">
-      <AnimatedTabs
-        v-if="filterTabs.length"
-        :tabs="filterTabs"
-        :default-value="selectedFilter"
-        @update:active="onFilterChange"
+    <article class="projects-inner">
+      <AuroraPageHero
+        :eyebrow="$t('aurora.cursor.projects')"
+        :title="$t('projects.title1').toLowerCase()"
+        :title-accent="$t('projects.title2').toLowerCase()"
+        :subtitle="$t('projects.subtitle')"
       />
-    </section>
 
-    <!-- Loading -->
-    <div v-if="loading" class="state">
-      <span class="dot-pulse" />
-    </div>
+      <!-- AnimatedTabs replaces filter pills -->
+      <section ref="filterEl" class="filter-row reveal">
+        <AnimatedTabs
+          v-if="filterTabs.length"
+          :tabs="filterTabs"
+          :default-value="selectedFilter"
+          @update:active="onFilterChange"
+        />
+      </section>
 
-    <!-- Empty -->
-    <div v-else-if="!filteredProjects.length" class="state empty">
-      {{ $t('projects.noProjects') }}
-    </div>
+      <!-- Loading -->
+      <div v-if="loading" class="state">
+        <span class="dot-pulse" />
+      </div>
 
-    <section v-else ref="gridEl" class="grid-wrap">
-      <FocusCards>
-        <FocusCard
-          v-for="(project, i) in filteredProjects"
-          :key="project.id"
-          :index="i"
-          class="stagger-in"
-          :style="{ animationDelay: `${i * 0.08}s` }"
-        >
-          <MagicCard
-            class="project-card"
-            :class="{ featured: i === 0 }"
-            data-cursor-card
-            :data-cursor-label="$t('projects.viewCaseStudy')"
-            @click="openProjectModal(project)"
+      <!-- Empty -->
+      <div v-else-if="!filteredProjects.length" class="state empty">
+        {{ $t('projects.noProjects') }}
+      </div>
+
+      <section v-else ref="gridEl" class="grid-wrap">
+        <FocusCards>
+          <FocusCard
+            v-for="(project, i) in filteredProjects"
+            :key="project.id"
+            :index="i"
+            class="stagger-in"
+            :style="{ animationDelay: `${i * 0.08}s` }"
           >
-            <BorderBeam v-if="i === 0" />
-            <div class="thumb">
-              <img
-                :src="project.image_url || '/images/project-placeholder.jpg'"
-                :alt="project.title"
-                @load="imageLoaded[project.id] = true"
-              />
-            </div>
-            <div class="meta">
-              <span class="index">{{ String(i + 1).padStart(2, '0') }} · {{ project.category }}</span>
-              <span class="year" v-if="project.year">{{ project.year }}</span>
-            </div>
-            <h3 class="title">{{ localField(project, 'title') }}</h3>
-            <p class="desc">{{ localField(project, 'description') }}</p>
-            <div class="bottom">
-              <div class="tags">
-                <span v-for="tech in (project.technologies || []).slice(0, 3)" :key="tech" class="tag">{{ tech }}</span>
+            <MagicCard
+              class="project-card"
+              :class="{ featured: i === 0 }"
+              data-cursor-card
+              :data-cursor-label="$t('projects.viewCaseStudy')"
+              @click="openProjectModal(project)"
+            >
+              <BorderBeam v-if="i === 0" />
+              <div class="thumb">
+                <img
+                  :src="project.image_url || '/images/project-placeholder.jpg'"
+                  :alt="project.title"
+                  @load="imageLoaded[project.id] = true"
+                />
               </div>
-              <span class="open-arrow" aria-hidden="true">↗</span>
-            </div>
-          </MagicCard>
-        </FocusCard>
-      </FocusCards>
-    </section>
+              <div class="meta">
+                <span class="index">{{ String(i + 1).padStart(2, '0') }} · {{ project.category }}</span>
+                <span class="year" v-if="project.year">{{ project.year }}</span>
+              </div>
+              <h3 class="title">{{ localField(project, 'title') }}</h3>
+              <p class="desc">{{ localField(project, 'description') }}</p>
+              <div class="bottom">
+                <div class="tags">
+                  <span v-for="tech in (project.technologies || []).slice(0, 3)" :key="tech" class="tag">{{ tech }}</span>
+                </div>
+                <InteractiveHoverButton @click.stop="openProjectModal(project)">View</InteractiveHoverButton>
+              </div>
+            </MagicCard>
+          </FocusCard>
+        </FocusCards>
+      </section>
 
-    <ProjectModal
-      v-if="selectedProject"
-      :isOpen="isModalOpen"
-      :project="selectedProject"
-      @close="closeProjectModal"
-    />
-  </article>
+      <!-- ShimmerButton archive CTA -->
+      <div class="archive-cta">
+        <ShimmerButton to="/projects/archive">Browse Archive →</ShimmerButton>
+      </div>
+
+      <ProjectModal
+        v-if="selectedProject"
+        :isOpen="isModalOpen"
+        :project="selectedProject"
+        @close="closeProjectModal"
+      />
+    </article>
+  </section>
 </template>
 
 <script setup>
@@ -87,6 +98,11 @@ import MagicCard from '~/components/aurora/surface/MagicCard.vue'
 import BorderBeam from '~/components/aurora/surface/BorderBeam.vue'
 import FocusCards from '~/components/aurora/surface/FocusCards.vue'
 import FocusCard from '~/components/aurora/surface/FocusCard.vue'
+import BackgroundBeams from '~/components/aurora/surface/BackgroundBeams.vue'
+import Spotlight from '~/components/aurora/surface/Spotlight.vue'
+import Meteors from '~/components/aurora/surface/Meteors.vue'
+import InteractiveHoverButton from '~/components/aurora/primitives/InteractiveHoverButton.vue'
+import ShimmerButton from '~/components/aurora/primitives/ShimmerButton.vue'
 
 if (typeof window !== 'undefined') gsap.registerPlugin(ScrollTrigger)
 
@@ -145,8 +161,15 @@ useSeoMeta({
 
 <style scoped>
 .projects-page {
+  position: relative;
   max-width: 1400px;
   margin: 0 auto;
+  overflow: hidden;
+}
+
+.projects-inner {
+  position: relative;
+  z-index: 2;
   padding-bottom: 220px;
   font-family: 'Geist', system-ui, sans-serif;
   color: var(--text);
@@ -254,14 +277,11 @@ useSeoMeta({
   border-radius: 999px;
   border: 1px solid var(--glass-border);
 }
-.open-arrow {
-  width: 32px; height: 32px;
-  border-radius: 50%;
-  border: 1px solid var(--glass-border);
-  display: flex; align-items: center; justify-content: center;
-  color: var(--muted);
-  transition: all 0.3s var(--ease-cinematic);
-}
-.project-card:hover .open-arrow { border-color: var(--amber); color: var(--amber); transform: rotate(-45deg); }
 
+/* Archive CTA */
+.archive-cta {
+  display: flex;
+  justify-content: center;
+  padding: 80px 0 0;
+}
 </style>
