@@ -1,0 +1,63 @@
+/* Aurora design tokens — single source of truth for both modes.
+   See docs/superpowers/specs/2026-05-29-portfolio-aurora-redesign-design.md §3.1, §10 */
+
+:root, [data-theme="dark"] {
+  --void: #08080d;
+  --void-soft: #0c0c14;
+  --line: rgba(255, 255, 255, 0.055);
+  --line-strong: rgba(255, 255, 255, 0.12);
+
+  --indigo: #818cf8;
+  --amber: #d4a574;
+  --cyan: #67e8f9;
+  --magenta: #f472b6;
+
+  --text: #e8e6ef;
+  --muted: rgba(232, 230, 239, 0.55);
+
+  --glass-bg: rgba(255, 255, 255, 0.035);
+  --glass-border: rgba(255, 255, 255, 0.08);
+
+  --ease-cinematic: cubic-bezier(0.16, 1, 0.3, 1);
+  --dur-instant: 150ms;
+  --dur-default: 400ms;
+  --dur-cinematic: 800ms;
+  --dur-grand: 1400ms;
+
+  /* Per-route accent — defaults; useAuroraTheme overrides. */
+  --accent-primary: var(--indigo);
+  --accent-secondary: var(--cyan);
+  --accent-tertiary: var(--amber);
+}
+
+[data-theme="light"] {
+  --void: #f7f3ee;
+  --void-soft: #efe9e0;
+  --line: rgba(28, 25, 23, 0.07);
+  --line-strong: rgba(28, 25, 23, 0.12);
+
+  --indigo: #818cf8;
+  --amber: #d4a574;
+  --cyan: #67e8f9;
+  --magenta: #f472b6;
+
+  --text: #1c1917;
+  --muted: rgba(28, 25, 23, 0.55);
+
+  --glass-bg: rgba(255, 255, 255, 0.55);
+  --glass-border: rgba(28, 25, 23, 0.08);
+}
+
+/* Font family CSS aliases for use outside Tailwind utilities. */
+.font-aurora-sans { font-family: 'Geist', system-ui, sans-serif; }
+.font-aurora-mono { font-family: 'Geist Mono', 'JetBrains Mono', ui-monospace, monospace; }
+.font-aurora-serif { font-family: 'Instrument Serif', Georgia, serif; }
+
+/* Disable smooth cursor + heavy animations for users who request it. */
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: 0.001ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.001ms !important;
+  }
+}
