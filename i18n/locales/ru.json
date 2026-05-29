@@ -220,5 +220,41 @@
         "saveFailed": "Не удалось сохранить",
         "deleteFailed": "Не удалось удалить",
         "confirmDelete": "Вы уверены, что хотите удалить?"
+    },
+    "aurora": {
+        "brand": "x · q",
+        "eyebrow": "Архитектор ПО · С 2014 года",
+        "name": "ХУСНИДДИН",
+        "surname": "каландаров",
+        "subtitle": "Я создаю цифровые продукты, ощущающиеся неизбежными — там, где инженерная точность встречает моменты восторга.",
+        "viewWork": "Работы",
+        "getInTouch": "Связаться",
+        "scrollMarker": "Скролл · 01 / 04",
+        "live": "Ташкент · 24/7",
+        "indexIntro": "01 · ИНТРО",
+        "indexWork": "02 · РАБОТА",
+        "indexAbout": "03 · ОБО МНЕ",
+        "indexContact": "04 · КОНТАКТ",
+        "dock": {
+            "home": "ГЛ",
+            "about": "ОМ",
+            "experience": "ОП",
+            "projects": "ПР",
+            "blogs": "БЛ",
+            "fitness": "ФТ",
+            "contact": "КТ"
+        },
+        "cursor": {
+            "hover": "Наведи",
+            "view": "Смотреть →",
+            "reachOut": "Написать",
+            "home": "Главная",
+            "about": "Обо мне",
+            "experience": "Опыт",
+            "projects": "Проекты",
+            "blogs": "Блог",
+            "fitness": "Фитнес",
+            "contact": "Контакт"
+        }
     }
 }

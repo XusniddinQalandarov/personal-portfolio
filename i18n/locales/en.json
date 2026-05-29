@@ -220,5 +220,41 @@
         "saveFailed": "Failed to save",
         "deleteFailed": "Failed to delete",
         "confirmDelete": "Are you sure you want to delete this?"
+    },
+    "aurora": {
+        "brand": "x · q",
+        "eyebrow": "Software Architect · Building since 2014",
+        "name": "XUSNIDDIN",
+        "surname": "qalandarov",
+        "subtitle": "I build digital experiences that feel inevitable — products that fold engineering rigor into moments of delight.",
+        "viewWork": "View Work",
+        "getInTouch": "Get in touch",
+        "scrollMarker": "Scroll · 01 / 04",
+        "live": "Tashkent · 24/7",
+        "indexIntro": "01 · INTRO",
+        "indexWork": "02 · WORK",
+        "indexAbout": "03 · ABOUT",
+        "indexContact": "04 · CONTACT",
+        "dock": {
+            "home": "HM",
+            "about": "AB",
+            "experience": "EX",
+            "projects": "PR",
+            "blogs": "BL",
+            "fitness": "FT",
+            "contact": "CT"
+        },
+        "cursor": {
+            "hover": "Hover",
+            "view": "View →",
+            "reachOut": "Reach out",
+            "home": "Home",
+            "about": "About",
+            "experience": "Experience",
+            "projects": "Projects",
+            "blogs": "Blogs",
+            "fitness": "Fitness",
+            "contact": "Contact"
+        }
     }
 }
