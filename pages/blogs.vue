@@ -37,28 +37,31 @@
     <div v-if="loading" class="state"><span class="dot-pulse" /></div>
     <div v-else-if="!filteredBlogs.length" class="state empty">{{ $t('blogs.noArticles') }}</div>
 
-    <section v-else ref="listEl" class="grid">
-      <MagicCard
-        v-for="blog in filteredBlogs"
-        :key="blog.id"
-        class="blog-card reveal-card"
-        data-cursor-card
-        :data-cursor-label="$t('blogs.readArticle')"
-        @click="navigateTo(`/blog/${blog.slug}`)"
-      >
-        <div class="thumb">
-          <img v-if="blog.image_url" :src="blog.image_url" :alt="blog.title" />
-          <div v-else class="thumb-fallback"><i class="pi pi-image" /></div>
-        </div>
-        <div class="meta">
-          <span class="date">{{ formatDate(blog.created_at) }}</span>
-          <span v-if="blog.tags?.length" class="dot">·</span>
-          <span v-if="blog.tags?.length" class="topic">#{{ blog.tags[0] }}</span>
-        </div>
-        <h3 class="title">{{ localField(blog, 'title') }}</h3>
-        <p class="excerpt">{{ localField(blog, 'excerpt') }}</p>
-        <div class="read">{{ $t('blogs.readArticle') }} <span class="arrow">→</span></div>
-      </MagicCard>
+    <!-- AnimatedList wraps blog grid; .al-track overridden to grid layout -->
+    <section v-else ref="listEl" class="grid-wrap">
+      <AnimatedList :delay="180" class="blogs-animated-list">
+        <MagicCard
+          v-for="blog in filteredBlogs"
+          :key="blog.id"
+          class="blog-card reveal-card"
+          data-cursor-card
+          :data-cursor-label="$t('blogs.readArticle')"
+          @click="navigateTo(`/blog/${blog.slug}`)"
+        >
+          <div class="thumb">
+            <img v-if="blog.image_url" :src="blog.image_url" :alt="blog.title" />
+            <div v-else class="thumb-fallback"><i class="pi pi-image" /></div>
+          </div>
+          <div class="meta">
+            <span class="date">{{ formatDate(blog.created_at) }}</span>
+            <span v-if="blog.tags?.length" class="dot">·</span>
+            <span v-if="blog.tags?.length" class="topic">#{{ blog.tags[0] }}</span>
+          </div>
+          <h3 class="title">{{ localField(blog, 'title') }}</h3>
+          <p class="excerpt">{{ localField(blog, 'excerpt') }}</p>
+          <div class="read">{{ $t('blogs.readArticle') }} <span class="arrow">→</span></div>
+        </MagicCard>
+      </AnimatedList>
     </section>
   </article>
 </template>
@@ -71,6 +74,7 @@ import AuroraPageHero from '~/components/aurora/layout/AuroraPageHero.vue'
 import MagicCard from '~/components/aurora/surface/MagicCard.vue'
 import HeroHighlight from '~/components/aurora/surface/HeroHighlight.vue'
 import Highlight from '~/components/aurora/type/Highlight.vue'
+import AnimatedList from '~/components/aurora/surface/AnimatedList.vue'
 
 if (typeof window !== 'undefined') gsap.registerPlugin(ScrollTrigger)
 
@@ -92,12 +96,6 @@ onMounted(async () => {
   if (typeof window === 'undefined') return
   nextTick(() => {
     if (filtersEl.value) gsap.fromTo(filtersEl.value, { y: 24, opacity: 0 }, { y: 0, opacity: 1, duration: 0.8, ease: 'power3.out' })
-    document.querySelectorAll('.reveal-card').forEach((el) => {
-      gsap.fromTo(el, { y: 30, opacity: 0 }, {
-        y: 0, opacity: 1, duration: 0.9, ease: 'power3.out',
-        scrollTrigger: { trigger: el, start: 'top 90%' },
-      })
-    })
   })
 })
 
@@ -220,14 +218,25 @@ useSeoMeta({
 .dot-pulse { display: inline-block; width: 8px; height: 8px; background: var(--amber); border-radius: 50%; animation: pulse 1.2s ease-in-out infinite; }
 @keyframes pulse { 0%, 100% { opacity: 0.3; transform: scale(0.9); } 50% { opacity: 1; transform: scale(1.2); } }
 
-.grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
-  gap: 22px;
+.grid-wrap {
   padding: 0 6vw;
   max-width: 1400px;
   margin: 0 auto;
 }
+
+/* Override AnimatedList column layout to restore grid */
+.blogs-animated-list :deep(.animated-list),
+.blogs-animated-list :deep(.al-track) {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+  gap: 22px;
+  flex-direction: unset;
+  align-items: unset;
+}
+.blogs-animated-list :deep(.al-item) {
+  width: 100%;
+}
+
 .blog-card { cursor: none; }
 .blog-card :deep(.card-content) { padding: 0; }
 
