@@ -10,19 +10,21 @@
       :class="{ active: $route.path === item.to }"
       :data-cursor-label="$t(`aurora.cursor.${item.cursorKey}`)"
       :aria-label="$t(`aurora.cursor.${item.cursorKey}`)"
-    >{{ $t(`aurora.dock.${item.cursorKey}`) }}</NuxtLink>
+    >
+      <i :class="['pi', item.icon]" />
+    </NuxtLink>
   </nav>
 </template>
 
 <script setup lang="ts">
 const items = [
-  { to: '/',           cursorKey: 'home' },
-  { to: '/about',      cursorKey: 'about' },
-  { to: '/experience', cursorKey: 'experience' },
-  { to: '/projects',   cursorKey: 'projects' },
-  { to: '/blogs',      cursorKey: 'blogs' },
-  { to: '/fitness',    cursorKey: 'fitness' },
-  { to: '/contact',    cursorKey: 'contact' },
+  { to: '/',           cursorKey: 'home',       icon: 'pi-home' },
+  { to: '/about',      cursorKey: 'about',      icon: 'pi-user' },
+  { to: '/experience', cursorKey: 'experience', icon: 'pi-briefcase' },
+  { to: '/projects',   cursorKey: 'projects',   icon: 'pi-folder' },
+  { to: '/blogs',      cursorKey: 'blogs',      icon: 'pi-book' },
+  { to: '/fitness',    cursorKey: 'fitness',    icon: 'pi-bolt' },
+  { to: '/contact',    cursorKey: 'contact',    icon: 'pi-envelope' },
 ] as const
 </script>
 
@@ -44,10 +46,7 @@ const items = [
   display: flex; align-items: center; justify-content: center;
   border-radius: 999px;
   color: var(--muted);
-  font-family: 'Geist Mono', monospace;
-  font-size: 11px; font-weight: 500;
-  letter-spacing: 0.06em;
-  text-transform: uppercase;
+  font-size: 15px;
   transition: transform 0.4s var(--ease-cinematic), color 0.3s, background 0.3s;
   position: relative;
   text-decoration: none;
@@ -59,9 +58,4 @@ const items = [
   background: rgba(255,255,255,0.04);
 }
 .dock-item.active { color: var(--amber); }
-.dock-item.active::after {
-  content: ''; position: absolute; bottom: -4px; left: 50%; transform: translateX(-50%);
-  width: 3px; height: 3px; border-radius: 50%; background: var(--amber);
-  box-shadow: 0 0 6px var(--amber);
-}
 </style>

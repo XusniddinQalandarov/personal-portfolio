@@ -17,4 +17,15 @@ describe('AuroraDock', () => {
     })
     expect(w.findAll('.dock-item').length).toBe(7)
   })
+
+  it('renders 7 primeicon <i> elements', () => {
+    const w = mount(AuroraDock, {
+      global: {
+        stubs,
+        mocks: { $t: (k: string) => k, $route: { path: '/' } },
+      },
+    })
+    const icons = w.findAll('i.pi')
+    expect(icons.length).toBe(7)
+  })
 })
