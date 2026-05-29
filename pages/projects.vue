@@ -1,203 +1,290 @@
 <template>
-  <div class="min-h-screen py-24 px-4 md:px-0">
-    <div class="max-w-7xl mx-auto">
-      
-      <!-- Minimalist Header -->
-      <div ref="headerEl" class="mb-24 text-center md:text-left border-b border-gray-200 dark:border-white/10 pb-12 opacity-0">
-        <h1 class="text-6xl md:text-8xl font-display font-black tracking-tighter text-main uppercase mb-6 leading-none">
-          {{ $t('projects.title1') }}<br>{{ $t('projects.title2') }}
-        </h1>
-        <p class="text-xl text-sub font-light max-w-2xl">
-          {{ $t('projects.subtitle') }}
-        </p>
+  <section class="projects-page">
+    <BackgroundBeams />
+    <Meteors :number="11" />
+
+    <article class="projects-inner">
+      <AuroraPageHero
+        :eyebrow="$t('aurora.cursor.projects')"
+        :title="$t('projects.title1').toLowerCase()"
+        :title-accent="$t('projects.title2').toLowerCase()"
+        :subtitle="$t('projects.subtitle')"
+      />
+
+      <!-- AnimatedTabs replaces filter pills -->
+      <section ref="filterEl" class="filter-row reveal">
+        <AnimatedTabs
+          v-if="filterTabs.length"
+          :tabs="filterTabs"
+          :default-value="selectedFilter"
+          @update:active="onFilterChange"
+        />
+      </section>
+
+      <!-- Loading -->
+      <div v-if="loading" class="state">
+        <span class="dot-pulse" />
       </div>
 
-      <!-- Filter Tags (Minimalist Pill) -->
-      <div ref="tagsEl" class="flex flex-wrap gap-4 mb-20 opacity-0">
-        <button
-          v-for="tag in filterTags"
-          :key="tag"
-          @click="selectedFilter = tag"
-          class="px-6 py-2 rounded-full border text-sm uppercase tracking-widest transition-all duration-300"
-          :class="selectedFilter === tag 
-            ? 'bg-main text-charcoal border-main' 
-            : 'bg-transparent text-sub border-gray-300 dark:border-white/20 hover:border-accent-amber hover:text-accent-amber'"
-        >
-          {{ tag === 'All' ? $t('projects.all') : tag }}
-        </button>
-      </div>
-
-      <!-- Projects List (Editorial) -->
-      <div v-if="loading" class="text-center py-32">
-        <div class="inline-block w-2 h-2 bg-main rounded-full animate-ping"></div>
-      </div>
-
-      <div v-else-if="!filteredProjects.length" class="text-center py-32 text-sub uppercase tracking-widest">
+      <!-- Empty -->
+      <div v-else-if="!filteredProjects.length" class="state empty">
         {{ $t('projects.noProjects') }}
       </div>
 
-      <div ref="listEl" v-else class="space-y-32">
-        <div 
-          v-for="(project, index) in filteredProjects" 
-          :key="project.id"
-          class="project-item group relative opacity-0"
-        >
-          <div class="flex flex-col md:flex-row gap-12 md:gap-24 items-start">
-            
-            <!-- Project Image (Large) -->
-            <div class="w-full md:w-3/5 overflow-hidden rounded-lg aspect-video relative cursor-pointer" @click="openProjectModal(project)">
-              <div class="absolute inset-0 bg-gray-200 dark:bg-white/5 animate-pulse" v-if="!imageLoaded[project.id]"></div>
-              <img 
-                :src="project.image_url || '/images/project-placeholder.jpg'" 
-                :alt="project.title"
-                class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105"
-                @load="imageLoaded[project.id] = true"
-              />
-              <div class="absolute inset-0 bg-black/0 group-hover:bg-black/20 transition-colors duration-300 flex items-center justify-center opacity-0 group-hover:opacity-100">
-                <span class="px-6 py-3 bg-white text-black font-bold uppercase tracking-widest text-sm rounded-full transform translate-y-4 group-hover:translate-y-0 transition-transform duration-300">
-                  {{ $t('projects.viewCaseStudy') }}
-                </span>
+      <section v-else ref="gridEl" class="grid-wrap">
+        <FocusCards>
+          <FocusCard
+            v-for="(project, i) in filteredProjects"
+            :key="project.id"
+            :index="i"
+            class="stagger-in"
+            :style="{ animationDelay: `${i * 0.08}s` }"
+          >
+            <MagicCard
+              class="project-card"
+              :class="{ featured: i === 0 }"
+              data-cursor-card
+              :data-cursor-label="$t('projects.viewCaseStudy')"
+              @click="openProjectModal(project)"
+            >
+              <BorderBeam v-if="i === 0" />
+              <div class="thumb">
+                <img
+                  :src="project.image_url || '/images/project-placeholder.jpg'"
+                  :alt="project.title"
+                  @load="imageLoaded[project.id] = true"
+                />
               </div>
-            </div>
-
-            <!-- Project Details -->
-            <div class="w-full md:w-2/5 flex flex-col justify-center h-full pt-4">
-              <div class="text-xs font-mono text-accent-amber uppercase tracking-widest mb-4">
-                0{{ index + 1 }} — {{ project.category }}
+              <div class="meta">
+                <span class="index">{{ String(i + 1).padStart(2, '0') }} · {{ project.category }}</span>
+                <span class="year" v-if="project.year">{{ project.year }}</span>
               </div>
-              
-              <h2 class="text-4xl md:text-5xl font-display font-bold text-main mb-6 leading-tight group-hover:text-accent-amber transition-colors cursor-pointer" @click="openProjectModal(project)">
-                {{ localField(project, 'title') }}
-              </h2>
-              
-              <p class="text-lg text-sub font-light leading-relaxed mb-8 line-clamp-3">
-                {{ localField(project, 'description') }}
-              </p>
-
-              <!-- Tech Stack -->
-              <div class="flex flex-wrap gap-2 mb-8">
-                <span v-for="tech in project.technologies?.slice(0, 4)" :key="tech" class="text-xs font-mono text-sub border border-gray-200 dark:border-white/10 px-3 py-1 rounded-full uppercase">
-                  {{ tech }}
-                </span>
+              <h3 class="title">{{ localField(project, 'title') }}</h3>
+              <p class="desc">{{ localField(project, 'description') }}</p>
+              <div class="bottom">
+                <div class="tags">
+                  <span v-for="tech in (project.technologies || []).slice(0, 3)" :key="tech" class="tag">{{ tech }}</span>
+                </div>
+                <button class="view-btn" @click.stop="openProjectModal(project)">View</button>
               </div>
+            </MagicCard>
+          </FocusCard>
+        </FocusCards>
+      </section>
 
-              <!-- Links -->
-              <div class="flex items-center gap-6">
-                 <a v-if="project.demo_url" :href="project.demo_url" target="_blank" class="text-main font-bold uppercase tracking-widest text-sm hover:text-accent-amber transition-colors flex items-center gap-2">
-                   {{ $t('projects.liveDemo') }} <i class="pi pi-arrow-up-right"></i>
-                 </a>
-                 <a v-if="project.github_url" :href="project.github_url" target="_blank" class="text-sub font-bold uppercase tracking-widest text-sm hover:text-main transition-colors flex items-center gap-2">
-                   {{ $t('projects.github') }} <i class="pi pi-github"></i>
-                 </a>
-              </div>
-            </div>
-
-          </div>
-        </div>
-      </div>
-      
-    </div>
-
-    <!-- Project Modal (Reusing existing component structure) -->
-    <ProjectModal 
-      v-if="selectedProject"
-      :isOpen="isModalOpen" 
-      :project="selectedProject" 
-      @close="closeProjectModal"
-    />
-  </div>
+      <ProjectModal
+        v-if="selectedProject"
+        :isOpen="isModalOpen"
+        :project="selectedProject"
+        @close="closeProjectModal"
+      />
+    </article>
+  </section>
 </template>
 
 <script setup>
-import { gsap } from 'gsap';
-import { ScrollTrigger } from 'gsap/ScrollTrigger';
-
-gsap.registerPlugin(ScrollTrigger);
+definePageMeta({ layout: 'aurora' })
+import { gsap } from 'gsap'
+import { ScrollTrigger } from 'gsap/ScrollTrigger'
+import AuroraPageHero from '~/components/aurora/layout/AuroraPageHero.vue'
+import AnimatedTabs from '~/components/aurora/layout/AnimatedTabs.vue'
+import MagicCard from '~/components/aurora/surface/MagicCard.vue'
+import BorderBeam from '~/components/aurora/surface/BorderBeam.vue'
+import FocusCards from '~/components/aurora/surface/FocusCards.vue'
+import FocusCard from '~/components/aurora/surface/FocusCard.vue'
+import BackgroundBeams from '~/components/aurora/surface/BackgroundBeams.vue'
+import Meteors from '~/components/aurora/surface/Meteors.vue'
+if (typeof window !== 'undefined') gsap.registerPlugin(ScrollTrigger)
 
 const { t } = useI18n()
 const { localField } = useLocalizedContent()
 
-const projects = ref([]);
-const loading = ref(true);
-const selectedFilter = ref('All');
-const imageLoaded = ref({});
+const projects = ref([])
+const loading = ref(true)
+const selectedFilter = ref('All')
+const imageLoaded = ref({})
 
-// Modal state
-const isModalOpen = ref(false);
-const selectedProject = ref(null);
+const isModalOpen = ref(false)
+const selectedProject = ref(null)
 
-const headerEl = ref(null);
-const tagsEl = ref(null);
-const listEl = ref(null);
+const filterEl = ref(null)
+const gridEl = ref(null)
 
-// Fetch Data
 onMounted(async () => {
   try {
-    loading.value = true;
-    const response = await $fetch('/api/projects');
-    if (response?.data) {
-      projects.value = response.data;
-    } else if (Array.isArray(response)) {
-      projects.value = response;
-    }
+    loading.value = true
+    const response = await $fetch('/api/projects').catch(() => null)
+    if (response?.data) projects.value = response.data
+    else if (Array.isArray(response)) projects.value = response
   } catch (e) {
-    console.error(e);
+    console.error(e)
   } finally {
-    loading.value = false;
-    nextTick(() => initAnimations());
+    loading.value = false
+    nextTick(() => initAnimations())
   }
-});
+})
 
-const filterTags = computed(() => ['All', ...new Set(projects.value.map(p => p.category))]);
+const filterTags = computed(() => ['All', ...new Set(projects.value.map(p => p.category).filter(Boolean))])
+const filterTabs = computed(() => filterTags.value.map(tag => ({
+  title: tag === 'All' ? t('projects.all') : tag,
+  value: tag,
+})))
 
-const filteredProjects = computed(() => {
-  if (selectedFilter.value === 'All') return projects.value;
-  return projects.value.filter(p => p.category === selectedFilter.value);
-});
+const filteredProjects = computed(() =>
+  selectedFilter.value === 'All' ? projects.value : projects.value.filter(p => p.category === selectedFilter.value)
+)
 
-const openProjectModal = (project) => {
-  selectedProject.value = project;
-  isModalOpen.value = true;
-};
+const onFilterChange = (v) => { selectedFilter.value = v }
+const openProjectModal = (p) => { selectedProject.value = p; isModalOpen.value = true }
+const closeProjectModal = () => { isModalOpen.value = false; selectedProject.value = null }
 
-const closeProjectModal = () => {
-  isModalOpen.value = false;
-  selectedProject.value = null;
-};
-
-const initAnimations = () => {
-  const tl = gsap.timeline();
-  tl.fromTo(headerEl.value, { y: 50, opacity: 0 }, { y: 0, opacity: 1, duration: 1, ease: 'power3.out' })
-    .fromTo(tagsEl.value, { y: 30, opacity: 0 }, { y: 0, opacity: 1, duration: 0.8 }, '-=0.6');
-
-  const items = document.querySelectorAll('.project-item');
-  items.forEach((item) => {
-    gsap.fromTo(item, 
-      { y: 50, opacity: 0 },
-      {
-        y: 0,
-        opacity: 1,
-        duration: 1,
-        scrollTrigger: {
-          trigger: item,
-          start: "top 85%",
-        }
-      }
-    );
-  });
-};
+function initAnimations() {
+  if (typeof window === 'undefined') return
+  if (filterEl.value) gsap.fromTo(filterEl.value, { y: 24, opacity: 0 }, { y: 0, opacity: 1, duration: 0.8, ease: 'power3.out' })
+}
 
 useSeoMeta({
   title: () => t('projects.seoTitle'),
-  description: () => t('projects.seoDescription')
+  description: () => t('projects.seoDescription'),
 })
 </script>
 
 <style scoped>
-.bg-main {
-  background-color: var(--color-text-primary);
+.projects-page {
+  position: relative;
+  max-width: 1400px;
+  margin: 0 auto;
+  overflow: hidden;
 }
-.text-charcoal {
-  color: var(--color-bg-primary);
+
+.projects-inner {
+  position: relative;
+  z-index: 2;
+  padding-bottom: 220px;
+  font-family: 'Geist', system-ui, sans-serif;
+  color: var(--text);
 }
+
+.filter-row {
+  padding: 0 6vw 56px;
+  max-width: 1200px;
+  margin: 0 auto;
+  opacity: 0;
+}
+
+.state {
+  text-align: center;
+  padding: 80px 0;
+  font-family: 'Geist Mono', monospace;
+  color: var(--muted);
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+  font-size: 11px;
+}
+.dot-pulse { display: inline-block; width: 8px; height: 8px; background: var(--amber); border-radius: 50%; animation: pulse 1.2s ease-in-out infinite; }
+@keyframes pulse { 0%, 100% { opacity: 0.3; transform: scale(0.9); } 50% { opacity: 1; transform: scale(1.2); } }
+
+.grid-wrap {
+  padding: 0 6vw;
+  max-width: 1400px;
+  margin: 0 auto;
+}
+
+.stagger-in {
+  opacity: 0;
+  transform: translateY(24px);
+  animation: stagger-pop 0.7s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+  will-change: transform, opacity;
+}
+@keyframes stagger-pop {
+  to { opacity: 1; transform: translateY(0); }
+}
+@media (prefers-reduced-motion: reduce) {
+  .stagger-in { animation: none; opacity: 1; transform: none; }
+}
+
+.project-card { cursor: none; }
+.project-card :deep(.card-content) { padding: 0; }
+
+.thumb {
+  aspect-ratio: 16 / 10;
+  overflow: hidden;
+  border-radius: 22px 22px 0 0;
+  background: rgba(255,255,255,0.03);
+  margin: -1px -1px 0;
+}
+.thumb img {
+  width: 100%; height: 100%; object-fit: cover;
+  transition: transform 0.6s var(--ease-cinematic);
+}
+.project-card:hover .thumb img { transform: scale(1.04); }
+
+.meta {
+  display: flex; justify-content: space-between; align-items: center;
+  padding: 18px 24px 0;
+}
+.index, .year {
+  font-family: 'Geist Mono', monospace;
+  font-size: 10px;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+  color: var(--amber);
+}
+.year { color: var(--muted); }
+
+.title {
+  font-family: 'Geist', system-ui, sans-serif;
+  font-weight: 700;
+  font-size: 24px;
+  line-height: 1.1;
+  letter-spacing: -0.02em;
+  padding: 12px 24px 8px;
+  color: var(--text);
+}
+.desc {
+  font-weight: 300;
+  font-size: 14px;
+  line-height: 1.6;
+  color: var(--muted);
+  padding: 0 24px 20px;
+  display: -webkit-box;
+  -webkit-line-clamp: 3;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+.bottom {
+  display: flex; justify-content: space-between; align-items: center;
+  padding: 0 24px 24px;
+}
+.tags { display: flex; gap: 6px; flex-wrap: wrap; }
+.tag {
+  font-family: 'Geist Mono', monospace;
+  font-size: 9px;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: var(--muted);
+  padding: 4px 9px;
+  border-radius: 999px;
+  border: 1px solid var(--glass-border);
+}
+
+.view-btn {
+  font-family: 'Geist Mono', monospace;
+  font-size: 11px;
+  font-weight: 500;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+  color: var(--text);
+  background: transparent;
+  border: 1px solid var(--glass-border);
+  padding: 10px 22px;
+  border-radius: 999px;
+  cursor: none;
+  transition: border-color 0.25s var(--ease-cinematic), color 0.25s var(--ease-cinematic);
+}
+.view-btn:hover {
+  border-color: var(--amber);
+  color: var(--amber);
+}
+
 </style>

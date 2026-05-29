@@ -10,7 +10,7 @@ export default defineNuxtConfig({
         { rel: 'icon', type: 'image/svg+xml', href: '/images/icon.svg' },
         { rel: 'preconnect', href: 'https://fonts.googleapis.com' },
         { rel: 'preconnect', href: 'https://fonts.gstatic.com', crossorigin: '' },
-        { rel: 'stylesheet', href: 'https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=DM+Mono:wght@300;400;500&family=Sora:wght@300;400;500;600;700;800&display=swap' }
+        { rel: 'stylesheet', href: 'https://fonts.googleapis.com/css2?family=Geist:wght@300;400;500;600;700;800;900&family=Geist+Mono:wght@300;400;500&family=Instrument+Serif:ital@0;1&display=swap' }
       ]
     }
   },
@@ -47,6 +47,7 @@ export default defineNuxtConfig({
     types: false, // Disable automatic type generation
   },
   css: [
+    '~/assets/css/aurora.css',
     '~/assets/css/main.css',
     'primeicons/primeicons.css'
   ],

@@ -35,8 +35,8 @@
             {{ locale === 'en' ? 'RU' : 'EN' }}
           </button>
           <button @click="toggleTheme" class="nav-btn" :aria-label="isDark ? 'Switch to light mode' : 'Switch to dark mode'">
-            <i v-if="isDark" class="pi pi-sun text-base"></i>
-            <i v-else class="pi pi-moon text-base"></i>
+            <Sun v-if="isDark" :size="15" :stroke-width="1.8" />
+            <Moon v-else :size="15" :stroke-width="1.8" />
           </button>
           <button @click.stop="toggleMobileMenu" class="md:hidden nav-btn" aria-label="Toggle menu">
             <svg v-if="!isMobileMenuOpen" class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -73,8 +73,8 @@
             <span>{{ locale === 'en' ? 'Русский' : 'English' }}</span>
           </button>
           <button @click="toggleTheme" class="nav-btn flex items-center justify-center gap-2 py-2 w-full font-mono uppercase tracking-widest">
-            <i v-if="isDark" class="pi pi-sun"></i>
-            <i v-else class="pi pi-moon"></i>
+            <Sun v-if="isDark" :size="15" :stroke-width="1.8" />
+            <Moon v-else :size="15" :stroke-width="1.8" />
             <span>{{ isDark ? $t('nav.lightMode') : $t('nav.darkMode') }}</span>
           </button>
         </div>
@@ -87,6 +87,7 @@
 </template>
 
 <script setup>
+import { Sun, Moon } from 'lucide-vue-next'
 const { isDark, toggleTheme, initTheme } = useTheme()
 const { locale, setLocale } = useI18n()
 
@@ -150,44 +151,52 @@ onMounted(() => {
   box-shadow: 0 4px 30px rgba(0, 0, 0, 0.3);
 }
 
-/* In light mode, use a warm white blur */
-:root:not([data-theme="dark"]) .navbar-scrolled {
-  background: rgba(250, 250, 249, 0.82);
-  border-bottom: 1px solid rgba(28, 25, 23, 0.06);
-  box-shadow: 0 4px 30px rgba(0, 0, 0, 0.08);
+/* Light mode */
+[data-theme="light"] .navbar-scrolled {
+  background: rgba(247, 243, 238, 0.88);
+  border-bottom: 1px solid rgba(28, 25, 23, 0.07);
+  box-shadow: 0 4px 24px rgba(0, 0, 0, 0.07);
 }
 
-/* Nav toggle buttons — fully transparent */
+/* Nav toggle buttons */
 .nav-btn {
   background: transparent;
   border: none;
-  color: var(--color-text-primary);
+  color: var(--text);
   border-radius: 9999px;
   padding: 0.4rem 0.6rem;
   transition: color 0.3s ease;
-  cursor: pointer;
+  cursor: none;
+  display: flex;
+  align-items: center;
 }
 
 .nav-btn:hover {
-  color: var(--color-accent-primary);
+  color: var(--amber);
 }
 
 /* Nav links */
 .nav-link {
   position: relative;
+  color: var(--muted);
+  text-decoration: none;
+  padding: 0.4rem 0.75rem;
+  transition: color 0.3s;
 }
+
+.nav-link:hover { color: var(--text); }
+.nav-link.active { color: var(--text); }
 
 .nav-link::after {
   content: '';
   position: absolute;
-  bottom: 0;
+  bottom: -2px;
   left: 50%;
   width: 0;
-  height: 2px;
-  background: var(--color-accent-gradient);
-  transition: all 0.3s ease;
+  height: 1px;
+  background: var(--amber);
+  transition: width 0.3s var(--ease-cinematic);
   transform: translateX(-50%);
-  border-radius: 1px;
 }
 
 .nav-link:hover::after,

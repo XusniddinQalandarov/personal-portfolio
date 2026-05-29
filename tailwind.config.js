@@ -49,12 +49,24 @@ module.exports = {
             900: '#1c1917',
             950: '#0c0a09',
           }
-        }
+        },
+        aurora: {
+          void: '#08080d',
+          voidSoft: '#0c0c14',
+          indigo: '#818cf8',
+          amber: '#d4a574',
+          cyan: '#67e8f9',
+          magenta: '#f472b6',
+          text: '#e8e6ef',
+        },
       },
       fontFamily: {
         sans: ['Sora', 'system-ui', 'sans-serif'],
         display: ['Instrument Serif', 'Georgia', 'serif'],
         mono: ['DM Mono', 'ui-monospace', 'SFMono-Regular', 'Menlo', 'monospace'],
+        geist: ['Geist', 'system-ui', 'sans-serif'],
+        'geist-mono': ['Geist Mono', 'JetBrains Mono', 'ui-monospace', 'monospace'],
+        instrument: ['Instrument Serif', 'Georgia', 'serif'],
       },
       backdropBlur: {
         xs: '2px',
@@ -77,8 +89,11 @@ module.exports = {
           '0%, 100%': { boxShadow: '0 0 20px rgba(212, 165, 116, 0.15)' },
           '50%': { boxShadow: '0 0 40px rgba(212, 165, 116, 0.3)' },
         },
-      }
-    },
+      },
+      transitionTimingFunction: {
+        cinematic: 'cubic-bezier(0.16, 1, 0.3, 1)',
+      },
+    }
   },
   plugins: [],
 }

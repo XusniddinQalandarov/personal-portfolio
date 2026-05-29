@@ -173,9 +173,7 @@ useSeoMeta({
   description: () => t('contact.seoDescription')
 })
 
-definePageMeta({
-  layout: 'no-footer'
-})
+definePageMeta({ layout: 'aurora' })
 </script>
 
 <style scoped>
