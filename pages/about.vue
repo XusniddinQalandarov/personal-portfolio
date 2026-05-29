@@ -59,8 +59,8 @@
     <section ref="interestsEl" class="reveal section">
       <div class="section-label">{{ $t('about.beyondIde') }}</div>
       <AuroraBento :cols="2">
-        <div v-for="item in interests" :key="item.key" class="tile interest">
-          <span class="emoji">{{ item.emoji }}</span>
+        <div v-for="(item, i) in interests" :key="item.key" class="tile interest">
+          <span class="interest-num">{{ String(i + 1).padStart(2, '0') }}</span>
           <span class="interest-text">{{ $t(item.key) }}</span>
         </div>
       </AuroraBento>
@@ -104,10 +104,10 @@ const interestsEl = ref(null)
 const missionEl = ref(null)
 
 const interests = [
-  { emoji: '⚡', key: 'about.interest1' },
-  { emoji: '📚', key: 'about.interest2' },
-  { emoji: '🤖', key: 'about.interest3' },
-  { emoji: '💡', key: 'about.interest4' },
+  { key: 'about.interest1' },
+  { key: 'about.interest2' },
+  { key: 'about.interest3' },
+  { key: 'about.interest4' },
 ]
 
 const techStrip = ['Vue', 'Nuxt', 'TypeScript', 'Tailwind', 'GSAP', 'Three.js', 'Supabase', 'PostgreSQL', 'Node.js', 'Python', 'OpenAI', 'Angular']
@@ -237,7 +237,13 @@ useSeoMeta({
 }
 
 .interest { display: flex; gap: 14px; align-items: center; }
-.emoji { font-size: 22px; }
+.interest-num {
+  font-family: 'Geist Mono', monospace;
+  font-size: 10px;
+  letter-spacing: 0.24em;
+  text-transform: uppercase;
+  color: var(--amber);
+}
 .interest-text {
   font-weight: 300;
   font-size: 15px;
