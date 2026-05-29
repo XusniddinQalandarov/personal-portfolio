@@ -75,11 +75,13 @@ import AuroraButton from '~/components/aurora/primitives/AuroraButton.vue'
   font-family: 'Instrument Serif', serif;
   font-style: italic;
   font-weight: 400;
-  font-size: clamp(52px, 11vw, 180px);
+  font-size: clamp(36px, 10vw, 170px);
   line-height: 0.88;
   letter-spacing: -0.02em;
   margin-top: -8px;
   margin-left: -4px;
+  max-width: 100%;
+  overflow-wrap: break-word;
   opacity: 0;
   animation: fadeUp 1.2s var(--ease-cinematic) 0.8s forwards;
 }

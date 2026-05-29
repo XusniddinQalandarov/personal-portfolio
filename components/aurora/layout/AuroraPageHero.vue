@@ -19,11 +19,13 @@ defineProps<{ eyebrow: string; title: string; titleAccent?: string; subtitle?: s
 .page-title {
   font-family: 'Geist', system-ui, sans-serif;
   font-weight: 800;
-  font-size: clamp(48px, 8vw, 120px);
+  font-size: clamp(34px, 8vw, 120px);
   line-height: 0.95;
   letter-spacing: -0.04em;
   margin: 20px 0 28px;
   color: var(--text);
+  overflow-wrap: break-word;
+  hyphens: auto;
 }
 .page-title em {
   font-family: 'Instrument Serif', serif;

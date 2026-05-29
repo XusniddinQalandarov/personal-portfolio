@@ -4,7 +4,7 @@
       
       <!-- Minimalist Header -->
       <div ref="headerEl" class="mb-20 text-center md:text-left opacity-0">
-        <h1 class="text-6xl md:text-8xl font-display font-black tracking-tighter text-main uppercase mb-6 leading-none">
+        <h1 class="text-4xl sm:text-5xl md:text-8xl font-display font-black tracking-tighter text-main uppercase mb-6 leading-none break-words">
           {{ $t('contact.title') }}
         </h1>
         <div class="h-1 w-24 bg-accent-amber mt-6 mb-8 mx-auto md:mx-0"></div>

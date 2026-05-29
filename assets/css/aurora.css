@@ -48,6 +48,11 @@
   --glass-border: rgba(28, 25, 23, 0.08);
 }
 
+/* Guard against horizontal overflow from oversized display text on small
+   viewports. `clip` (not `hidden`) avoids creating a scroll container, so
+   position: sticky descendants keep working. */
+html, body { overflow-x: clip; }
+
 /* Font family CSS aliases for use outside Tailwind utilities. */
 .font-aurora-sans { font-family: 'Geist', system-ui, sans-serif; }
 .font-aurora-mono { font-family: 'Geist Mono', 'JetBrains Mono', ui-monospace, monospace; }

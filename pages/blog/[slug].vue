@@ -242,11 +242,13 @@ useSeoMeta({
 .blog-title {
   font-family: 'Geist', system-ui, sans-serif;
   font-weight: 800;
-  font-size: clamp(32px, 5vw, 60px);
+  font-size: clamp(28px, 5vw, 60px);
   line-height: 1.05;
   letter-spacing: -0.04em;
   color: var(--text);
   margin-bottom: 28px;
+  overflow-wrap: break-word;
+  hyphens: auto;
 }
 
 .tags-row {

@@ -12,7 +12,7 @@
       
       <!-- Hero Content with Rounded Profile Photo -->
       <div class="relative z-10 text-center px-4 max-w-5xl mx-auto">
-        <h1 ref="heroTitle" class="text-6xl md:text-8xl lg:text-9xl font-display font-black tracking-tighter mb-6 uppercase text-transparent bg-clip-text bg-gradient-to-br from-white via-gray-200 to-gray-400 drop-shadow-2xl opacity-0">
+        <h1 ref="heroTitle" class="text-5xl sm:text-6xl md:text-8xl lg:text-9xl font-display font-black tracking-tighter mb-6 uppercase text-transparent bg-clip-text bg-gradient-to-br from-white via-gray-200 to-gray-400 drop-shadow-2xl opacity-0 break-words">
           {{ $t('fitness.heroTitle') }}
         </h1>
         <p ref="heroSubtitle" class="text-xl md:text-2xl font-light tracking-widest text-gray-200 uppercase mb-12 drop-shadow-md opacity-0">
