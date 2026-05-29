@@ -6,6 +6,19 @@
       :subtitle="$t('experience.subtitle')"
     />
 
+    <!-- HyperText hero + NumberTicker years stat -->
+    <section class="reveal hero-stat">
+      <div class="hero-stat-inner">
+        <div class="years-block">
+          <NumberTicker :value="yearsOfExperience" class="years-num" />
+          <span class="years-suffix">+</span>
+          <div class="years-label">
+            <HyperText text="YEARS BUILDING" :duration="700" :start-on-view="true" />
+          </div>
+        </div>
+      </div>
+    </section>
+
     <section ref="timelineSection" class="reveal">
       <AuroraTimeline :data="experiences.map(e => ({ title: e.period, slot: `entry-${e.id}` }))">
         <template v-for="e in experiences" :key="e.id" #[`entry-${e.id}`]>
@@ -42,9 +55,13 @@ import { gsap } from 'gsap'
 import AuroraPageHero from '~/components/aurora/layout/AuroraPageHero.vue'
 import AuroraTimeline from '~/components/aurora/layout/AuroraTimeline.vue'
 import AuroraBento from '~/components/aurora/surface/AuroraBento.vue'
+import NumberTicker from '~/components/aurora/type/NumberTicker.vue'
+import HyperText from '~/components/aurora/type/HyperText.vue'
 
 const { t } = useI18n()
 const { localField, locale } = useLocalizedContent()
+
+const yearsOfExperience = computed(() => new Date().getFullYear() - 2023)
 
 const localAchievements = (item) => {
   if (locale.value === 'ru' && item.achievements_ru?.length) return item.achievements_ru
@@ -210,6 +227,38 @@ useSeoMeta({
   color: var(--text);
 }
 .reveal { opacity: 0; }
+
+.hero-stat {
+  padding: 48px 6vw 32px;
+  max-width: 1200px;
+  margin: 0 auto 24px;
+}
+.hero-stat-inner { display: flex; align-items: flex-end; gap: 48px; }
+.years-block { display: flex; flex-direction: column; align-items: flex-start; }
+.years-num {
+  font-family: 'Geist', system-ui, sans-serif;
+  font-weight: 800;
+  font-size: clamp(72px, 10vw, 120px);
+  line-height: 1;
+  letter-spacing: -0.05em;
+  color: var(--text);
+}
+.years-suffix {
+  font-family: 'Geist', system-ui, sans-serif;
+  font-weight: 800;
+  font-size: clamp(48px, 6vw, 80px);
+  line-height: 1;
+  color: var(--amber);
+  margin-left: 4px;
+}
+.years-label {
+  margin-top: 8px;
+  font-family: 'Geist Mono', monospace;
+  font-size: 11px;
+  letter-spacing: 0.28em;
+  color: var(--muted);
+}
+
 .edu-section {
   max-width: 920px;
   margin: 96px auto 0;
