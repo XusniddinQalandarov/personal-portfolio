@@ -38,8 +38,8 @@
       </div>
 
       <div class="scroll-marker">
-        <span class="line" />
         <span>{{ $t('aurora.scrollMarker') }}</span>
+        <span class="line" />
       </div>
     </div>
   </section>
@@ -91,19 +91,22 @@ import AuroraButton from '~/components/aurora/primitives/AuroraButton.vue'
   animation: fadeUp 0.9s var(--ease-cinematic) 2.0s forwards;
 }
 .scroll-marker {
-  position: absolute; bottom: 120px; left: 6vw;
+  position: fixed;
+  bottom: 36px;
+  right: 6vw;
   display: flex; align-items: center; gap: 14px;
   font-family: 'Geist Mono', monospace;
   font-size: 10px; font-weight: 500;
   letter-spacing: 0.32em;
   text-transform: uppercase;
   color: var(--muted);
+  z-index: 40;
   opacity: 0;
   animation: fadeUp 0.8s var(--ease-cinematic) 2.6s forwards;
 }
 .scroll-marker .line {
   width: 60px; height: 1px;
-  background: linear-gradient(90deg, var(--muted), transparent);
+  background: linear-gradient(90deg, transparent, var(--muted));
 }
 @keyframes fadeUp {
   from { opacity: 0; transform: translateY(24px); }

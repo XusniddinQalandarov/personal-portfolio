@@ -99,6 +99,7 @@
 </template>
 
 <script setup>
+definePageMeta({ layout: 'aurora' })
 import { gsap } from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
 

@@ -3,7 +3,6 @@
   <div class="aurora-layout">
     <AuroraWorld />
     <AuroraCursor />
-    <AuroraBrand />
     <AuroraMetaTop />
     <main class="content">
       <slot />
@@ -17,7 +16,6 @@ import { onMounted, onBeforeUnmount } from 'vue'
 import AuroraWorld from '~/components/aurora/backdrop/AuroraWorld.vue'
 import AuroraCursor from '~/components/aurora/cursor/AuroraCursor.vue'
 import AuroraDock from '~/components/aurora/layout/AuroraDock.vue'
-import AuroraBrand from '~/components/aurora/layout/AuroraBrand.vue'
 import AuroraMetaTop from '~/components/aurora/layout/AuroraMetaTop.vue'
 import { useTheme } from '~/composables/useTheme'
 import { useAuroraTheme } from '~/composables/useAuroraTheme'
