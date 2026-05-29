@@ -1,108 +1,57 @@
 <template>
-  <div class="min-h-screen py-20 px-4 md:px-0">
-    <div class="max-w-5xl mx-auto">
-      
-      <!-- Minimalist Header -->
-      <div ref="headerEl" class="mb-24 px-4 md:px-0 opacity-0">
-        <h1 class="text-6xl md:text-8xl font-display font-black tracking-tighter mb-8 text-main opacity-90">
-          {{ $t('experience.title') }}
-        </h1>
-        <p class="text-xl md:text-2xl font-light text-sub max-w-2xl leading-relaxed">
-          {{ $t('experience.subtitle') }}
-        </p>
-      </div>
+  <article class="experience-page">
+    <AuroraPageHero
+      :eyebrow="$t('aurora.cursor.experience')"
+      :title="$t('experience.title').toLowerCase()"
+      :subtitle="$t('experience.subtitle')"
+    />
 
-      <!-- Minimalist Timeline -->
-      <div ref="timelineEl" class="relative pl-8 md:pl-0">
-        <!-- Vertical Line (Desktop Centered, Mobile Left) -->
-        <div class="absolute left-0 md:left-1/2 top-0 bottom-0 w-px bg-gradient-to-b from-transparent via-gray-300 dark:via-white/20 to-transparent"></div>
-
-        <div v-for="(experience, index) in experiences" :key="experience.id" 
-             class="group relative mb-24 md:mb-32 flex flex-col md:flex-row w-full opacity-0"
-             :class="index % 2 === 0 ? 'md:flex-row-reverse' : ''">
-          
-          <!-- Timeline Dot -->
-          <div class="absolute left-[-4.5px] md:left-1/2 md:-ml-[5px] top-2 w-2.5 h-2.5 bg-accent-amber rounded-full z-10 shadow-[0_0_10px_rgba(212,165,116,0.5)]"></div>
-
-          <!-- Spacer for Desktop -->
-          <div class="hidden md:block md:w-1/2"></div>
-          
-          <!-- Content Side -->
-          <div class="md:w-1/2 pl-8 md:px-12 relative">
-            
-            <!-- Period -->
-            <span class="inline-block text-sm font-mono text-accent-amber mb-2 tracking-widest uppercase opacity-80">
-              {{ experience.period }}
-            </span>
-
-            <!-- Title & Company -->
-            <h2 class="text-3xl md:text-4xl font-display font-bold text-main mb-1 group-hover:text-accent-amber transition-colors duration-300">
-              {{ localField(experience, 'title') }}
-            </h2>
-            <h3 class="text-xl text-sub font-medium mb-6">{{ localField(experience, 'company') }}</h3>
-
-            <!-- Description -->
-            <p class="text-lg text-sub font-light leading-relaxed mb-6">
-              {{ localField(experience, 'description') }}
-            </p>
-
-            <!-- Tech Stack (Minimal) -->
-            <div class="flex flex-wrap gap-x-6 gap-y-2 mb-6">
-              <span v-for="tech in experience.technologies" :key="tech" 
-                    class="text-sm font-mono text-gray-500 dark:text-gray-400 group-hover:text-main transition-colors">
-                #{{ tech }}
-              </span>
-            </div>
-
-            <!-- Achievements (Bulleted, Minimal) -->
-            <ul v-if="localAchievements(experience).length" class="space-y-2 border-l border-gray-300 dark:border-white/10 pl-6">
-              <li v-for="ach in localAchievements(experience)" :key="ach" class="text-sub text-sm leading-relaxed">
-                {{ ach }}
-              </li>
-            </ul>
-
+    <section ref="timelineSection" class="reveal">
+      <AuroraTimeline>
+        <div v-for="exp in experiences" :key="exp.id" class="timeline-item">
+          <span class="ti-period">{{ exp.period }}</span>
+          <h2 class="ti-title">{{ localField(exp, 'title') }}</h2>
+          <div class="ti-org">{{ localField(exp, 'company') }}</div>
+          <p class="ti-desc">{{ localField(exp, 'description') }}</p>
+          <div class="ti-tech">
+            <span v-for="tech in exp.technologies" :key="tech" class="ti-tag">{{ tech }}</span>
           </div>
+          <ul v-if="localAchievements(exp).length" class="ti-bullets">
+            <li v-for="a in localAchievements(exp)" :key="a">{{ a }}</li>
+          </ul>
         </div>
-      </div>
+      </AuroraTimeline>
+    </section>
 
-      <!-- Education Section (List Style) -->
-      <div class="mt-32 px-4 md:px-0">
-        <h2 class="text-4xl md:text-5xl font-display font-black text-main mb-16 tracking-tight">{{ $t('experience.educationTitle') }}</h2>
-        <div class="grid gap-12 border-t border-gray-200 dark:border-white/10 pt-12">
-          <div v-for="edu in educationList" :key="edu.id" class="grid md:grid-cols-12 gap-6 group hover:bg-gray-100 dark:hover:bg-gray-800 p-6 rounded-lg transition-colors -mx-6">
-            <div class="md:col-span-3 text-sub font-mono text-sm">{{ edu.year }}</div>
-            <div class="md:col-span-9">
-              <h3 class="text-2xl font-display font-bold text-main mb-2 group-hover:text-accent-amber transition-colors">{{ localField(edu, 'degree') }}</h3>
-              <div class="text-xl text-sub mb-4">{{ localField(edu, 'school') }}</div>
-              <p class="text-sub font-light">{{ localField(edu, 'description') }}</p>
-            </div>
-          </div>
+    <section ref="eduSection" class="reveal edu-section">
+      <h2 class="edu-title">{{ $t('experience.educationTitle').toLowerCase() }}</h2>
+      <AuroraBento :cols="1">
+        <div v-for="edu in educationList" :key="edu.id" class="tile edu-item">
+          <div class="edu-year">{{ edu.year }}</div>
+          <h3 class="edu-degree">{{ localField(edu, 'degree') }}</h3>
+          <div class="edu-school">{{ localField(edu, 'school') }}</div>
+          <p class="edu-desc">{{ localField(edu, 'description') }}</p>
         </div>
-      </div>
-
-    </div>
-  </div>
+      </AuroraBento>
+    </section>
+  </article>
 </template>
 
 <script setup>
 definePageMeta({ layout: 'aurora' })
-import { gsap } from 'gsap';
-import { ScrollTrigger } from 'gsap/ScrollTrigger';
-
-gsap.registerPlugin(ScrollTrigger);
+import { gsap } from 'gsap'
+import AuroraPageHero from '~/components/aurora/layout/AuroraPageHero.vue'
+import AuroraTimeline from '~/components/aurora/layout/AuroraTimeline.vue'
+import AuroraBento from '~/components/aurora/surface/AuroraBento.vue'
 
 const { t } = useI18n()
 const { localField, locale } = useLocalizedContent()
 
-// Helper for arrays (achievements)
 const localAchievements = (item) => {
-  if (locale.value === 'ru' && item.achievements_ru && item.achievements_ru.length) {
-    return item.achievements_ru
-  }
+  if (locale.value === 'ru' && item.achievements_ru?.length) return item.achievements_ru
   return item.achievements || []
 }
 
-// Data with bilingual support
 const experiences = ref([
   {
     id: 1,
@@ -201,7 +150,7 @@ const experiences = ref([
       "Сократил начальную загрузку на 25%"
     ]
   }
-]);
+])
 
 const educationList = ref([
   {
@@ -234,45 +183,77 @@ const educationList = ref([
     description: "Advanced modern web development practices.",
     description_ru: "Продвинутые практики современной веб-разработки."
   }
-]);
+])
 
-const headerEl = ref(null);
-const timelineEl = ref(null);
+const timelineSection = ref(null)
+const eduSection = ref(null)
 
 onMounted(() => {
-  if (process.client) {
-    // Header Animation
-    gsap.fromTo(headerEl.value, { y: 50, opacity: 0 }, { y: 0, opacity: 1, duration: 1.2, ease: "power3.out" });
-
-    // Timeline Items Animation
-    const items = timelineEl.value.querySelectorAll('.group');
-    items.forEach((item, i) => {
-      gsap.fromTo(item, 
-        { y: 50, opacity: 0 },
-        {
-          y: 0,
-          opacity: 1,
-          duration: 1,
-          ease: "power3.out",
-          scrollTrigger: {
-            trigger: item,
-            start: "top 85%",
-            toggleActions: "play none none reverse"
-          }
-        }
-      );
-    });
-  }
-});
+  if (typeof window === 'undefined') return
+  const els = [timelineSection.value, eduSection.value].filter(Boolean)
+  els.forEach((el, i) => {
+    gsap.fromTo(el, { y: 30, opacity: 0 }, { y: 0, opacity: 1, duration: 0.9, ease: 'power3.out', delay: 0.15 * i })
+  })
+})
 
 useSeoMeta({
   title: () => t('experience.seoTitle'),
-  description: () => t('experience.seoDescription')
+  description: () => t('experience.seoDescription'),
 })
 </script>
 
 <style scoped>
-.text-main { color: var(--color-text-primary); }
-.text-sub { color: var(--color-text-secondary); }
-.bg-primary { background-color: var(--color-bg-primary); }
+.experience-page {
+  max-width: 1400px;
+  margin: 0 auto;
+  padding: 0 0 200px;
+  font-family: 'Geist', system-ui, sans-serif;
+  color: var(--text);
+}
+.reveal { opacity: 0; }
+.edu-section {
+  max-width: 920px;
+  margin: 96px auto 0;
+  padding: 0 6vw;
+}
+.edu-title {
+  font-family: 'Geist', system-ui, sans-serif;
+  font-weight: 800;
+  font-size: clamp(36px, 5vw, 72px);
+  line-height: 1;
+  letter-spacing: -0.04em;
+  text-transform: uppercase;
+  margin-bottom: 36px;
+  color: var(--text);
+}
+.edu-item { display: grid; grid-template-columns: 140px 1fr; gap: 24px; align-items: baseline; }
+@media (max-width: 720px) { .edu-item { grid-template-columns: 1fr; } }
+.edu-year {
+  font-family: 'Geist Mono', monospace;
+  font-size: 11px;
+  letter-spacing: 0.24em;
+  text-transform: uppercase;
+  color: var(--amber);
+}
+.edu-degree {
+  font-family: 'Geist', system-ui, sans-serif;
+  font-weight: 700;
+  font-size: 22px;
+  letter-spacing: -0.02em;
+  margin-bottom: 6px;
+  color: var(--text);
+}
+.edu-school {
+  font-family: 'Instrument Serif', serif;
+  font-style: italic;
+  font-size: 18px;
+  color: var(--muted);
+  margin-bottom: 10px;
+}
+.edu-desc {
+  font-weight: 300;
+  font-size: 14px;
+  line-height: 1.65;
+  color: var(--muted);
+}
 </style>
