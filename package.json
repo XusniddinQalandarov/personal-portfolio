@@ -36,5 +36,9 @@
     "@vue/test-utils": "^2.4.10",
     "happy-dom": "^20.9.0",
     "vitest": "^4.1.7"
+  },
+  "optionalDependencies": {
+    "@rolldown/binding-darwin-arm64": "1.0.0-rc.15",
+    "@rolldown/binding-linux-x64-gnu": "1.0.0-rc.15"
   }
 }
