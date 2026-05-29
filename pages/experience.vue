@@ -7,19 +7,18 @@
     />
 
     <section ref="timelineSection" class="reveal">
-      <AuroraTimeline>
-        <div v-for="exp in experiences" :key="exp.id" class="timeline-item">
-          <span class="ti-period">{{ exp.period }}</span>
-          <h2 class="ti-title">{{ localField(exp, 'title') }}</h2>
-          <div class="ti-org">{{ localField(exp, 'company') }}</div>
-          <p class="ti-desc">{{ localField(exp, 'description') }}</p>
+      <AuroraTimeline :data="experiences.map(e => ({ title: e.period, slot: `entry-${e.id}` }))">
+        <template v-for="e in experiences" :key="e.id" #[`entry-${e.id}`]>
+          <h2 class="ti-title">{{ localField(e, 'title') }}</h2>
+          <div class="ti-org">{{ localField(e, 'company') }}</div>
+          <p class="ti-desc">{{ localField(e, 'description') }}</p>
           <div class="ti-tech">
-            <span v-for="tech in exp.technologies" :key="tech" class="ti-tag">{{ tech }}</span>
+            <span v-for="tech in e.technologies" :key="tech" class="ti-tag">{{ tech }}</span>
           </div>
-          <ul v-if="localAchievements(exp).length" class="ti-bullets">
-            <li v-for="a in localAchievements(exp)" :key="a">{{ a }}</li>
+          <ul v-if="localAchievements(e).length" class="ti-bullets">
+            <li v-for="a in localAchievements(e)" :key="a">{{ a }}</li>
           </ul>
-        </div>
+        </template>
       </AuroraTimeline>
     </section>
 
@@ -256,4 +255,55 @@ useSeoMeta({
   line-height: 1.65;
   color: var(--muted);
 }
+
+/* Timeline entry content styles (page-specific) */
+.ti-title {
+  font-family: 'Geist', system-ui, sans-serif;
+  font-weight: 700;
+  font-size: 28px;
+  letter-spacing: -0.02em;
+  line-height: 1.1;
+  margin-bottom: 6px;
+  color: var(--text);
+}
+.ti-org {
+  font-family: 'Instrument Serif', serif;
+  font-style: italic;
+  font-size: 20px;
+  color: var(--muted);
+  margin-bottom: 18px;
+}
+.ti-desc {
+  font-family: 'Geist', system-ui, sans-serif;
+  font-weight: 300;
+  font-size: 15px;
+  line-height: 1.65;
+  color: var(--muted);
+  margin-bottom: 18px;
+  max-width: 720px;
+}
+.ti-tech {
+  display: flex; flex-wrap: wrap; gap: 8px;
+  margin-bottom: 18px;
+}
+.ti-tag {
+  font-family: 'Geist Mono', monospace;
+  font-size: 10px;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: var(--muted);
+  border: 1px solid var(--glass-border);
+  padding: 4px 10px;
+  border-radius: 999px;
+}
+.ti-bullets {
+  margin: 0; padding-left: 0; list-style: none;
+  font-family: 'Geist', system-ui, sans-serif;
+  font-weight: 300;
+  font-size: 14px;
+  color: var(--muted);
+  border-left: 1px solid var(--glass-border);
+  padding-left: 18px;
+}
+.ti-bullets li { margin-bottom: 6px; }
 </style>
