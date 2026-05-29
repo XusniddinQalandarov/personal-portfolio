@@ -1,17 +1,30 @@
 <template>
   <article class="experience-page">
-    <AuroraPageHero
-      :eyebrow="$t('aurora.cursor.experience')"
-      :title="$t('experience.title').toLowerCase()"
-      :subtitle="$t('experience.subtitle')"
-    />
+    <!-- Hero area with Spotlight -->
+    <section class="hero-area">
+      <Spotlight />
+      <AuroraPageHero
+        :eyebrow="$t('aurora.cursor.experience')"
+        :title="$t('experience.title').toLowerCase()"
+        :subtitle="$t('experience.subtitle')"
+      />
+    </section>
 
-    <!-- HyperText hero + NumberTicker years stat -->
+    <!-- HyperText hero + NumberTicker years stat with OrbitingCircles -->
     <section class="reveal hero-stat">
       <div class="hero-stat-inner">
         <div class="years-block">
-          <NumberTicker :value="yearsOfExperience" class="years-num" />
-          <span class="years-suffix">+</span>
+          <div class="years-orbit-wrap">
+            <OrbitingCircles :radius="80" :duration="18" :path="true" :icon-size="10">
+              <span class="orbit-dot" />
+              <span class="orbit-dot orbit-dot--cyan" />
+              <span class="orbit-dot orbit-dot--indigo" />
+            </OrbitingCircles>
+            <div class="years-content">
+              <NumberTicker :value="yearsOfExperience" class="years-num" />
+              <span class="years-suffix">+</span>
+            </div>
+          </div>
           <div class="years-label">
             <HyperText text="YEARS BUILDING" :duration="700" :start-on-view="true" />
           </div>
@@ -19,43 +32,47 @@
       </div>
     </section>
 
-    <section ref="timelineSection" class="reveal">
-      <AuroraTimeline :data="experiences.map(e => ({ title: e.period, slot: `entry-${e.id}` }))">
-        <template v-for="(e, i) in experiences" :key="e.id" #[`entry-${e.id}`]>
-          <MagicCard mode="orb" class="ti-card">
-            <div v-if="i === 0" class="featured-entry-wrap">
-              <BorderBeam />
-              <h2 class="ti-title">{{ localField(e, 'title') }}</h2>
-              <div class="ti-org-row">
-                <AnimatedTooltip :items="companyTooltipItem(e)" />
-                <span class="ti-org">{{ localField(e, 'company') }}</span>
+    <!-- Timeline with Meteors behind it -->
+    <div class="timeline-wrap">
+      <Meteors :number="14" />
+      <section ref="timelineSection" class="reveal">
+        <AuroraTimeline :data="experiences.map(e => ({ title: e.period, slot: `entry-${e.id}` }))">
+          <template v-for="(e, i) in experiences" :key="e.id" #[`entry-${e.id}`]>
+            <MagicCard mode="orb" class="ti-card">
+              <div v-if="i === 0" class="featured-entry-wrap">
+                <BorderBeam />
+                <h2 class="ti-title">{{ localField(e, 'title') }}</h2>
+                <div class="ti-org-row">
+                  <AnimatedTooltip :items="companyTooltipItem(e)" />
+                  <span class="ti-org">{{ localField(e, 'company') }}</span>
+                </div>
+                <p class="ti-desc">{{ localField(e, 'description') }}</p>
+                <div class="ti-tech">
+                  <span v-for="tech in e.technologies" :key="tech" class="ti-tag">{{ tech }}</span>
+                </div>
+                <ul v-if="localAchievements(e).length" class="ti-bullets">
+                  <li v-for="a in localAchievements(e)" :key="a">{{ a }}</li>
+                </ul>
               </div>
-              <p class="ti-desc">{{ localField(e, 'description') }}</p>
-              <div class="ti-tech">
-                <span v-for="tech in e.technologies" :key="tech" class="ti-tag">{{ tech }}</span>
-              </div>
-              <ul v-if="localAchievements(e).length" class="ti-bullets">
-                <li v-for="a in localAchievements(e)" :key="a">{{ a }}</li>
-              </ul>
-            </div>
-            <template v-else>
-              <h2 class="ti-title">{{ localField(e, 'title') }}</h2>
-              <div class="ti-org-row">
-                <AnimatedTooltip :items="companyTooltipItem(e)" />
-                <span class="ti-org">{{ localField(e, 'company') }}</span>
-              </div>
-              <p class="ti-desc">{{ localField(e, 'description') }}</p>
-              <div class="ti-tech">
-                <span v-for="tech in e.technologies" :key="tech" class="ti-tag">{{ tech }}</span>
-              </div>
-              <ul v-if="localAchievements(e).length" class="ti-bullets">
-                <li v-for="a in localAchievements(e)" :key="a">{{ a }}</li>
-              </ul>
-            </template>
-          </MagicCard>
-        </template>
-      </AuroraTimeline>
-    </section>
+              <template v-else>
+                <h2 class="ti-title">{{ localField(e, 'title') }}</h2>
+                <div class="ti-org-row">
+                  <AnimatedTooltip :items="companyTooltipItem(e)" />
+                  <span class="ti-org">{{ localField(e, 'company') }}</span>
+                </div>
+                <p class="ti-desc">{{ localField(e, 'description') }}</p>
+                <div class="ti-tech">
+                  <span v-for="tech in e.technologies" :key="tech" class="ti-tag">{{ tech }}</span>
+                </div>
+                <ul v-if="localAchievements(e).length" class="ti-bullets">
+                  <li v-for="a in localAchievements(e)" :key="a">{{ a }}</li>
+                </ul>
+              </template>
+            </MagicCard>
+          </template>
+        </AuroraTimeline>
+      </section>
+    </div>
 
     <section ref="eduSection" class="reveal edu-section">
       <h2 class="edu-title">
@@ -69,6 +86,11 @@
           <p class="edu-desc">{{ localField(edu, 'description') }}</p>
         </div>
       </AuroraBento>
+
+      <!-- ShimmerButton download resume CTA -->
+      <div class="resume-cta">
+        <ShimmerButton href="/Xusniddin_Qalandarov_Resume.pdf">Download Resume ↓</ShimmerButton>
+      </div>
     </section>
   </article>
 </template>
@@ -84,6 +106,10 @@ import BorderBeam from '~/components/aurora/surface/BorderBeam.vue'
 import AnimatedTooltip from '~/components/aurora/surface/AnimatedTooltip.vue'
 import NumberTicker from '~/components/aurora/type/NumberTicker.vue'
 import HyperText from '~/components/aurora/type/HyperText.vue'
+import Spotlight from '~/components/aurora/surface/Spotlight.vue'
+import Meteors from '~/components/aurora/surface/Meteors.vue'
+import OrbitingCircles from '~/components/aurora/surface/OrbitingCircles.vue'
+import ShimmerButton from '~/components/aurora/primitives/ShimmerButton.vue'
 
 const { t } = useI18n()
 const { localField, locale } = useLocalizedContent()
@@ -262,6 +288,12 @@ useSeoMeta({
 }
 .reveal { opacity: 0; }
 
+/* Hero area with Spotlight */
+.hero-area {
+  position: relative;
+  overflow: hidden;
+}
+
 .hero-stat {
   padding: 48px 6vw 32px;
   max-width: 1200px;
@@ -269,6 +301,24 @@ useSeoMeta({
 }
 .hero-stat-inner { display: flex; align-items: flex-end; gap: 48px; }
 .years-block { display: flex; flex-direction: column; align-items: flex-start; }
+
+/* OrbitingCircles wrap around the years number */
+.years-orbit-wrap {
+  position: relative;
+  width: 200px;
+  height: 200px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.years-content {
+  position: absolute;
+  display: flex;
+  align-items: baseline;
+  gap: 4px;
+  z-index: 2;
+}
+
 .years-num {
   font-family: 'Geist', system-ui, sans-serif;
   font-weight: 800;
@@ -291,6 +341,28 @@ useSeoMeta({
   font-size: 11px;
   letter-spacing: 0.28em;
   color: var(--muted);
+}
+
+/* Orbiting dots */
+.orbit-dot {
+  width: 8px; height: 8px; border-radius: 50%;
+  background: var(--amber);
+  box-shadow: 0 0 10px var(--amber);
+  display: block;
+}
+.orbit-dot--cyan {
+  background: var(--cyan);
+  box-shadow: 0 0 10px var(--cyan);
+}
+.orbit-dot--indigo {
+  background: var(--indigo);
+  box-shadow: 0 0 10px var(--indigo);
+}
+
+/* Timeline with Meteors wrapper */
+.timeline-wrap {
+  position: relative;
+  overflow: hidden;
 }
 
 .edu-section {
@@ -337,6 +409,13 @@ useSeoMeta({
   font-size: 14px;
   line-height: 1.65;
   color: var(--muted);
+}
+
+/* ShimmerButton CTA */
+.resume-cta {
+  margin-top: 56px;
+  display: flex;
+  justify-content: flex-start;
 }
 
 /* Timeline entry MagicCard wrapper */
