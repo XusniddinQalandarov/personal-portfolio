@@ -60,3 +60,6 @@ credentials/
 *.pem
 *.key
 *.cert
+
+# Superpowers brainstorming session files
+.superpowers/
