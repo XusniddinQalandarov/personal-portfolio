@@ -6,6 +6,21 @@
       :title-accent="$t('about.title3')"
     />
 
+    <!-- Stats row with NumberTicker -->
+    <section class="reveal section stats-row">
+      <div class="stat-block">
+        <NumberTicker :value="yearsOfExperience" class="stat-num" />
+        <span class="stat-suffix">+</span>
+        <div class="stat-label">{{ $t('about.yearsExperience') }}</div>
+      </div>
+      <div class="stat-block">
+        <NumberTicker :value="10" class="stat-num" />
+        <span class="stat-suffix">+</span>
+        <div class="stat-label">{{ $t('about.projectsShipped') }}</div>
+      </div>
+    </section>
+
+    <!-- Intro heading with HyperText scramble -->
     <section ref="introEl" class="reveal section">
       <div class="intro-grid">
         <div class="intro-text">
@@ -15,8 +30,10 @@
               <template #purpose><span class="accent">{{ $t('about.purpose') }}</span></template>
             </i18n-t>
           </h2>
-          <p class="body">{{ $t('about.introP1') }}</p>
-          <p class="body">{{ $t('about.introP2') }}</p>
+          <!-- HyperText scrambles the sub-label on hover -->
+          <div class="hyper-label">
+            <HyperText :text="$t('about.introP1').slice(0, 40)" :duration="600" :start-on-view="true" />
+          </div>
         </div>
         <AuroraBento :cols="2" class="intro-stats">
           <div class="tile stat">
@@ -31,11 +48,12 @@
       </div>
     </section>
 
+    <!-- TextReveal: intro paragraphs scroll-fade word-by-word -->
+    <TextReveal :text="$t('about.introP1') + ' ' + $t('about.introP2')" />
+
+    <!-- Quote with TextRevealCard — sweep reveals author -->
     <section ref="quoteEl" class="reveal section">
-      <MagicCard class="quote-card">
-        <p class="quote-text">{{ $t('about.quote') }}</p>
-        <p class="quote-author">{{ $t('about.quoteAuthor') }}</p>
-      </MagicCard>
+      <TextRevealCard :text="$t('about.quote')" :reveal-text="$t('about.quoteAuthor')" />
     </section>
 
     <section ref="interestsEl" class="reveal section">
@@ -55,9 +73,12 @@
       </Marquee>
     </section>
 
+    <!-- Mission wrapped in MagicCard orb mode -->
     <section ref="missionEl" class="reveal section mission">
-      <h3 class="mission-title">{{ $t('about.missionTitle') }}</h3>
-      <p class="body">{{ $t('about.missionText') }}</p>
+      <MagicCard mode="orb" class="mission-card">
+        <h3 class="mission-title">{{ $t('about.missionTitle') }}</h3>
+        <p class="body">{{ $t('about.missionText') }}</p>
+      </MagicCard>
     </section>
   </article>
 </template>
@@ -69,6 +90,10 @@ import AuroraPageHero from '~/components/aurora/layout/AuroraPageHero.vue'
 import AuroraBento from '~/components/aurora/surface/AuroraBento.vue'
 import MagicCard from '~/components/aurora/surface/MagicCard.vue'
 import Marquee from '~/components/aurora/layout/Marquee.vue'
+import NumberTicker from '~/components/aurora/type/NumberTicker.vue'
+import HyperText from '~/components/aurora/type/HyperText.vue'
+import TextReveal from '~/components/aurora/type/TextReveal.vue'
+import TextRevealCard from '~/components/aurora/surface/TextRevealCard.vue'
 
 const { t } = useI18n()
 const yearsOfExperience = computed(() => new Date().getFullYear() - 2023)
@@ -116,6 +141,48 @@ useSeoMeta({
 }
 .reveal { opacity: 0; }
 
+/* Stats row */
+.stats-row {
+  display: flex;
+  gap: 64px;
+  align-items: flex-start;
+  padding-top: 48px;
+}
+.stat-block { display: flex; flex-direction: column; align-items: flex-start; }
+.stat-num {
+  font-family: 'Geist', system-ui, sans-serif;
+  font-weight: 800;
+  font-size: clamp(56px, 7vw, 80px);
+  line-height: 1;
+  letter-spacing: -0.04em;
+  color: var(--text);
+}
+.stat-suffix {
+  font-family: 'Geist', system-ui, sans-serif;
+  font-weight: 800;
+  font-size: clamp(40px, 5vw, 64px);
+  line-height: 1;
+  letter-spacing: -0.04em;
+  color: var(--amber);
+  margin-left: 2px;
+}
+.stat-label {
+  font-family: 'Geist Mono', monospace;
+  font-size: 10px;
+  letter-spacing: 0.24em;
+  text-transform: uppercase;
+  color: var(--muted);
+  margin-top: 8px;
+}
+
+.hyper-label {
+  margin-bottom: 18px;
+  font-family: 'Geist Mono', monospace;
+  font-size: 11px;
+  letter-spacing: 0.18em;
+  color: var(--muted);
+}
+
 .intro-grid {
   display: grid;
   grid-template-columns: minmax(0, 1.4fr) minmax(0, 1fr);
@@ -159,32 +226,6 @@ useSeoMeta({
   color: var(--text);
   margin-bottom: 8px;
 }
-.stat-label {
-  font-family: 'Geist Mono', monospace;
-  font-size: 10px;
-  letter-spacing: 0.24em;
-  text-transform: uppercase;
-  color: var(--muted);
-}
-
-.quote-card { padding: 0; }
-.quote-card :deep(.card-content) { padding: 42px; }
-.quote-text {
-  font-family: 'Instrument Serif', serif;
-  font-style: italic;
-  font-weight: 400;
-  font-size: clamp(22px, 2.4vw, 32px);
-  line-height: 1.35;
-  color: var(--text);
-  margin-bottom: 16px;
-}
-.quote-author {
-  font-family: 'Geist Mono', monospace;
-  font-size: 11px;
-  letter-spacing: 0.24em;
-  text-transform: uppercase;
-  color: var(--amber);
-}
 
 .section-label {
   font-family: 'Geist Mono', monospace;
@@ -219,6 +260,7 @@ useSeoMeta({
 }
 
 .mission { border-top: 1px dashed var(--glass-border); padding-top: 56px; margin-top: 24px; }
+.mission-card { padding: 0; }
 .mission-title {
   font-family: 'Geist', system-ui, sans-serif;
   font-weight: 700;
