@@ -48,6 +48,13 @@
       </AuroraBento>
     </section>
 
+    <section class="reveal section">
+      <div class="section-label">Tech stack</div>
+      <Marquee :pause-on-hover="true" :duration="35">
+        <span v-for="tech in techStrip" :key="tech" class="tech-pill">{{ tech }}</span>
+      </Marquee>
+    </section>
+
     <section ref="missionEl" class="reveal section mission">
       <h3 class="mission-title">{{ $t('about.missionTitle') }}</h3>
       <p class="body">{{ $t('about.missionText') }}</p>
@@ -61,6 +68,7 @@ import { gsap } from 'gsap'
 import AuroraPageHero from '~/components/aurora/layout/AuroraPageHero.vue'
 import AuroraBento from '~/components/aurora/surface/AuroraBento.vue'
 import MagicCard from '~/components/aurora/surface/MagicCard.vue'
+import Marquee from '~/components/aurora/layout/Marquee.vue'
 
 const { t } = useI18n()
 const yearsOfExperience = computed(() => new Date().getFullYear() - 2023)
@@ -76,6 +84,8 @@ const interests = [
   { emoji: '🤖', key: 'about.interest3' },
   { emoji: '💡', key: 'about.interest4' },
 ]
+
+const techStrip = ['Vue', 'Nuxt', 'TypeScript', 'Tailwind', 'GSAP', 'Three.js', 'Supabase', 'PostgreSQL', 'Node.js', 'Python', 'OpenAI', 'Angular']
 
 onMounted(() => {
   if (typeof window === 'undefined') return
@@ -158,7 +168,7 @@ useSeoMeta({
 }
 
 .quote-card { padding: 0; }
-.quote-card :deep(.content) { padding: 42px; }
+.quote-card :deep(.card-content) { padding: 42px; }
 .quote-text {
   font-family: 'Instrument Serif', serif;
   font-style: italic;
@@ -191,6 +201,21 @@ useSeoMeta({
   font-weight: 300;
   font-size: 15px;
   color: var(--text);
+}
+
+.tech-pill {
+  display: inline-flex;
+  align-items: center;
+  padding: 6px 16px;
+  border-radius: 999px;
+  border: 1px solid var(--glass-border);
+  font-family: 'Geist Mono', monospace;
+  font-size: 11px;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: var(--muted);
+  white-space: nowrap;
+  background: var(--glass-bg);
 }
 
 .mission { border-top: 1px dashed var(--glass-border); padding-top: 56px; margin-top: 24px; }

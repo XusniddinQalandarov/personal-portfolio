@@ -30,37 +30,44 @@
     </div>
 
     <!-- Grid -->
-    <section v-else ref="gridEl" class="grid">
-      <MagicCard
-        v-for="(project, i) in filteredProjects"
-        :key="project.id"
-        class="project-card reveal-card"
-        :class="{ featured: i === 0 }"
-        data-cursor-card
-        :data-cursor-label="$t('projects.viewCaseStudy')"
-        @click="openProjectModal(project)"
-      >
-        <BorderBeam v-if="i === 0" />
-        <div class="thumb">
-          <img
-            :src="project.image_url || '/images/project-placeholder.jpg'"
-            :alt="project.title"
-            @load="imageLoaded[project.id] = true"
-          />
-        </div>
-        <div class="meta">
-          <span class="index">{{ String(i + 1).padStart(2, '0') }} · {{ project.category }}</span>
-          <span class="year" v-if="project.year">{{ project.year }}</span>
-        </div>
-        <h3 class="title">{{ localField(project, 'title') }}</h3>
-        <p class="desc">{{ localField(project, 'description') }}</p>
-        <div class="bottom">
-          <div class="tags">
-            <span v-for="tech in (project.technologies || []).slice(0, 3)" :key="tech" class="tag">{{ tech }}</span>
-          </div>
-          <span class="open-arrow" aria-hidden="true">↗</span>
-        </div>
-      </MagicCard>
+    <section v-else ref="gridEl" class="grid-wrap">
+      <FocusCards>
+        <FocusCard
+          v-for="(project, i) in filteredProjects"
+          :key="project.id"
+          :index="i"
+          class="focus-card-override"
+        >
+          <MagicCard
+            class="project-card reveal-card"
+            :class="{ featured: i === 0 }"
+            data-cursor-card
+            :data-cursor-label="$t('projects.viewCaseStudy')"
+            @click="openProjectModal(project)"
+          >
+            <BorderBeam v-if="i === 0" />
+            <div class="thumb">
+              <img
+                :src="project.image_url || '/images/project-placeholder.jpg'"
+                :alt="project.title"
+                @load="imageLoaded[project.id] = true"
+              />
+            </div>
+            <div class="meta">
+              <span class="index">{{ String(i + 1).padStart(2, '0') }} · {{ project.category }}</span>
+              <span class="year" v-if="project.year">{{ project.year }}</span>
+            </div>
+            <h3 class="title">{{ localField(project, 'title') }}</h3>
+            <p class="desc">{{ localField(project, 'description') }}</p>
+            <div class="bottom">
+              <div class="tags">
+                <span v-for="tech in (project.technologies || []).slice(0, 3)" :key="tech" class="tag">{{ tech }}</span>
+              </div>
+              <span class="open-arrow" aria-hidden="true">↗</span>
+            </div>
+          </MagicCard>
+        </FocusCard>
+      </FocusCards>
     </section>
 
     <ProjectModal
@@ -79,6 +86,8 @@ import { ScrollTrigger } from 'gsap/ScrollTrigger'
 import AuroraPageHero from '~/components/aurora/layout/AuroraPageHero.vue'
 import MagicCard from '~/components/aurora/surface/MagicCard.vue'
 import BorderBeam from '~/components/aurora/surface/BorderBeam.vue'
+import FocusCards from '~/components/aurora/surface/FocusCards.vue'
+import FocusCard from '~/components/aurora/surface/FocusCard.vue'
 
 if (typeof window !== 'undefined') gsap.registerPlugin(ScrollTrigger)
 
@@ -184,16 +193,20 @@ useSeoMeta({
 .dot-pulse { display: inline-block; width: 8px; height: 8px; background: var(--amber); border-radius: 50%; animation: pulse 1.2s ease-in-out infinite; }
 @keyframes pulse { 0%, 100% { opacity: 0.3; transform: scale(0.9); } 50% { opacity: 1; transform: scale(1.2); } }
 
-.grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
-  gap: 22px;
+.grid-wrap {
   padding: 0 6vw;
   max-width: 1400px;
   margin: 0 auto;
 }
+.focus-card-override {
+  /* Reset FocusCard's aspect-ratio so MagicCard controls height */
+  aspect-ratio: unset !important;
+  border-radius: 22px !important;
+  background: transparent !important;
+  border: none !important;
+}
 .project-card { cursor: none; }
-.project-card :deep(.content) { padding: 0; }
+.project-card :deep(.card-content) { padding: 0; }
 
 .thumb {
   aspect-ratio: 16 / 10;

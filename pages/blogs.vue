@@ -1,10 +1,15 @@
 <template>
   <article class="blogs-page">
-    <AuroraPageHero
-      :eyebrow="$t('aurora.cursor.blogs')"
-      :title="$t('blogs.title').toLowerCase()"
-      :subtitle="$t('blogs.subtitle')"
-    />
+    <HeroHighlight>
+      <AuroraPageHero
+        :eyebrow="$t('aurora.cursor.blogs')"
+        :title="$t('blogs.title').toLowerCase()"
+        :subtitle="$t('blogs.subtitle')"
+      />
+      <div class="hero-tagline">
+        <Highlight>{{ $t('blogs.subtitle') }}</Highlight>
+      </div>
+    </HeroHighlight>
 
     <section ref="filtersEl" class="filters reveal">
       <div class="search-wrap">
@@ -64,6 +69,8 @@ import { gsap } from 'gsap'
 import { ScrollTrigger } from 'gsap/ScrollTrigger'
 import AuroraPageHero from '~/components/aurora/layout/AuroraPageHero.vue'
 import MagicCard from '~/components/aurora/surface/MagicCard.vue'
+import HeroHighlight from '~/components/aurora/surface/HeroHighlight.vue'
+import Highlight from '~/components/aurora/type/Highlight.vue'
 
 if (typeof window !== 'undefined') gsap.registerPlugin(ScrollTrigger)
 
@@ -146,6 +153,15 @@ useSeoMeta({
   color: var(--text);
 }
 
+.hero-tagline {
+  text-align: center;
+  font-family: 'Geist', system-ui, sans-serif;
+  font-weight: 300;
+  font-size: 16px;
+  color: var(--muted);
+  padding: 0 6vw 16px;
+}
+
 .filters {
   display: flex; flex-direction: column; gap: 24px;
   padding: 0 6vw 56px;
@@ -213,7 +229,7 @@ useSeoMeta({
   margin: 0 auto;
 }
 .blog-card { cursor: none; }
-.blog-card :deep(.content) { padding: 0; }
+.blog-card :deep(.card-content) { padding: 0; }
 
 .thumb {
   aspect-ratio: 16 / 10;
