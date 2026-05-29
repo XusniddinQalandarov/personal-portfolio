@@ -27,50 +27,45 @@
       {{ $t('projects.noProjects') }}
     </div>
 
-    <!-- Grid wrapped in AnimatedList for sequential pop-in.
-         DEVIATION: AnimatedList normally stacks in a column. Here we override
-         .al-track to display:grid to preserve the responsive 3-col layout.
-         Each FocusCard pops in sequentially via the spring enter transition. -->
     <section v-else ref="gridEl" class="grid-wrap">
-      <AnimatedList :delay="200" class="projects-animated-list">
-        <FocusCards>
-          <FocusCard
-            v-for="(project, i) in filteredProjects"
-            :key="project.id"
-            :index="i"
-            class="focus-card-override"
+      <FocusCards>
+        <FocusCard
+          v-for="(project, i) in filteredProjects"
+          :key="project.id"
+          :index="i"
+          class="stagger-in"
+          :style="{ animationDelay: `${i * 0.08}s` }"
+        >
+          <MagicCard
+            class="project-card"
+            :class="{ featured: i === 0 }"
+            data-cursor-card
+            :data-cursor-label="$t('projects.viewCaseStudy')"
+            @click="openProjectModal(project)"
           >
-            <MagicCard
-              class="project-card reveal-card"
-              :class="{ featured: i === 0 }"
-              data-cursor-card
-              :data-cursor-label="$t('projects.viewCaseStudy')"
-              @click="openProjectModal(project)"
-            >
-              <BorderBeam v-if="i === 0" />
-              <div class="thumb">
-                <img
-                  :src="project.image_url || '/images/project-placeholder.jpg'"
-                  :alt="project.title"
-                  @load="imageLoaded[project.id] = true"
-                />
+            <BorderBeam v-if="i === 0" />
+            <div class="thumb">
+              <img
+                :src="project.image_url || '/images/project-placeholder.jpg'"
+                :alt="project.title"
+                @load="imageLoaded[project.id] = true"
+              />
+            </div>
+            <div class="meta">
+              <span class="index">{{ String(i + 1).padStart(2, '0') }} · {{ project.category }}</span>
+              <span class="year" v-if="project.year">{{ project.year }}</span>
+            </div>
+            <h3 class="title">{{ localField(project, 'title') }}</h3>
+            <p class="desc">{{ localField(project, 'description') }}</p>
+            <div class="bottom">
+              <div class="tags">
+                <span v-for="tech in (project.technologies || []).slice(0, 3)" :key="tech" class="tag">{{ tech }}</span>
               </div>
-              <div class="meta">
-                <span class="index">{{ String(i + 1).padStart(2, '0') }} · {{ project.category }}</span>
-                <span class="year" v-if="project.year">{{ project.year }}</span>
-              </div>
-              <h3 class="title">{{ localField(project, 'title') }}</h3>
-              <p class="desc">{{ localField(project, 'description') }}</p>
-              <div class="bottom">
-                <div class="tags">
-                  <span v-for="tech in (project.technologies || []).slice(0, 3)" :key="tech" class="tag">{{ tech }}</span>
-                </div>
-                <span class="open-arrow" aria-hidden="true">↗</span>
-              </div>
-            </MagicCard>
-          </FocusCard>
-        </FocusCards>
-      </AnimatedList>
+              <span class="open-arrow" aria-hidden="true">↗</span>
+            </div>
+          </MagicCard>
+        </FocusCard>
+      </FocusCards>
     </section>
 
     <ProjectModal
@@ -88,7 +83,6 @@ import { gsap } from 'gsap'
 import { ScrollTrigger } from 'gsap/ScrollTrigger'
 import AuroraPageHero from '~/components/aurora/layout/AuroraPageHero.vue'
 import AnimatedTabs from '~/components/aurora/layout/AnimatedTabs.vue'
-import AnimatedList from '~/components/aurora/surface/AnimatedList.vue'
 import MagicCard from '~/components/aurora/surface/MagicCard.vue'
 import BorderBeam from '~/components/aurora/surface/BorderBeam.vue'
 import FocusCards from '~/components/aurora/surface/FocusCards.vue'
@@ -183,22 +177,19 @@ useSeoMeta({
   margin: 0 auto;
 }
 
-/* Override AnimatedList's flex-column track to preserve grid layout */
-.projects-animated-list :deep(.al-track) {
-  display: block;
+.stagger-in {
+  opacity: 0;
+  transform: translateY(24px);
+  animation: stagger-pop 0.7s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+  will-change: transform, opacity;
 }
-.projects-animated-list :deep(.al-item) {
-  display: block;
-  width: 100%;
+@keyframes stagger-pop {
+  to { opacity: 1; transform: translateY(0); }
+}
+@media (prefers-reduced-motion: reduce) {
+  .stagger-in { animation: none; opacity: 1; transform: none; }
 }
 
-.focus-card-override {
-  /* Reset FocusCard's aspect-ratio so MagicCard controls height */
-  aspect-ratio: unset !important;
-  border-radius: 22px !important;
-  background: transparent !important;
-  border: none !important;
-}
 .project-card { cursor: none; }
 .project-card :deep(.card-content) { padding: 0; }
 
@@ -273,5 +264,4 @@ useSeoMeta({
 }
 .project-card:hover .open-arrow { border-color: var(--amber); color: var(--amber); transform: rotate(-45deg); }
 
-.reveal-card { opacity: 0; }
 </style>
