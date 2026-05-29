@@ -37,31 +37,29 @@
     <div v-if="loading" class="state"><span class="dot-pulse" /></div>
     <div v-else-if="!filteredBlogs.length" class="state empty">{{ $t('blogs.noArticles') }}</div>
 
-    <!-- AnimatedList wraps blog grid; .al-track overridden to grid layout -->
-    <section v-else ref="listEl" class="grid-wrap">
-      <AnimatedList :delay="180" class="blogs-animated-list">
-        <MagicCard
-          v-for="blog in filteredBlogs"
-          :key="blog.id"
-          class="blog-card reveal-card"
-          data-cursor-card
-          :data-cursor-label="$t('blogs.readArticle')"
-          @click="navigateTo(`/blog/${blog.slug}`)"
-        >
-          <div class="thumb">
-            <img v-if="blog.image_url" :src="blog.image_url" :alt="blog.title" />
-            <div v-else class="thumb-fallback"><i class="pi pi-image" /></div>
-          </div>
-          <div class="meta">
-            <span class="date">{{ formatDate(blog.created_at) }}</span>
-            <span v-if="blog.tags?.length" class="dot">·</span>
-            <span v-if="blog.tags?.length" class="topic">#{{ blog.tags[0] }}</span>
-          </div>
-          <h3 class="title">{{ localField(blog, 'title') }}</h3>
-          <p class="excerpt">{{ localField(blog, 'excerpt') }}</p>
-          <div class="read">{{ $t('blogs.readArticle') }} <span class="arrow">→</span></div>
-        </MagicCard>
-      </AnimatedList>
+    <section v-else ref="listEl" class="grid">
+      <MagicCard
+        v-for="(blog, i) in filteredBlogs"
+        :key="blog.id"
+        class="blog-card stagger-in"
+        :style="{ animationDelay: `${i * 0.08}s` }"
+        data-cursor-card
+        :data-cursor-label="$t('blogs.readArticle')"
+        @click="navigateTo(`/blog/${blog.slug}`)"
+      >
+        <div class="thumb">
+          <img v-if="blog.image_url" :src="blog.image_url" :alt="blog.title" />
+          <div v-else class="thumb-fallback"><i class="pi pi-image" /></div>
+        </div>
+        <div class="meta">
+          <span class="date">{{ formatDate(blog.created_at) }}</span>
+          <span v-if="blog.tags?.length" class="dot">·</span>
+          <span v-if="blog.tags?.length" class="topic">#{{ blog.tags[0] }}</span>
+        </div>
+        <h3 class="title">{{ localField(blog, 'title') }}</h3>
+        <p class="excerpt">{{ localField(blog, 'excerpt') }}</p>
+        <div class="read">{{ $t('blogs.readArticle') }} <span class="arrow">→</span></div>
+      </MagicCard>
     </section>
   </article>
 </template>
@@ -74,7 +72,6 @@ import AuroraPageHero from '~/components/aurora/layout/AuroraPageHero.vue'
 import MagicCard from '~/components/aurora/surface/MagicCard.vue'
 import HeroHighlight from '~/components/aurora/surface/HeroHighlight.vue'
 import Highlight from '~/components/aurora/type/Highlight.vue'
-import AnimatedList from '~/components/aurora/surface/AnimatedList.vue'
 
 if (typeof window !== 'undefined') gsap.registerPlugin(ScrollTrigger)
 
@@ -218,23 +215,26 @@ useSeoMeta({
 .dot-pulse { display: inline-block; width: 8px; height: 8px; background: var(--amber); border-radius: 50%; animation: pulse 1.2s ease-in-out infinite; }
 @keyframes pulse { 0%, 100% { opacity: 0.3; transform: scale(0.9); } 50% { opacity: 1; transform: scale(1.2); } }
 
-.grid-wrap {
+.grid {
   padding: 0 6vw;
   max-width: 1400px;
   margin: 0 auto;
-}
-
-/* Override AnimatedList column layout to restore grid */
-.blogs-animated-list :deep(.animated-list),
-.blogs-animated-list :deep(.al-track) {
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
   gap: 22px;
-  flex-direction: unset;
-  align-items: unset;
 }
-.blogs-animated-list :deep(.al-item) {
-  width: 100%;
+
+.stagger-in {
+  opacity: 0;
+  transform: translateY(24px);
+  animation: stagger-pop 0.7s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+  will-change: transform, opacity;
+}
+@keyframes stagger-pop {
+  to { opacity: 1; transform: translateY(0); }
+}
+@media (prefers-reduced-motion: reduce) {
+  .stagger-in { animation: none; opacity: 1; transform: none; }
 }
 
 .blog-card { cursor: none; }
@@ -302,5 +302,4 @@ useSeoMeta({
 .arrow { color: var(--amber); transition: transform 0.3s var(--ease-cinematic); }
 .blog-card:hover .arrow { transform: translateX(4px); }
 
-.reveal-card { opacity: 0; }
 </style>
