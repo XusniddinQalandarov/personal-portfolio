@@ -7,16 +7,14 @@
       :subtitle="$t('projects.subtitle')"
     />
 
-    <!-- Filter pills -->
+    <!-- AnimatedTabs replaces filter pills -->
     <section ref="filterEl" class="filter-row reveal">
-      <button
-        v-for="tag in filterTags"
-        :key="tag"
-        class="pill"
-        :class="{ active: selectedFilter === tag }"
-        :data-cursor-label="tag === 'All' ? $t('projects.all') : tag"
-        @click="selectedFilter = tag"
-      >{{ tag === 'All' ? $t('projects.all') : tag }}</button>
+      <AnimatedTabs
+        v-if="filterTabs.length"
+        :tabs="filterTabs"
+        :default-value="selectedFilter"
+        @update:active="onFilterChange"
+      />
     </section>
 
     <!-- Loading -->
@@ -29,45 +27,50 @@
       {{ $t('projects.noProjects') }}
     </div>
 
-    <!-- Grid -->
+    <!-- Grid wrapped in AnimatedList for sequential pop-in.
+         DEVIATION: AnimatedList normally stacks in a column. Here we override
+         .al-track to display:grid to preserve the responsive 3-col layout.
+         Each FocusCard pops in sequentially via the spring enter transition. -->
     <section v-else ref="gridEl" class="grid-wrap">
-      <FocusCards>
-        <FocusCard
-          v-for="(project, i) in filteredProjects"
-          :key="project.id"
-          :index="i"
-          class="focus-card-override"
-        >
-          <MagicCard
-            class="project-card reveal-card"
-            :class="{ featured: i === 0 }"
-            data-cursor-card
-            :data-cursor-label="$t('projects.viewCaseStudy')"
-            @click="openProjectModal(project)"
+      <AnimatedList :delay="200" class="projects-animated-list">
+        <FocusCards>
+          <FocusCard
+            v-for="(project, i) in filteredProjects"
+            :key="project.id"
+            :index="i"
+            class="focus-card-override"
           >
-            <BorderBeam v-if="i === 0" />
-            <div class="thumb">
-              <img
-                :src="project.image_url || '/images/project-placeholder.jpg'"
-                :alt="project.title"
-                @load="imageLoaded[project.id] = true"
-              />
-            </div>
-            <div class="meta">
-              <span class="index">{{ String(i + 1).padStart(2, '0') }} · {{ project.category }}</span>
-              <span class="year" v-if="project.year">{{ project.year }}</span>
-            </div>
-            <h3 class="title">{{ localField(project, 'title') }}</h3>
-            <p class="desc">{{ localField(project, 'description') }}</p>
-            <div class="bottom">
-              <div class="tags">
-                <span v-for="tech in (project.technologies || []).slice(0, 3)" :key="tech" class="tag">{{ tech }}</span>
+            <MagicCard
+              class="project-card reveal-card"
+              :class="{ featured: i === 0 }"
+              data-cursor-card
+              :data-cursor-label="$t('projects.viewCaseStudy')"
+              @click="openProjectModal(project)"
+            >
+              <BorderBeam v-if="i === 0" />
+              <div class="thumb">
+                <img
+                  :src="project.image_url || '/images/project-placeholder.jpg'"
+                  :alt="project.title"
+                  @load="imageLoaded[project.id] = true"
+                />
               </div>
-              <span class="open-arrow" aria-hidden="true">↗</span>
-            </div>
-          </MagicCard>
-        </FocusCard>
-      </FocusCards>
+              <div class="meta">
+                <span class="index">{{ String(i + 1).padStart(2, '0') }} · {{ project.category }}</span>
+                <span class="year" v-if="project.year">{{ project.year }}</span>
+              </div>
+              <h3 class="title">{{ localField(project, 'title') }}</h3>
+              <p class="desc">{{ localField(project, 'description') }}</p>
+              <div class="bottom">
+                <div class="tags">
+                  <span v-for="tech in (project.technologies || []).slice(0, 3)" :key="tech" class="tag">{{ tech }}</span>
+                </div>
+                <span class="open-arrow" aria-hidden="true">↗</span>
+              </div>
+            </MagicCard>
+          </FocusCard>
+        </FocusCards>
+      </AnimatedList>
     </section>
 
     <ProjectModal
@@ -84,6 +87,8 @@ definePageMeta({ layout: 'aurora' })
 import { gsap } from 'gsap'
 import { ScrollTrigger } from 'gsap/ScrollTrigger'
 import AuroraPageHero from '~/components/aurora/layout/AuroraPageHero.vue'
+import AnimatedTabs from '~/components/aurora/layout/AnimatedTabs.vue'
+import AnimatedList from '~/components/aurora/surface/AnimatedList.vue'
 import MagicCard from '~/components/aurora/surface/MagicCard.vue'
 import BorderBeam from '~/components/aurora/surface/BorderBeam.vue'
 import FocusCards from '~/components/aurora/surface/FocusCards.vue'
@@ -120,22 +125,22 @@ onMounted(async () => {
 })
 
 const filterTags = computed(() => ['All', ...new Set(projects.value.map(p => p.category).filter(Boolean))])
+const filterTabs = computed(() => filterTags.value.map(tag => ({
+  title: tag === 'All' ? t('projects.all') : tag,
+  value: tag,
+})))
+
 const filteredProjects = computed(() =>
   selectedFilter.value === 'All' ? projects.value : projects.value.filter(p => p.category === selectedFilter.value)
 )
 
+const onFilterChange = (v) => { selectedFilter.value = v }
 const openProjectModal = (p) => { selectedProject.value = p; isModalOpen.value = true }
 const closeProjectModal = () => { isModalOpen.value = false; selectedProject.value = null }
 
 function initAnimations() {
   if (typeof window === 'undefined') return
   if (filterEl.value) gsap.fromTo(filterEl.value, { y: 24, opacity: 0 }, { y: 0, opacity: 1, duration: 0.8, ease: 'power3.out' })
-  document.querySelectorAll('.reveal-card').forEach((el) => {
-    gsap.fromTo(el, { y: 30, opacity: 0 }, {
-      y: 0, opacity: 1, duration: 0.9, ease: 'power3.out',
-      scrollTrigger: { trigger: el, start: 'top 88%' },
-    })
-  })
 }
 
 useSeoMeta({
@@ -154,31 +159,10 @@ useSeoMeta({
 }
 
 .filter-row {
-  display: flex; flex-wrap: wrap; gap: 10px;
   padding: 0 6vw 56px;
   max-width: 1200px;
   margin: 0 auto;
   opacity: 0;
-}
-.pill {
-  font-family: 'Geist Mono', monospace;
-  font-size: 11px;
-  font-weight: 500;
-  letter-spacing: 0.22em;
-  text-transform: uppercase;
-  color: var(--muted);
-  background: transparent;
-  border: 1px solid var(--glass-border);
-  border-radius: 999px;
-  padding: 9px 18px;
-  cursor: none;
-  transition: all 0.3s var(--ease-cinematic);
-}
-.pill:hover { color: var(--text); border-color: rgba(255,255,255,0.18); }
-.pill.active {
-  background: var(--text);
-  color: var(--void);
-  border-color: var(--text);
 }
 
 .state {
@@ -198,6 +182,16 @@ useSeoMeta({
   max-width: 1400px;
   margin: 0 auto;
 }
+
+/* Override AnimatedList's flex-column track to preserve grid layout */
+.projects-animated-list :deep(.al-track) {
+  display: block;
+}
+.projects-animated-list :deep(.al-item) {
+  display: block;
+  width: 100%;
+}
+
 .focus-card-override {
   /* Reset FocusCard's aspect-ratio so MagicCard controls height */
   aspect-ratio: unset !important;
