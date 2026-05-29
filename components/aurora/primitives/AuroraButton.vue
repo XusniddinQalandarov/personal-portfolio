@@ -12,7 +12,7 @@
 </template>
 
 <script setup lang="ts">
-import { defineProps, resolveComponent } from 'vue'
+import { resolveComponent } from 'vue'
 const props = withDefaults(defineProps<{
   variant?: 'primary' | 'ghost'
   to?: string
@@ -49,4 +49,11 @@ function resolveAnchor() {
 .btn-ghost:hover { border-color: var(--amber); color: var(--amber); }
 .arrow { display: inline-block; transition: transform 0.3s var(--ease-cinematic); }
 .btn:hover .arrow { transform: translateX(4px); }
+
+@media (prefers-reduced-motion: reduce) {
+  .btn { transition: none; }
+  .btn-primary:hover { transform: none; }
+  .arrow { transition: none; }
+  .btn:hover .arrow { transform: none; }
+}
 </style>
