@@ -1,0 +1,67 @@
+<!-- components/aurora/layout/AuroraDock.vue
+     Ported pattern from aceternity/floating-dock + magicui/dock. -->
+<template>
+  <nav class="dock" aria-label="Primary navigation">
+    <NuxtLink
+      v-for="item in items"
+      :key="item.to"
+      :to="item.to"
+      class="dock-item"
+      :class="{ active: $route.path === item.to }"
+      :data-cursor-label="$t(`aurora.cursor.${item.cursorKey}`)"
+      :aria-label="$t(`aurora.cursor.${item.cursorKey}`)"
+    >{{ $t(`aurora.dock.${item.cursorKey}`) }}</NuxtLink>
+  </nav>
+</template>
+
+<script setup lang="ts">
+const items = [
+  { to: '/',           cursorKey: 'home' },
+  { to: '/about',      cursorKey: 'about' },
+  { to: '/experience', cursorKey: 'experience' },
+  { to: '/projects',   cursorKey: 'projects' },
+  { to: '/blogs',      cursorKey: 'blogs' },
+  { to: '/fitness',    cursorKey: 'fitness' },
+  { to: '/contact',    cursorKey: 'contact' },
+] as const
+</script>
+
+<style scoped>
+.dock {
+  position: fixed; bottom: 32px; left: 50%; transform: translateX(-50%);
+  z-index: 50;
+  display: flex; align-items: center; gap: 2px;
+  padding: 6px;
+  background: rgba(12, 12, 20, 0.65);
+  backdrop-filter: blur(28px) saturate(180%);
+  -webkit-backdrop-filter: blur(28px) saturate(180%);
+  border: 1px solid var(--glass-border);
+  border-radius: 999px;
+  box-shadow: 0 24px 64px -16px rgba(0,0,0,0.6), inset 0 1px 0 rgba(255,255,255,0.04);
+}
+.dock-item {
+  width: 42px; height: 42px;
+  display: flex; align-items: center; justify-content: center;
+  border-radius: 999px;
+  color: var(--muted);
+  font-family: 'Geist Mono', monospace;
+  font-size: 11px; font-weight: 500;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  transition: transform 0.4s var(--ease-cinematic), color 0.3s, background 0.3s;
+  position: relative;
+  text-decoration: none;
+  cursor: none;
+}
+.dock-item:hover {
+  color: var(--text);
+  transform: translateY(-6px) scale(1.12);
+  background: rgba(255,255,255,0.04);
+}
+.dock-item.active { color: var(--amber); }
+.dock-item.active::after {
+  content: ''; position: absolute; bottom: -4px; left: 50%; transform: translateX(-50%);
+  width: 3px; height: 3px; border-radius: 50%; background: var(--amber);
+  box-shadow: 0 0 6px var(--amber);
+}
+</style>
