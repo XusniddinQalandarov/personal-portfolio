@@ -173,7 +173,7 @@ const experiences = ref([
     id: 1,
     title: 'Frontend Developer', title_ru: 'Фронтенд Разработчик',
     company: 'UZINFOCOM', company_ru: 'УЗИНФОКОМ',
-    period: 'May 2025 – Present', period_ru: 'Май 2025 – наст. время',
+    period: 'May 2025 – June 2026', period_ru: 'Май 2025 – Июнь 2026',
     domain: 'Full Stack', domain_ru: 'Фулл Стек',
     description: 'Building responsive SPAs and improving UX across multiple projects. Developing interactive data visualization solutions and modernizing university websites.',
     description_ru: 'Создание адаптивных SPA и улучшение UX в нескольких проектах. Разработка интерактивных решений для визуализации данных и модернизация университетских сайтов.',
